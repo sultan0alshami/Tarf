@@ -7,9 +7,8 @@ void main() {
     test('setDuration resets total and remaining', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final c = container.read(timerControllerProvider.notifier);
-
-      c.setDuration(const Duration(minutes: 10));
+      container.read(timerControllerProvider.notifier)
+          .setDuration(const Duration(minutes: 10));
       final s = container.read(timerControllerProvider);
       expect(s.total, const Duration(minutes: 10));
       expect(s.remaining, const Duration(minutes: 10));
@@ -19,7 +18,7 @@ void main() {
     test('addMinutes extends total when idle', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final c = container.read(timerControllerProvider.notifier)
+      container.read(timerControllerProvider.notifier)
         ..setDuration(const Duration(minutes: 5))
         ..addMinutes(3);
       expect(container.read(timerControllerProvider).total,
@@ -38,7 +37,7 @@ void main() {
     test('start is a no-op at zero remaining', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final c = container.read(timerControllerProvider.notifier)
+      container.read(timerControllerProvider.notifier)
         ..setDuration(Duration.zero)
         ..start();
       expect(container.read(timerControllerProvider).running, isFalse);

@@ -1,0 +1,23 @@
+rules_version = '2';
+
+// Tarf Firestore security rules.
+// Every document is private to its owner: only the authenticated user whose
+// uid matches the {uid} path segment may read or write anything under it.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      // settings, dailyProgress/{yyyy-MM-dd}, focusSessions/{id}, todos/{id}, ...
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
