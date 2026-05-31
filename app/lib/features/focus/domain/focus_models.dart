@@ -30,6 +30,26 @@ class FocusConfig {
         FocusPhase.idle => Duration.zero,
       };
 
+  FocusConfig copyWith({
+    Duration? work,
+    Duration? shortBreak,
+    Duration? longBreak,
+    int? cyclesBeforeLongBreak,
+    bool? autoStartBreaks,
+    bool? autoStartWork,
+    int? dailyGoalSessions,
+  }) {
+    return FocusConfig(
+      work: work ?? this.work,
+      shortBreak: shortBreak ?? this.shortBreak,
+      longBreak: longBreak ?? this.longBreak,
+      cyclesBeforeLongBreak: cyclesBeforeLongBreak ?? this.cyclesBeforeLongBreak,
+      autoStartBreaks: autoStartBreaks ?? this.autoStartBreaks,
+      autoStartWork: autoStartWork ?? this.autoStartWork,
+      dailyGoalSessions: dailyGoalSessions ?? this.dailyGoalSessions,
+    );
+  }
+
   Map<String, Object?> toJson() => {
         'workS': work.inSeconds,
         'shortS': shortBreak.inSeconds,

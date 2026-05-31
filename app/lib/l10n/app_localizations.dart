@@ -679,6 +679,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All data deleted'**
   String get dataDeleted;
+
+  /// No description provided for @editDurations.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit durations'**
+  String get editDurations;
 }
 
 class _AppLocalizationsDelegate

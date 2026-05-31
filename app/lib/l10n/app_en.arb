@@ -124,5 +124,7 @@
   "deleteAllData": "Delete all my data",
   "deleteAllConfirm": "This permanently deletes all your Tarf data on this device and cannot be undone.",
   "dataExported": "Your data was copied to the clipboard",
-  "dataDeleted": "All data deleted"
+  "dataDeleted": "All data deleted",
+
+  "editDurations": "Edit durations"
 }

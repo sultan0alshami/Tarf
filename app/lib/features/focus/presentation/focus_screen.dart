@@ -51,6 +51,15 @@ class FocusScreen extends ConsumerWidget {
             onPressed: () => showEyeBreak(context, ref),
           ),
           IconButton(
+            icon: const Icon(Icons.tune),
+            tooltip: l10n.editDurations,
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              builder: (_) => const _FocusDurationsSheet(),
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.checklist_outlined),
             tooltip: l10n.tasks,
             onPressed: () => context.push(Routes.tasks),
@@ -183,6 +192,131 @@ class _Controls extends StatelessWidget {
           child: Text(l10n.actionSkip),
         ),
       ],
+    );
+  }
+}
+
+/// Inline editor for the Focus (Pomodoro) durations + daily goal, opened from
+/// the home screen so the user never has to dig into Settings.
+class _FocusDurationsSheet extends ConsumerWidget {
+  const _FocusDurationsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final config = ref.watch(focusConfigProvider);
+    final controller = ref.read(focusConfigProvider.notifier);
+    final numerals = ref.watch(
+      settingsControllerProvider.select((s) => s.effectiveNumerals),
+    );
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            Text(l10n.editDurations,
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: TarfTokens.space2),
+            _SliderRow(
+              label: l10n.phaseWork,
+              valueLabel: l10n.minutesShort(config.work.inMinutes),
+              value: config.work.inMinutes.toDouble(),
+              min: 5,
+              max: 60,
+              divisions: 11,
+              onChanged: (v) => controller
+                  .update(config.copyWith(work: Duration(minutes: v.round()))),
+            ),
+            _SliderRow(
+              label: l10n.phaseShortBreak,
+              valueLabel: l10n.minutesShort(config.shortBreak.inMinutes),
+              value: config.shortBreak.inMinutes.toDouble(),
+              min: 1,
+              max: 30,
+              divisions: 29,
+              onChanged: (v) => controller.update(
+                  config.copyWith(shortBreak: Duration(minutes: v.round()))),
+            ),
+            _SliderRow(
+              label: l10n.phaseLongBreak,
+              valueLabel: l10n.minutesShort(config.longBreak.inMinutes),
+              value: config.longBreak.inMinutes.toDouble(),
+              min: 5,
+              max: 45,
+              divisions: 40,
+              onChanged: (v) => controller.update(
+                  config.copyWith(longBreak: Duration(minutes: v.round()))),
+            ),
+            _SliderRow(
+              label: l10n.focusDailyGoal,
+              valueLabel: Numerals.formatInt(config.dailyGoalSessions, numerals),
+              value: config.dailyGoalSessions.toDouble(),
+              min: 1,
+              max: 16,
+              divisions: 15,
+              onChanged: (v) => controller
+                  .update(config.copyWith(dailyGoalSessions: v.round())),
+            ),
+            const SizedBox(height: TarfTokens.space2),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.actionDone),
+            ),
+          ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SliderRow extends StatelessWidget {
+  const _SliderRow({
+    required this.label,
+    required this.valueLabel,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required this.onChanged,
+  });
+
+  final String label;
+  final String valueLabel;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label, style: Theme.of(context).textTheme.bodyLarge),
+              Text(valueLabel,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+            ],
+          ),
+          Slider(
+            value: value.clamp(min, max),
+            min: min,
+            max: max,
+            divisions: divisions,
+            label: valueLabel,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
     );
   }
 }

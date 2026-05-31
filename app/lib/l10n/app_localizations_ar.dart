@@ -315,4 +315,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dataDeleted => 'تم حذف جميع البيانات';
+
+  @override
+  String get editDurations => 'تعديل المدد';
 }

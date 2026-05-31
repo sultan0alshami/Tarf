@@ -315,4 +315,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataDeleted => 'All data deleted';
+
+  @override
+  String get editDurations => 'Edit durations';
 }
