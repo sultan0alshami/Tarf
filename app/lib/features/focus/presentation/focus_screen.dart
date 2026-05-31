@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 import '../../../core/format/numerals.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
+import '../../../core/time/clock.dart';
 import '../../../core/widgets/progress_ring.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../../eyecare/presentation/show_break.dart';
+import '../../insights/application/progress_controller.dart';
 import '../application/focus_controller.dart';
 import '../domain/focus_models.dart';
 
@@ -31,6 +33,10 @@ class FocusScreen extends ConsumerWidget {
     final config = ref.watch(focusConfigProvider);
     final numerals = ref.watch(
       settingsControllerProvider.select((s) => s.effectiveNumerals),
+    );
+    final todaySessions = ref.watch(
+      progressControllerProvider
+          .select((m) => m[dayKey(DateTime.now())]?.sessions ?? 0),
     );
 
     final display = state.phase == FocusPhase.idle ? config.work : state.remaining;
@@ -86,7 +92,7 @@ class FocusScreen extends ConsumerWidget {
             ),
             const SizedBox(height: TarfTokens.space4),
             _DailyGoal(
-              done: state.completedWorkSessions,
+              done: todaySessions,
               goal: config.dailyGoalSessions,
             ),
             const SizedBox(height: TarfTokens.space5),
@@ -106,11 +112,37 @@ class _DailyGoal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Text(
-      l10n.focusSessionsProgress(done, goal),
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+    final scheme = Theme.of(context).colorScheme;
+    final dots = goal.clamp(1, 12);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < dots; i++)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: 9,
+                height: 9,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: i < done
+                      ? scheme.primary
+                      : scheme.primary.withValues(alpha: 0.18),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: TarfTokens.space2),
+        Text(
+          l10n.focusSessionsProgress(done, goal),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: scheme.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }
