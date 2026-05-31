@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/format/numerals.dart';
-import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/time/clock.dart';
 import '../../../core/widgets/progress_ring.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
-import '../../eyecare/presentation/show_break.dart';
 import '../../insights/application/progress_controller.dart';
 import '../application/focus_controller.dart';
 import '../domain/focus_models.dart';
+
+/// Full-screen focus (Pomodoro) session, pushed from Home. The eye-break overlay
+/// may appear over it without disturbing this timer.
 
 class FocusScreen extends ConsumerWidget {
   const FocusScreen({super.key});
@@ -43,13 +43,8 @@ class FocusScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appName),
+        title: Text(l10n.tabFocus),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.visibility_outlined),
-            tooltip: l10n.restEyes,
-            onPressed: () => showEyeBreak(context, ref),
-          ),
           IconButton(
             icon: const Icon(Icons.tune),
             tooltip: l10n.editDurations,
@@ -58,21 +53,6 @@ class FocusScreen extends ConsumerWidget {
               showDragHandle: true,
               builder: (_) => const _FocusDurationsSheet(),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.checklist_outlined),
-            tooltip: l10n.tasks,
-            onPressed: () => context.push(Routes.tasks),
-          ),
-          IconButton(
-            icon: const Icon(Icons.insights_outlined),
-            tooltip: l10n.navInsights,
-            onPressed: () => context.push(Routes.insights),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: l10n.navSettings,
-            onPressed: () => context.push(Routes.settings),
           ),
         ],
       ),

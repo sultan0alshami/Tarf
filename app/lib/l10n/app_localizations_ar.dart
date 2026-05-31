@@ -317,5 +317,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dataDeleted => 'تم حذف جميع البيانات';
 
   @override
+  String get tabHome => 'الرئيسية';
+
+  @override
+  String get nextEyeBreak => 'راحة العين القادمة';
+
+  @override
+  String eyeRestsToday(int count) {
+    return '$count راحات للعين اليوم';
+  }
+
+  @override
+  String get startFocusSession => 'ابدأ جلسة تركيز';
+
+  @override
+  String get pausedLabel => 'متوقّف مؤقّتًا';
+
+  @override
+  String get focusTodayLabel => 'تركيز اليوم';
+
+  @override
+  String get todosLabel => 'المهام';
+
+  @override
   String get editDurations => 'تعديل المدد';
 }

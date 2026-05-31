@@ -680,6 +680,48 @@ abstract class AppLocalizations {
   /// **'All data deleted'**
   String get dataDeleted;
 
+  /// No description provided for @tabHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabHome;
+
+  /// No description provided for @nextEyeBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Next eye break'**
+  String get nextEyeBreak;
+
+  /// No description provided for @eyeRestsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} eye rests today'**
+  String eyeRestsToday(int count);
+
+  /// No description provided for @startFocusSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Start focus session'**
+  String get startFocusSession;
+
+  /// No description provided for @pausedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get pausedLabel;
+
+  /// No description provided for @focusTodayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus today'**
+  String get focusTodayLabel;
+
+  /// No description provided for @todosLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To-dos'**
+  String get todosLabel;
+
   /// No description provided for @editDurations.
   ///
   /// In en, this message translates to:

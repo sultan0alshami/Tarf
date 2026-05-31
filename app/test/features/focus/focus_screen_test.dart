@@ -6,9 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tarf/app.dart';
 import 'package:tarf/core/settings/settings_controller.dart';
 
+// Bounded pump — never run the running focus/eye-care timers to settle.
+Future<void> settle(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
+}
+
 void main() {
-  testWidgets('Focus home reflects the configured work duration', (tester) async {
-    // Persist a 20-minute focus work duration; the home must show 20:00.
+  testWidgets('Start focus opens a full-screen session at the configured duration',
+      (tester) async {
+    // Persist a 20-minute focus work duration; the session must show 20:00.
     SharedPreferences.setMockInitialValues({
       'tarf.app_settings.v1':
           jsonEncode({'onboardingComplete': true, 'localeCode': 'en'}),
@@ -22,13 +29,17 @@ void main() {
         child: const TarfApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await settle(tester);
+
+    // From Home, start a focus session (pushes the full-screen Pomodoro).
+    await tester.tap(find.text('Start focus session'));
+    await settle(tester);
 
     expect(find.text('20:00'), findsOneWidget);
 
-    // The inline durations editor opens from the home (no Settings trip).
+    // The inline durations editor opens from the session screen.
     await tester.tap(find.byTooltip('Edit durations'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Edit durations'), findsOneWidget);
   });
 }

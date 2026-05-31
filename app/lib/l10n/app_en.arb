@@ -126,5 +126,14 @@
   "dataExported": "Your data was copied to the clipboard",
   "dataDeleted": "All data deleted",
 
+  "tabHome": "Home",
+  "nextEyeBreak": "Next eye break",
+  "eyeRestsToday": "{count} eye rests today",
+  "@eyeRestsToday": { "placeholders": { "count": { "type": "int" } } },
+  "startFocusSession": "Start focus session",
+  "pausedLabel": "Paused",
+  "focusTodayLabel": "Focus today",
+  "todosLabel": "To-dos",
+
   "editDurations": "Edit durations"
 }

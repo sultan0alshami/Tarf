@@ -70,3 +70,7 @@ Thumbs.db
 _setup/*.log
 _setup/install.DONE
 _setup/install.FAILED
+_setup/android.DONE
+_setup/android_fix.DONE
+_setup/shots/
+_setup/chromeprofile/

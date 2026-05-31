@@ -6,6 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tarf/app.dart';
 import 'package:tarf/core/settings/settings_controller.dart';
 
+// Bounded pump (Home's live countdown means pumpAndSettle never settles).
+Future<void> settle(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
+}
+
 void main() {
   testWidgets('every main screen renders and navigation works (EN)',
       (tester) async {
@@ -21,49 +27,47 @@ void main() {
         child: const TarfApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await settle(tester);
 
-    // Focus (home) is the start tab.
-    expect(find.text('Start'), findsWidgets);
+    // Home (first tab) leads with eye-care + the Start-focus CTA.
+    expect(find.text('Start focus session'), findsOneWidget);
+    expect(find.text('Next eye break'), findsOneWidget);
 
-    // Visit each tab via the rail.
+    // Visit each tab via the rail/bar.
     for (final tab in ['Timer', 'Alarm', 'Stopwatch']) {
       await tester.tap(find.text(tab).first);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(find.text(tab), findsWidgets);
     }
+    await tester.tap(find.text('Home').first);
+    await settle(tester);
 
-    // Back to Focus.
-    await tester.tap(find.text('Focus').first);
-    await tester.pumpAndSettle();
-
-    // Open Tasks from the Focus app bar.
+    // Tasks + Insights from the Home app bar.
     await tester.tap(find.byTooltip('Tasks'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('No tasks yet'), findsOneWidget);
     await tester.pageBack();
-    await tester.pumpAndSettle();
+    await settle(tester);
 
-    // Open Insights.
     await tester.tap(find.byTooltip('Insights'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('No data yet — start a focus session'), findsOneWidget);
     await tester.pageBack();
-    await tester.pumpAndSettle();
+    await settle(tester);
 
-    // Open Settings -> Eye care, then Account & Sync.
+    // Settings -> Eye care, then Account & Sync.
     await tester.tap(find.byTooltip('Settings'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Eye care'), findsWidgets);
 
     await tester.tap(find.text('Eye care'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Reminder interval'), findsOneWidget);
     await tester.pageBack();
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     await tester.tap(find.text('Account & Sync'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Export my data'), findsOneWidget);
   });
 }

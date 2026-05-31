@@ -4,6 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tarf/app.dart';
 import 'package:tarf/core/settings/settings_controller.dart';
 
+// Bounded pump (avoid the never-settling live eye-care countdown).
+Future<void> settle(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
+}
+
 void main() {
   testWidgets('first launch shows onboarding; completing it reaches the shell',
       (tester) async {
@@ -16,20 +22,18 @@ void main() {
         child: const TarfApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await settle(tester);
 
-    // Onboarding welcome (Arabic default).
-    expect(find.text('أرِح عينيك واذكر الله'), findsOneWidget);
+    expect(find.text('أرِح عينيك واذكر الله'), findsOneWidget); // welcome
 
-    // Page 1 -> 2 -> 3, then "Get started".
     await tester.tap(find.text('التالي'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     await tester.tap(find.text('التالي'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     await tester.tap(find.text('ابدأ الآن'));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
-    // We are now in the main shell.
-    expect(find.text('التركيز'), findsWidgets);
+    // We are now in the main shell (Home tab).
+    expect(find.text('الرئيسية'), findsWidgets);
   });
 }

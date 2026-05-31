@@ -5,6 +5,7 @@ import 'package:tarf/features/eyecare/audio/break_audio.dart';
 import 'package:tarf/features/eyecare/domain/dhikr.dart';
 import 'package:tarf/features/eyecare/presentation/break_overlay.dart';
 import 'package:tarf/l10n/app_localizations.dart';
+import 'package:tarf/theme/app_theme.dart';
 
 const _dhikr = Dhikr(
   id: 'subhanallah',
@@ -16,6 +17,7 @@ const _dhikr = Dhikr(
 
 Widget _host(Widget child, {Locale locale = const Locale('ar')}) => MaterialApp(
       locale: locale,
+      theme: TarfTheme.dark(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: child,

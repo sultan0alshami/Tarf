@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/account_screen.dart';
 import '../../features/alarm/presentation/alarm_screen.dart';
+import '../../features/eyecare/presentation/break_screen.dart';
 import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
 import '../../features/focus/presentation/focus_screen.dart';
+import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -17,12 +19,14 @@ import '../widgets/app_scaffold.dart';
 /// App route paths.
 abstract final class Routes {
   static const focus = '/focus';
+  static const focusSession = '/focus-session';
   static const timer = '/timer';
   static const alarm = '/alarm';
   static const stopwatch = '/stopwatch';
   static const insights = '/insights';
   static const settings = '/settings';
   static const eyeCareSettings = '/settings/eyecare';
+  static const eyeCareBreak = '/eyecare/break';
   static const account = '/settings/account';
   static const tasks = '/tasks';
   static const onboarding = '/onboarding';
@@ -32,7 +36,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: Routes.focus,
     redirect: (context, state) {
-      final done = ref.read(settingsControllerProvider).onboardingComplete;
+      // Debug/screenshot flag (default false; no effect on real builds).
+      const skipOnboarding = bool.fromEnvironment('SKIP_ONBOARDING');
+      final done = skipOnboarding ||
+          ref.read(settingsControllerProvider).onboardingComplete;
       final atOnboarding = state.matchedLocation == Routes.onboarding;
       if (!done && !atOnboarding) return Routes.onboarding;
       if (done && atOnboarding) return Routes.focus;
@@ -51,7 +58,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.focus,
-                builder: (context, state) => const FocusScreen(),
+                builder: (context, state) => const HomeScreen(),
               ),
             ],
           ),
@@ -94,12 +101,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const EyeCareSettingsScreen(),
       ),
       GoRoute(
+        path: Routes.eyeCareBreak,
+        builder: (context, state) => const BreakScreen(),
+      ),
+      GoRoute(
         path: Routes.account,
         builder: (context, state) => const AccountScreen(),
       ),
       GoRoute(
         path: Routes.tasks,
         builder: (context, state) => const TodosScreen(),
+      ),
+      GoRoute(
+        path: Routes.focusSession,
+        builder: (context, state) => const FocusScreen(),
       ),
     ],
   );

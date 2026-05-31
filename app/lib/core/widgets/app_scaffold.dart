@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../theme/tokens.dart';
 
 /// A single destination shown identically across mobile (bottom bar) and
 /// desktop/web/tablet (navigation rail).
@@ -14,16 +17,14 @@ class TarfDestination {
 
   final IconData icon;
   final IconData selectedIcon;
-
-  /// Resolves the localized label.
   final String Function(AppLocalizations l10n) label;
 }
 
 final tarfDestinations = <TarfDestination>[
   TarfDestination(
-    icon: Icons.center_focus_weak_outlined,
-    selectedIcon: Icons.center_focus_strong,
-    label: (l) => l.tabFocus,
+    icon: Icons.home_outlined,
+    selectedIcon: Icons.home,
+    label: (l) => l.tabHome,
   ),
   TarfDestination(
     icon: Icons.timer_outlined,
@@ -42,17 +43,10 @@ final tarfDestinations = <TarfDestination>[
   ),
 ];
 
-/// Responsive shell. Bottom navigation bar below 600px; navigation rail at or
-/// above 600px. The same destinations, order, and labels everywhere.
-///
-/// [accessory] is the persistent active-session slot (timer/focus/break) shown
-/// above the bottom bar on mobile and at the rail footer on wide layouts.
+/// Responsive shell: a floating glass capsule tab bar below 600px; a navigation
+/// rail at/above 600px. Same destinations, order, and labels everywhere.
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({
-    super.key,
-    required this.navigationShell,
-    this.accessory,
-  });
+  const AppScaffold({super.key, required this.navigationShell, this.accessory});
 
   final StatefulNavigationShell navigationShell;
   final Widget? accessory;
@@ -104,13 +98,56 @@ class AppScaffold extends StatelessWidget {
 
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ?accessory,
-          NavigationBar(
-            selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: _onSelect,
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ?accessory,
+              _CapsuleNavBar(
+                selectedIndex: navigationShell.currentIndex,
+                onSelect: _onSelect,
+                l10n: l10n,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CapsuleNavBar extends StatelessWidget {
+  const _CapsuleNavBar({
+    required this.selectedIndex,
+    required this.onSelect,
+    required this.l10n,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(TarfTokens.radiusL),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHigh.withValues(alpha: 0.9),
+            borderRadius: BorderRadius.circular(TarfTokens.radiusL),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.6)),
+          ),
+          child: NavigationBar(
+            height: 64,
+            backgroundColor: Colors.transparent,
+            selectedIndex: selectedIndex,
+            onDestinationSelected: onSelect,
             destinations: [
               for (final d in tarfDestinations)
                 NavigationDestination(
@@ -120,7 +157,7 @@ class AppScaffold extends StatelessWidget {
                 ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

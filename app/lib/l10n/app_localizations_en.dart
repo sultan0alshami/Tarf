@@ -317,5 +317,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataDeleted => 'All data deleted';
 
   @override
+  String get tabHome => 'Home';
+
+  @override
+  String get nextEyeBreak => 'Next eye break';
+
+  @override
+  String eyeRestsToday(int count) {
+    return '$count eye rests today';
+  }
+
+  @override
+  String get startFocusSession => 'Start focus session';
+
+  @override
+  String get pausedLabel => 'Paused';
+
+  @override
+  String get focusTodayLabel => 'Focus today';
+
+  @override
+  String get todosLabel => 'To-dos';
+
+  @override
   String get editDurations => 'Edit durations';
 }

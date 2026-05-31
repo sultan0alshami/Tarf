@@ -125,5 +125,14 @@
   "dataExported": "تم نسخ بياناتك إلى الحافظة",
   "dataDeleted": "تم حذف جميع البيانات",
 
+  "tabHome": "الرئيسية",
+  "nextEyeBreak": "راحة العين القادمة",
+  "eyeRestsToday": "{count} راحات للعين اليوم",
+  "@eyeRestsToday": { "placeholders": { "count": { "type": "int" } } },
+  "startFocusSession": "ابدأ جلسة تركيز",
+  "pausedLabel": "متوقّف مؤقّتًا",
+  "focusTodayLabel": "تركيز اليوم",
+  "todosLabel": "المهام",
+
   "editDurations": "تعديل المدد"
 }

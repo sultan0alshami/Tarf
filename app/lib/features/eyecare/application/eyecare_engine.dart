@@ -9,6 +9,7 @@ import '../core/prayer_service.dart';
 import '../core/precedence.dart';
 import '../presentation/show_break.dart';
 import 'eyecare_config_controller.dart';
+import 'eyecare_live.dart';
 
 /// Hosts the in-app eye-care engine. While the app is in the foreground it
 /// accumulates *active* time and, when a break is due and the precedence rules
@@ -61,10 +62,12 @@ class _EyeCareHostState extends ConsumerState<EyeCareHost>
   Future<void> _onTick() async {
     if (_breakShowing) return;
     final config = ref.read(eyeCareConfigProvider);
-    if (!config.enabled) return;
+    final live = ref.read(eyeCareLiveProvider.notifier);
+    if (!config.enabled || ref.read(eyeCareLiveProvider).paused) return;
 
     final tracker = _ensureTracker()
       ..tick(const Duration(seconds: 1), active: _resumed);
+    live.setAccumulated(tracker.accumulated);
     if (!tracker.isDue(config.eyeInterval)) return;
 
     final focus = ref.read(focusControllerProvider);
@@ -94,6 +97,7 @@ class _EyeCareHostState extends ConsumerState<EyeCareHost>
       await showEyeBreak(context, ref);
     } finally {
       tracker.reset();
+      live.reset();
       _breakShowing = false;
     }
   }
