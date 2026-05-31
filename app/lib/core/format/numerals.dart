@@ -18,12 +18,12 @@ abstract final class Numerals {
 
   static const _arabicIndicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
-  /// Resolves the default numeral system for a [localeCode] (e.g. 'ar', 'en')
-  /// when the user has not overridden it.
+  /// The default numeral system. Tarf uses Western digits (1234) everywhere —
+  /// including the Arabic locale — because those are the digits used across the
+  /// Arab world. (Eastern "Hindi" digits ٠١٢٣ remain available via the enum for
+  /// an optional future setting, but are not the default.)
   static NumeralSystem defaultForLocale(String localeCode) =>
-      localeCode.toLowerCase().startsWith('ar')
-          ? NumeralSystem.arabicIndic
-          : NumeralSystem.western;
+      NumeralSystem.western;
 
   /// Formats an integer in [system].
   static String formatInt(int value, NumeralSystem system) {

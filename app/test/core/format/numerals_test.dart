@@ -3,9 +3,9 @@ import 'package:tarf/core/format/numerals.dart';
 
 void main() {
   group('Numerals', () {
-    test('default numeral system follows locale', () {
-      expect(Numerals.defaultForLocale('ar'), NumeralSystem.arabicIndic);
-      expect(Numerals.defaultForLocale('ar_SA'), NumeralSystem.arabicIndic);
+    test('default is Western (1234) for every locale, including Arabic', () {
+      expect(Numerals.defaultForLocale('ar'), NumeralSystem.western);
+      expect(Numerals.defaultForLocale('ar_SA'), NumeralSystem.western);
       expect(Numerals.defaultForLocale('en'), NumeralSystem.western);
     });
 

@@ -47,8 +47,9 @@ class BreakOverlay extends StatefulWidget {
 }
 
 class _BreakOverlayState extends State<BreakOverlay>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _controller;
+  late final AnimationController _breathe;
   bool _finished = false;
   late bool _showTranslit;
 
@@ -62,6 +63,11 @@ class _BreakOverlayState extends State<BreakOverlay>
           setState(() => _finished = true);
         }
       });
+    _breathe = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+    if (!widget.reduceMotion) _breathe.repeat(reverse: true);
     _controller.forward();
     widget.audio.start(
       duration: widget.duration,
@@ -73,6 +79,7 @@ class _BreakOverlayState extends State<BreakOverlay>
   @override
   void dispose() {
     _controller.dispose();
+    _breathe.dispose();
     super.dispose();
   }
 
@@ -103,15 +110,17 @@ class _BreakOverlayState extends State<BreakOverlay>
               const Spacer(),
               // Countdown ring with seconds in the center.
               AnimatedBuilder(
-                animation: _controller,
+                animation: Listenable.merge([_controller, _breathe]),
                 builder: (context, _) {
                   final remaining = _finished
                       ? Duration.zero
                       : widget.duration * (1 - _controller.value);
                   final seconds = remaining.inMilliseconds / 1000;
-                  return SizedBox(
-                    width: 200,
-                    height: 200,
+                  return Transform.scale(
+                    scale: 1 + 0.02 * _breathe.value,
+                    child: SizedBox(
+                    width: 220,
+                    height: 220,
                     child: CustomPaint(
                       painter: _RingPainter(
                         progress: 1 - _controller.value,
@@ -130,7 +139,7 @@ class _BreakOverlayState extends State<BreakOverlay>
                         ),
                       ),
                     ),
-                  );
+                  ));
                 },
               ),
               const SizedBox(height: TarfTokens.space3),
@@ -192,8 +201,8 @@ class _DhikrView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: TarfTokens.fontArabic,
-                fontSize: 44,
-                height: 1.6,
+                fontSize: 50,
+                height: 1.75,
                 color: scheme.onSurface,
               ),
             ),

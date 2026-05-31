@@ -69,10 +69,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get takeBreakNow => 'خذ راحة الآن';
 
   @override
-  String get breakLookAway => 'انظر إلى مسافة ٦ أمتار';
+  String get breakLookAway => 'انظر إلى مسافة 6 أمتار';
 
   @override
-  String get breakInstruction => 'أرِح عينيك لمدّة ٢٠ ثانية';
+  String get breakInstruction => 'أرِح عينيك لمدّة 20 ثانية';
 
   @override
   String get breakRepeatAfter => 'ردّد خلف التلاوة';
@@ -183,7 +183,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get labelBreaks => 'فترات الراحة';
 
   @override
-  String get last7Days => 'آخر ٧ أيام';
+  String get last7Days => 'آخر 7 أيام';
 
   @override
   String get exportCsv => 'تصدير CSV';
@@ -273,7 +273,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onbBody =>
-      'كل ٢٠ دقيقة، يدعوك طَرْف بلطف إلى النظر بعيدًا لمدة ٢٠ ثانية مع ذكرٍ هادئ — عنايةً بعينيك وقلبك.';
+      'كل 20 دقيقة، يدعوك طَرْف بلطف إلى النظر بعيدًا لمدة 20 ثانية مع ذكرٍ هادئ — عنايةً بعينيك وقلبك.';
 
   @override
   String get onbChooseLanguage => 'اختر لغتك';
