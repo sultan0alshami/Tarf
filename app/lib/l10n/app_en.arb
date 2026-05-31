@@ -50,6 +50,7 @@
 
   "focusDailyGoal": "Daily goal",
   "focusReady": "Ready to focus",
+  "focusSessionComplete": "Session complete",
   "phaseWork": "Focus",
   "phaseShortBreak": "Short break",
   "phaseLongBreak": "Long break",
@@ -135,5 +136,49 @@
   "focusTodayLabel": "Focus today",
   "todosLabel": "To-dos",
 
-  "editDurations": "Edit durations"
+  "editDurations": "Edit durations",
+
+  "unitHours": "Hours",
+  "unitMinutes": "Minutes",
+  "unitSeconds": "Seconds",
+
+  "alarmRepeatDaily": "Daily",
+  "alarmRepeatWeekdays": "Weekdays",
+  "alarmRepeatWeekends": "Weekends",
+  "alarmRepeatOnce": "Once",
+  "alarmRepeatCustom": "Custom",
+  "alarmLabelHint": "e.g. Fajr, Wake up",
+  "alarmDeleted": "Alarm deleted",
+  "alarmToggleSemantic": "Toggle alarm",
+
+  "lapNumber": "Lap {n}",
+  "@lapNumber": { "placeholders": { "n": { "type": "int" } } },
+  "lapTotal": "Total",
+  "lapFastest": "Fastest",
+  "lapSlowest": "Slowest",
+  "noLapsYet": "No laps yet",
+
+  "insightsEyeRestsCaption": "Eye rests today",
+  "insightsEyeRestsSubline": "Nicely done — your eyes thank you.",
+  "insightsThisWeek": "This week",
+
+  "todosEmptyLine": "We're here whenever you need a moment",
+  "todoSessions": "{actual} of {estimated} sessions",
+  "@todoSessions": { "placeholders": { "actual": { "type": "int" }, "estimated": { "type": "int" } } },
+
+  "settingsEyeCare": "Eye-care",
+  "settingsBreakInterval": "Break interval",
+  "settingsBreakDuration": "Break duration",
+  "settingsDhikrAudio": "Dhikr & audio",
+  "settingsMoreEyeCare": "More eye-care settings",
+  "settingsNumerals": "Numerals",
+  "settingsAccount": "Account",
+
+  "syncStatusOffline": "Offline · On this device",
+  "comingSoon": "Coming soon",
+
+  "eyeCareSettingsTitle": "Eye-care settings",
+  "coreBreakGroupLabel": "Reminder & rest",
+  "longerBreakGroupLabel": "Longer stand & stretch break",
+  "behaviorAlertsGroupLabel": "Behavior & alerts"
 }

@@ -2,9 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/account_screen.dart';
+import '../../features/alarm/domain/alarm_item.dart';
+import '../../features/alarm/presentation/alarm_ringing_screen.dart';
 import '../../features/alarm/presentation/alarm_screen.dart';
 import '../../features/eyecare/presentation/break_screen.dart';
 import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
+import '../../features/focus/presentation/active_session_shelf.dart';
 import '../../features/focus/presentation/focus_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
@@ -22,6 +25,7 @@ abstract final class Routes {
   static const focusSession = '/focus-session';
   static const timer = '/timer';
   static const alarm = '/alarm';
+  static const alarmRinging = '/alarm-ringing';
   static const stopwatch = '/stopwatch';
   static const insights = '/insights';
   static const settings = '/settings';
@@ -51,8 +55,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const OnboardingScreen(),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            AppScaffold(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) => AppScaffold(
+          navigationShell: navigationShell,
+          accessory: const ActiveSessionShelf(),
+        ),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -115,6 +121,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.focusSession,
         builder: (context, state) => const FocusScreen(),
+      ),
+      GoRoute(
+        path: Routes.alarmRinging,
+        builder: (context, state) => const AlarmRingingScreen(
+          item: AlarmItem(id: 'preview', hour: 6, minute: 30),
+        ),
       ),
     ],
   );

@@ -35,6 +35,7 @@ class EyeCareConfig {
     this.longInterval = const Duration(minutes: 50),
     this.longBreakDuration = const Duration(minutes: 5),
     this.strict = false,
+    this.showTransliteration = true,
     this.snoozeCapPerSession = 3,
     this.snoozePresets = const [
       Duration(minutes: 1),
@@ -67,6 +68,9 @@ class EyeCareConfig {
   final Duration longInterval;
   final Duration longBreakDuration;
   final bool strict;
+
+  /// Whether the dhikr break shows the Latin transliteration by default.
+  final bool showTransliteration;
   final int snoozeCapPerSession;
   final List<Duration> snoozePresets;
   final bool soundEnabled;
@@ -100,6 +104,7 @@ class EyeCareConfig {
     Duration? longInterval,
     Duration? longBreakDuration,
     bool? strict,
+    bool? showTransliteration,
     int? snoozeCapPerSession,
     List<Duration>? snoozePresets,
     bool? soundEnabled,
@@ -129,6 +134,7 @@ class EyeCareConfig {
       longInterval: longInterval ?? this.longInterval,
       longBreakDuration: longBreakDuration ?? this.longBreakDuration,
       strict: strict ?? this.strict,
+      showTransliteration: showTransliteration ?? this.showTransliteration,
       snoozeCapPerSession: snoozeCapPerSession ?? this.snoozeCapPerSession,
       snoozePresets: snoozePresets ?? this.snoozePresets,
       soundEnabled: soundEnabled ?? this.soundEnabled,
@@ -160,6 +166,7 @@ class EyeCareConfig {
         'longIntervalS': longInterval.inSeconds,
         'longBreakS': longBreakDuration.inSeconds,
         'strict': strict,
+        'showTranslit': showTransliteration,
         'snoozeCap': snoozeCapPerSession,
         'snoozePresetsS': snoozePresets.map((d) => d.inSeconds).toList(),
         'sound': soundEnabled,
@@ -192,6 +199,7 @@ class EyeCareConfig {
       longInterval: secs(j['longIntervalS'], 3000),
       longBreakDuration: secs(j['longBreakS'], 300),
       strict: (j['strict'] as bool?) ?? false,
+      showTransliteration: (j['showTranslit'] as bool?) ?? true,
       snoozeCapPerSession: (j['snoozeCap'] as int?) ?? 3,
       snoozePresets: ((j['snoozePresetsS'] as List?)?.cast<int>())
               ?.map((s) => Duration(seconds: s))

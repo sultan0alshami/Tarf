@@ -356,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Ready to focus'**
   String get focusReady;
 
+  /// No description provided for @focusSessionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete'**
+  String get focusSessionComplete;
+
   /// No description provided for @phaseWork.
   ///
   /// In en, this message translates to:
@@ -727,6 +733,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit durations'**
   String get editDurations;
+
+  /// No description provided for @unitHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get unitHours;
+
+  /// No description provided for @unitMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get unitMinutes;
+
+  /// No description provided for @unitSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get unitSeconds;
+
+  /// No description provided for @alarmRepeatDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get alarmRepeatDaily;
+
+  /// No description provided for @alarmRepeatWeekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekdays'**
+  String get alarmRepeatWeekdays;
+
+  /// No description provided for @alarmRepeatWeekends.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekends'**
+  String get alarmRepeatWeekends;
+
+  /// No description provided for @alarmRepeatOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once'**
+  String get alarmRepeatOnce;
+
+  /// No description provided for @alarmRepeatCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get alarmRepeatCustom;
+
+  /// No description provided for @alarmLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Fajr, Wake up'**
+  String get alarmLabelHint;
+
+  /// No description provided for @alarmDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm deleted'**
+  String get alarmDeleted;
+
+  /// No description provided for @alarmToggleSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle alarm'**
+  String get alarmToggleSemantic;
+
+  /// No description provided for @lapNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Lap {n}'**
+  String lapNumber(int n);
+
+  /// No description provided for @lapTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get lapTotal;
+
+  /// No description provided for @lapFastest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest'**
+  String get lapFastest;
+
+  /// No description provided for @lapSlowest.
+  ///
+  /// In en, this message translates to:
+  /// **'Slowest'**
+  String get lapSlowest;
+
+  /// No description provided for @noLapsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No laps yet'**
+  String get noLapsYet;
+
+  /// No description provided for @insightsEyeRestsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Eye rests today'**
+  String get insightsEyeRestsCaption;
+
+  /// No description provided for @insightsEyeRestsSubline.
+  ///
+  /// In en, this message translates to:
+  /// **'Nicely done — your eyes thank you.'**
+  String get insightsEyeRestsSubline;
+
+  /// No description provided for @insightsThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get insightsThisWeek;
+
+  /// No description provided for @todosEmptyLine.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re here whenever you need a moment'**
+  String get todosEmptyLine;
+
+  /// No description provided for @todoSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'{actual} of {estimated} sessions'**
+  String todoSessions(int actual, int estimated);
+
+  /// No description provided for @settingsEyeCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Eye-care'**
+  String get settingsEyeCare;
+
+  /// No description provided for @settingsBreakInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Break interval'**
+  String get settingsBreakInterval;
+
+  /// No description provided for @settingsBreakDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Break duration'**
+  String get settingsBreakDuration;
+
+  /// No description provided for @settingsDhikrAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr & audio'**
+  String get settingsDhikrAudio;
+
+  /// No description provided for @settingsMoreEyeCare.
+  ///
+  /// In en, this message translates to:
+  /// **'More eye-care settings'**
+  String get settingsMoreEyeCare;
+
+  /// No description provided for @settingsNumerals.
+  ///
+  /// In en, this message translates to:
+  /// **'Numerals'**
+  String get settingsNumerals;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
+
+  /// No description provided for @syncStatusOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline · On this device'**
+  String get syncStatusOffline;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
+
+  /// No description provided for @eyeCareSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Eye-care settings'**
+  String get eyeCareSettingsTitle;
+
+  /// No description provided for @coreBreakGroupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder & rest'**
+  String get coreBreakGroupLabel;
+
+  /// No description provided for @longerBreakGroupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Longer stand & stretch break'**
+  String get longerBreakGroupLabel;
+
+  /// No description provided for @behaviorAlertsGroupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Behavior & alerts'**
+  String get behaviorAlertsGroupLabel;
 }
 
 class _AppLocalizationsDelegate

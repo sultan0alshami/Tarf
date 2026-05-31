@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,8 +16,16 @@ import '../domain/focus_models.dart';
 /// Full-screen focus (Pomodoro) session, pushed from Home. The eye-break overlay
 /// may appear over it without disturbing this timer.
 
-class FocusScreen extends ConsumerWidget {
+class FocusScreen extends ConsumerStatefulWidget {
   const FocusScreen({super.key});
+
+  @override
+  ConsumerState<FocusScreen> createState() => _FocusScreenState();
+}
+
+class _FocusScreenState extends ConsumerState<FocusScreen> {
+  bool _bloom = false;
+  Timer? _bloomTimer;
 
   String _phaseLabel(AppLocalizations l10n, FocusPhase phase) => switch (phase) {
         FocusPhase.idle => l10n.focusReady,
@@ -25,9 +35,26 @@ class FocusScreen extends ConsumerWidget {
       };
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _bloomTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
+    // A work session just finished → celebrate with a brief bloom.
+    ref.listen(focusControllerProvider, (prev, next) {
+      if (next.justCompletedPhase == FocusPhase.work &&
+          prev?.justCompletedPhase != FocusPhase.work) {
+        setState(() => _bloom = true);
+        _bloomTimer?.cancel();
+        _bloomTimer = Timer(const Duration(milliseconds: 2800), () {
+          if (mounted) setState(() => _bloom = false);
+        });
+      }
+    });
     final state = ref.watch(focusControllerProvider);
     final controller = ref.read(focusControllerProvider.notifier);
     final config = ref.watch(focusConfigProvider);
@@ -56,7 +83,9 @@ class FocusScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
+      body: Stack(
+        children: [
+          Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -87,6 +116,95 @@ class FocusScreen extends ConsumerWidget {
             const SizedBox(height: TarfTokens.space5),
             _Controls(state: state, controller: controller),
           ],
+        ),
+          ),
+          if (_bloom)
+            _CompleteBloom(
+              reduceMotion: ref.watch(
+                settingsControllerProvider.select((s) => s.reduceMotion),
+              ),
+              done: state.completedWorkSessions,
+              goal: config.dailyGoalSessions,
+              onDismiss: () {
+                _bloomTimer?.cancel();
+                setState(() => _bloom = false);
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The focus-complete bloom (design §4.4/§8.12): a gentle scale+fade check over a
+/// dim scrim, with a supportive count. Tap to dismiss; auto-dismisses shortly.
+class _CompleteBloom extends StatelessWidget {
+  const _CompleteBloom({
+    required this.reduceMotion,
+    required this.done,
+    required this.goal,
+    required this.onDismiss,
+  });
+
+  final bool reduceMotion;
+  final int done;
+  final int goal;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Positioned.fill(
+      child: GestureDetector(
+        onTap: onDismiss,
+        child: ColoredBox(
+          color: scheme.scrim.withValues(alpha: 0.6),
+          child: Center(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: reduceMotion ? 1.0 : 0.0, end: 1.0),
+              duration: Duration(milliseconds: reduceMotion ? 0 : 320),
+              curve: Curves.easeOutBack,
+              builder: (context, t, child) {
+                final v = t.clamp(0.0, 1.0);
+                return Opacity(
+                  opacity: v,
+                  child: Transform.scale(scale: 0.8 + 0.2 * v, child: child),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: scheme.primary.withValues(alpha: 0.16),
+                    ),
+                    child: Icon(Icons.check_rounded,
+                        size: 52, color: scheme.primary),
+                  ),
+                  const SizedBox(height: TarfTokens.space4),
+                  Text(
+                    l10n.focusSessionComplete,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: TarfTokens.space2),
+                  Text(
+                    l10n.focusSessionsProgress(done, goal),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: scheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

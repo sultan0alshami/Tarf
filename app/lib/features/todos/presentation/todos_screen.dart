@@ -1,43 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../core/format/numerals.dart';
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/routing/app_router.dart';
+import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../theme/tokens.dart';
 import '../../focus/application/focus_controller.dart';
 import '../application/todos_controller.dart';
+import '../domain/todo.dart';
 
 class TodosScreen extends ConsumerWidget {
   const TodosScreen({super.key});
 
-  Future<void> _addDialog(BuildContext context, WidgetRef ref) async {
+  Future<void> _addTask(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context);
     final textController = TextEditingController();
-    final title = await showDialog<String>(
+    final text = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.addTask),
-        content: TextField(
-          controller: textController,
-          autofocus: true,
-          decoration: InputDecoration(hintText: l10n.taskHint),
-          onSubmitted: (v) => Navigator.of(context).pop(v),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.actionCancel),
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(l10n.addTask),
+          content: TextField(
+            controller: textController,
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(hintText: l10n.taskHint),
+            onSubmitted: (value) => Navigator.of(dialogContext).pop(value),
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(textController.text),
-            child: Text(l10n.actionDone),
-          ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.actionCancel),
+            ),
+            FilledButton(
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop(textController.text),
+              child: Text(l10n.actionDone),
+            ),
+          ],
+        );
+      },
     );
-    if (title != null && title.trim().isNotEmpty) {
+    final trimmed = text?.trim() ?? '';
+    if (trimmed.isNotEmpty) {
       await ref.read(todosControllerProvider.notifier).add(
-            title,
+            trimmed,
             nowMs: DateTime.now().millisecondsSinceEpoch,
           );
     }
@@ -46,74 +54,116 @@ class TodosScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final scheme = Theme.of(context).colorScheme;
     final todos = ref.watch(todosControllerProvider);
-    final controller = ref.read(todosControllerProvider.notifier);
-    final numerals = ref.watch(
-      settingsControllerProvider.select((s) => s.effectiveNumerals),
-    );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.tasks)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _addDialog(context, ref),
-        tooltip: l10n.addTask,
-        child: const Icon(Icons.add),
+      appBar: AppBar(
+        title: Text(l10n.tasks),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: l10n.addTask,
+            onPressed: () => _addTask(context, ref),
+          ),
+        ],
       ),
       body: todos.isEmpty
-          ? Center(
-              child: Text(l10n.noTasks,
-                  style: TextStyle(color: scheme.onSurfaceVariant)),
+          ? TarfEmptyState(
+              icon: Icons.check_circle_outline,
+              message: l10n.todosEmptyLine,
+              actionLabel: l10n.addTask,
+              onAction: () => _addTask(context, ref),
             )
-          : ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, i) {
-                final t = todos[i];
-                return Dismissible(
-                  key: ValueKey(t.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    color: scheme.errorContainer,
-                    alignment: AlignmentDirectional.centerEnd,
-                    padding: const EdgeInsetsDirectional.only(end: 24),
-                    child: Icon(Icons.delete, color: scheme.onErrorContainer),
-                  ),
-                  onDismissed: (_) => controller.remove(t.id),
-                  child: ListTile(
-                    leading: Checkbox(
-                      value: t.done,
-                      onChanged: (_) => controller.toggle(t.id),
-                    ),
-                    title: Text(
-                      t.title,
-                      style: t.done
-                          ? TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: scheme.onSurfaceVariant,
-                            )
-                          : null,
-                    ),
-                    subtitle: Text(
-                      '${Numerals.formatInt(t.actualSessions, numerals)}'
-                      ' / ${Numerals.formatInt(t.estimatedSessions, numerals)}'
-                      ' ${l10n.estLabel}',
-                    ),
-                    trailing: t.done
-                        ? null
-                        : IconButton(
-                            icon: const Icon(Icons.play_circle_outline),
-                            tooltip: l10n.startFocus,
-                            onPressed: () {
-                              ref
-                                  .read(focusControllerProvider.notifier)
-                                  .startWork(taskId: t.id);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                  ),
-                );
-              },
+          : ListView(
+              padding: const EdgeInsets.all(TarfTokens.space3),
+              children: [
+                TarfGroup(
+                  children: [
+                    for (final todo in todos) _TodoRow(todo: todo),
+                  ],
+                ),
+              ],
             ),
+    );
+  }
+}
+
+class _TodoRow extends ConsumerWidget {
+  const _TodoRow({required this.todo});
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsetsDirectional.symmetric(
+        horizontal: TarfTokens.space3,
+        vertical: TarfTokens.space2,
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 44,
+              height: 44,
+              child: Checkbox(
+                value: todo.done,
+                shape: const CircleBorder(),
+                onChanged: (_) => ref
+                    .read(todosControllerProvider.notifier)
+                    .toggle(todo.id),
+              ),
+            ),
+            const SizedBox(width: TarfTokens.space2),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    todo.title,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: todo.done
+                          ? context.tarf.textTertiary
+                          : scheme.onSurface,
+                      decoration:
+                          todo.done ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    l10n.todoSessions(
+                      todo.actualSessions,
+                      todo.estimatedSessions,
+                    ),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!todo.done)
+              IconButton(
+                icon: Icon(
+                  Icons.play_circle_outline,
+                  color: scheme.primary,
+                ),
+                tooltip: l10n.startFocus,
+                onPressed: () {
+                  ref.read(focusControllerProvider.notifier).startWork();
+                  context.push(Routes.focusSession);
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

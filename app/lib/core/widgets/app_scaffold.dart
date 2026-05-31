@@ -84,7 +84,9 @@ class AppScaffold extends StatelessWidget {
                         alignment: AlignmentDirectional.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(8),
-                          child: accessory,
+                          // Bound the width so the shelf uses its compact form in
+                          // the rail (the full strip needs a finite width).
+                          child: SizedBox(width: 72, child: accessory),
                         ),
                       ),
                     ),

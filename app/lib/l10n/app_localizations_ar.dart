@@ -139,6 +139,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get focusReady => 'جاهز للتركيز';
 
   @override
+  String get focusSessionComplete => 'اكتملت الجلسة';
+
+  @override
   String get phaseWork => 'تركيز';
 
   @override
@@ -341,4 +344,110 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get editDurations => 'تعديل المدد';
+
+  @override
+  String get unitHours => 'ساعات';
+
+  @override
+  String get unitMinutes => 'دقائق';
+
+  @override
+  String get unitSeconds => 'ثوانٍ';
+
+  @override
+  String get alarmRepeatDaily => 'يوميًا';
+
+  @override
+  String get alarmRepeatWeekdays => 'أيام الأسبوع';
+
+  @override
+  String get alarmRepeatWeekends => 'نهاية الأسبوع';
+
+  @override
+  String get alarmRepeatOnce => 'مرة واحدة';
+
+  @override
+  String get alarmRepeatCustom => 'مخصّص';
+
+  @override
+  String get alarmLabelHint => 'مثل: الفجر، الاستيقاظ';
+
+  @override
+  String get alarmDeleted => 'تم حذف المنبّه';
+
+  @override
+  String get alarmToggleSemantic => 'تبديل المنبّه';
+
+  @override
+  String lapNumber(int n) {
+    return 'لفة $n';
+  }
+
+  @override
+  String get lapTotal => 'الإجمالي';
+
+  @override
+  String get lapFastest => 'الأسرع';
+
+  @override
+  String get lapSlowest => 'الأبطأ';
+
+  @override
+  String get noLapsYet => 'لا لفات بعد';
+
+  @override
+  String get insightsEyeRestsCaption => 'راحات العين اليوم';
+
+  @override
+  String get insightsEyeRestsSubline => 'أحسنت — عيناك تشكرانك.';
+
+  @override
+  String get insightsThisWeek => 'هذا الأسبوع';
+
+  @override
+  String get todosEmptyLine => 'نحن هنا متى احتجت إلى لحظة';
+
+  @override
+  String todoSessions(int actual, int estimated) {
+    return '$actual من $estimated جلسات';
+  }
+
+  @override
+  String get settingsEyeCare => 'العناية بالعين';
+
+  @override
+  String get settingsBreakInterval => 'مدة التذكير';
+
+  @override
+  String get settingsBreakDuration => 'مدة الراحة';
+
+  @override
+  String get settingsDhikrAudio => 'الذِّكر والصوت';
+
+  @override
+  String get settingsMoreEyeCare => 'مزيد من إعدادات العناية بالعين';
+
+  @override
+  String get settingsNumerals => 'الأرقام';
+
+  @override
+  String get settingsAccount => 'الحساب';
+
+  @override
+  String get syncStatusOffline => 'غير متصل · على هذا الجهاز';
+
+  @override
+  String get comingSoon => 'قريبًا';
+
+  @override
+  String get eyeCareSettingsTitle => 'إعدادات العناية بالعين';
+
+  @override
+  String get coreBreakGroupLabel => 'التذكير والراحة';
+
+  @override
+  String get longerBreakGroupLabel => 'استراحة أطول للوقوف والتمدّد';
+
+  @override
+  String get behaviorAlertsGroupLabel => 'السلوك والتنبيهات';
 }

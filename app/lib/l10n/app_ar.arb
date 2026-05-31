@@ -49,6 +49,7 @@
 
   "focusDailyGoal": "الهدف اليومي",
   "focusReady": "جاهز للتركيز",
+  "focusSessionComplete": "اكتملت الجلسة",
   "phaseWork": "تركيز",
   "phaseShortBreak": "راحة قصيرة",
   "phaseLongBreak": "راحة طويلة",
@@ -134,5 +135,49 @@
   "focusTodayLabel": "تركيز اليوم",
   "todosLabel": "المهام",
 
-  "editDurations": "تعديل المدد"
+  "editDurations": "تعديل المدد",
+
+  "unitHours": "ساعات",
+  "unitMinutes": "دقائق",
+  "unitSeconds": "ثوانٍ",
+
+  "alarmRepeatDaily": "يوميًا",
+  "alarmRepeatWeekdays": "أيام الأسبوع",
+  "alarmRepeatWeekends": "نهاية الأسبوع",
+  "alarmRepeatOnce": "مرة واحدة",
+  "alarmRepeatCustom": "مخصّص",
+  "alarmLabelHint": "مثل: الفجر، الاستيقاظ",
+  "alarmDeleted": "تم حذف المنبّه",
+  "alarmToggleSemantic": "تبديل المنبّه",
+
+  "lapNumber": "لفة {n}",
+  "@lapNumber": { "placeholders": { "n": { "type": "int" } } },
+  "lapTotal": "الإجمالي",
+  "lapFastest": "الأسرع",
+  "lapSlowest": "الأبطأ",
+  "noLapsYet": "لا لفات بعد",
+
+  "insightsEyeRestsCaption": "راحات العين اليوم",
+  "insightsEyeRestsSubline": "أحسنت — عيناك تشكرانك.",
+  "insightsThisWeek": "هذا الأسبوع",
+
+  "todosEmptyLine": "نحن هنا متى احتجت إلى لحظة",
+  "todoSessions": "{actual} من {estimated} جلسات",
+  "@todoSessions": { "placeholders": { "actual": { "type": "int" }, "estimated": { "type": "int" } } },
+
+  "settingsEyeCare": "العناية بالعين",
+  "settingsBreakInterval": "مدة التذكير",
+  "settingsBreakDuration": "مدة الراحة",
+  "settingsDhikrAudio": "الذِّكر والصوت",
+  "settingsMoreEyeCare": "مزيد من إعدادات العناية بالعين",
+  "settingsNumerals": "الأرقام",
+  "settingsAccount": "الحساب",
+
+  "syncStatusOffline": "غير متصل · على هذا الجهاز",
+  "comingSoon": "قريبًا",
+
+  "eyeCareSettingsTitle": "إعدادات العناية بالعين",
+  "coreBreakGroupLabel": "التذكير والراحة",
+  "longerBreakGroupLabel": "استراحة أطول للوقوف والتمدّد",
+  "behaviorAlertsGroupLabel": "السلوك والتنبيهات"
 }

@@ -45,6 +45,7 @@ class BreakScreen extends ConsumerWidget {
           numerals: settings.effectiveNumerals,
           strict: config.strict,
           soundEnabled: config.soundEnabled,
+          showTransliteration: config.showTransliteration,
           reduceMotion: settings.reduceMotion,
           onFinished: () => close(taken: true),
           onSkip: config.strict ? null : () => close(taken: false),

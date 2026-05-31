@@ -139,6 +139,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get focusReady => 'Ready to focus';
 
   @override
+  String get focusSessionComplete => 'Session complete';
+
+  @override
   String get phaseWork => 'Focus';
 
   @override
@@ -341,4 +344,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editDurations => 'Edit durations';
+
+  @override
+  String get unitHours => 'Hours';
+
+  @override
+  String get unitMinutes => 'Minutes';
+
+  @override
+  String get unitSeconds => 'Seconds';
+
+  @override
+  String get alarmRepeatDaily => 'Daily';
+
+  @override
+  String get alarmRepeatWeekdays => 'Weekdays';
+
+  @override
+  String get alarmRepeatWeekends => 'Weekends';
+
+  @override
+  String get alarmRepeatOnce => 'Once';
+
+  @override
+  String get alarmRepeatCustom => 'Custom';
+
+  @override
+  String get alarmLabelHint => 'e.g. Fajr, Wake up';
+
+  @override
+  String get alarmDeleted => 'Alarm deleted';
+
+  @override
+  String get alarmToggleSemantic => 'Toggle alarm';
+
+  @override
+  String lapNumber(int n) {
+    return 'Lap $n';
+  }
+
+  @override
+  String get lapTotal => 'Total';
+
+  @override
+  String get lapFastest => 'Fastest';
+
+  @override
+  String get lapSlowest => 'Slowest';
+
+  @override
+  String get noLapsYet => 'No laps yet';
+
+  @override
+  String get insightsEyeRestsCaption => 'Eye rests today';
+
+  @override
+  String get insightsEyeRestsSubline => 'Nicely done — your eyes thank you.';
+
+  @override
+  String get insightsThisWeek => 'This week';
+
+  @override
+  String get todosEmptyLine => 'We\'re here whenever you need a moment';
+
+  @override
+  String todoSessions(int actual, int estimated) {
+    return '$actual of $estimated sessions';
+  }
+
+  @override
+  String get settingsEyeCare => 'Eye-care';
+
+  @override
+  String get settingsBreakInterval => 'Break interval';
+
+  @override
+  String get settingsBreakDuration => 'Break duration';
+
+  @override
+  String get settingsDhikrAudio => 'Dhikr & audio';
+
+  @override
+  String get settingsMoreEyeCare => 'More eye-care settings';
+
+  @override
+  String get settingsNumerals => 'Numerals';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String get syncStatusOffline => 'Offline · On this device';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get eyeCareSettingsTitle => 'Eye-care settings';
+
+  @override
+  String get coreBreakGroupLabel => 'Reminder & rest';
+
+  @override
+  String get longerBreakGroupLabel => 'Longer stand & stretch break';
+
+  @override
+  String get behaviorAlertsGroupLabel => 'Behavior & alerts';
 }

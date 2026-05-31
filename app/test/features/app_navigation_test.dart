@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,28 +46,35 @@ void main() {
     // Tasks + Insights from the Home app bar.
     await tester.tap(find.byTooltip('Tasks'));
     await settle(tester);
-    expect(find.text('No tasks yet'), findsOneWidget);
+    expect(find.text("We're here whenever you need a moment"), findsOneWidget);
     await tester.pageBack();
     await settle(tester);
 
     await tester.tap(find.byTooltip('Insights'));
     await settle(tester);
-    expect(find.text('No data yet — start a focus session'), findsOneWidget);
+    expect(find.text('Eye rests today'), findsOneWidget);
     await tester.pageBack();
     await settle(tester);
 
-    // Settings -> Eye care, then Account & Sync.
+    // Settings -> eye-care detail, then Account.
     await tester.tap(find.byTooltip('Settings'));
     await settle(tester);
-    expect(find.text('Eye care'), findsWidgets);
+    expect(find.text('Eye-care'), findsWidgets);
 
-    await tester.tap(find.text('Eye care'));
+    await tester.tap(find.text('More eye-care settings'));
     await settle(tester);
     expect(find.text('Reminder interval'), findsOneWidget);
     await tester.pageBack();
     await settle(tester);
 
-    await tester.tap(find.text('Account & Sync'));
+    // Account row is the last item in a long, lazily-built list — scroll to it.
+    await tester.scrollUntilVisible(
+      find.text('Account'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await settle(tester);
+    await tester.tap(find.text('Account'));
     await settle(tester);
     expect(find.text('Export my data'), findsOneWidget);
   });

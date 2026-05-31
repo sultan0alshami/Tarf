@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/format/numerals.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/time/clock.dart';
+import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../application/progress_controller.dart';
@@ -16,174 +19,187 @@ class InsightsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final tarf = context.tarf;
+
     final all = ref.watch(progressControllerProvider);
-    final numerals = ref.watch(
+    final n = ref.watch(
       settingsControllerProvider.select((s) => s.effectiveNumerals),
     );
 
     final now = DateTime.now();
-    final today = all[dayKey(now)] ?? DailyProgress.empty(dayKey(now));
+    final today = all[dayKey(now)] ?? DailyProgress.empty('today');
     final week = ProgressMath.lastDays(all, now, 7);
-    final streak = ProgressMath.currentStreak(all, now);
-    final hasData = all.values.any((d) => d.sessions > 0 || d.focusMinutes > 0);
+    final weekFocus = week.fold<int>(0, (a, d) => a + d.focusMinutes);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.navInsights),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.ios_share),
-            tooltip: l10n.exportCsv,
-            onPressed: hasData
-                ? () async {
-                    await Clipboard.setData(
-                      ClipboardData(text: ProgressMath.toCsv(all)),
-                    );
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.copiedToClipboard)),
-                      );
-                    }
-                  }
-                : null,
+      appBar: AppBar(title: Text(l10n.navInsights)),
+      body: ListView(
+        padding: const EdgeInsets.all(TarfTokens.space3),
+        children: [
+          // 1. Hero card — eye rests today.
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(TarfTokens.space4),
+              child: Row(
+                children: [
+                  TarfTimeText(
+                    Numerals.formatInt(today.breaksTaken, n),
+                    style: theme.textTheme.displaySmall,
+                    color: scheme.primary,
+                  ),
+                  const SizedBox(width: TarfTokens.space4),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.insightsEyeRestsCaption,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.insightsEyeRestsSubline,
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(color: tarf.textTertiary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 2. Last 7 days — bar chart of eye rests.
+          const SizedBox(height: TarfTokens.space4),
+          Text(
+            l10n.last7Days,
+            style: theme.textTheme.labelLarge
+                ?.copyWith(color: scheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: TarfTokens.space3),
+          _WeekBars(week: week, numerals: n),
+
+          // 3. Focus metrics — today vs this week.
+          const SizedBox(height: TarfTokens.space4),
+          Row(
+            children: [
+              Expanded(
+                child: TarfMetricCard(
+                  value: _hm(today.focusMinutes, n),
+                  label: l10n.focusTodayLabel,
+                ),
+              ),
+              const SizedBox(width: TarfTokens.space2),
+              Expanded(
+                child: TarfMetricCard(
+                  value: _hm(weekFocus, n),
+                  label: l10n.insightsThisWeek,
+                ),
+              ),
+            ],
+          ),
+
+          // 4. Export.
+          const SizedBox(height: TarfTokens.space4),
+          Center(
+            child: TextButton(
+              onPressed: () async {
+                await Clipboard.setData(
+                  ClipboardData(text: ProgressMath.toCsv(all)),
+                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.copiedToClipboard)),
+                  );
+                }
+              },
+              child: Text(l10n.exportCsv),
+            ),
           ),
         ],
       ),
-      body: !hasData
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(TarfTokens.space4),
-                child: Text(
-                  l10n.noDataYet,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: scheme.onSurfaceVariant),
-                ),
-              ),
-            )
-          : ListView(
-              padding: const EdgeInsets.all(TarfTokens.space3),
-              children: [
-                if (streak > 0)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: TarfTokens.space3),
-                    child: Chip(
-                      avatar: const Icon(Icons.local_fire_department, size: 18),
-                      label: Text(l10n.insightsStreak(streak)),
-                    ),
-                  ),
-                Text(l10n.insightsToday,
-                    style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: TarfTokens.space2),
-                Row(
-                  children: [
-                    _Stat(
-                      value: Numerals.formatInt(today.focusMinutes, numerals),
-                      label: l10n.labelFocusMinutes,
-                    ),
-                    _Stat(
-                      value: Numerals.formatInt(today.sessions, numerals),
-                      label: l10n.labelSessions,
-                    ),
-                    _Stat(
-                      value: Numerals.formatInt(today.breaksTaken, numerals),
-                      label: l10n.labelBreaks,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: TarfTokens.space4),
-                Text(l10n.last7Days,
-                    style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: TarfTokens.space3),
-                _WeekChart(week: week, numerals: numerals),
-              ],
-            ),
     );
   }
 }
 
-class _Stat extends StatelessWidget {
-  const _Stat({required this.value, required this.label});
-  final String value;
-  final String label;
+/// Formats minutes as a compact "1h 5m" / "5m" string in the chosen numerals.
+String _hm(int minutes, NumeralSystem n) {
+  final h = minutes ~/ 60;
+  final m = minutes % 60;
+  return h > 0
+      ? '${Numerals.formatInt(h, n)}h ${Numerals.formatInt(m, n)}m'
+      : '${Numerals.formatInt(m, n)}m';
+}
+
+/// A seven-bar chart of daily eye rests (oldest first). In RTL the Row places
+/// the oldest day on the right, which reads correctly; the bars themselves are
+/// plain rectangles and need no mirroring.
+class _WeekBars extends StatelessWidget {
+  const _WeekBars({required this.week, required this.numerals});
+
+  final List<DailyProgress> week;
+  final NumeralSystem numerals;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Expanded(
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: TarfTokens.space3),
-          child: Column(
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final maxRests = week.map((d) => d.breaksTaken).fold<int>(0, math.max);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(TarfTokens.space3),
+        child: SizedBox(
+          height: 150,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(value,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: scheme.primary,
-                        fontWeight: FontWeight.w600,
-                      )),
-              const SizedBox(height: 4),
-              Text(label,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.copyWith(color: scheme.onSurfaceVariant)),
+              for (final d in week)
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: TarfTokens.space1),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: FractionallySizedBox(
+                              heightFactor:
+                                  maxRests == 0 ? 0 : d.breaksTaken / maxRests,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: scheme.primary,
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(TarfTokens.radiusS),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          Numerals.formatInt(_dayOfMonth(d.day), numerals),
+                          style: theme.textTheme.labelSmall
+                              ?.copyWith(color: scheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class _WeekChart extends StatelessWidget {
-  const _WeekChart({required this.week, required this.numerals});
-  final List<DailyProgress> week;
-  final NumeralSystem numerals;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final maxMin =
-        week.fold<int>(1, (m, d) => d.focusMinutes > m ? d.focusMinutes : m);
-    return SizedBox(
-      height: 160,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          for (final d in week)
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    Numerals.formatInt(d.focusMinutes, numerals),
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    height: 110 * (d.focusMinutes / maxMin),
-                    decoration: BoxDecoration(
-                      color: d.focusMinutes > 0
-                          ? scheme.primary
-                          : scheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    d.day.substring(8), // dd
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall
-                        ?.copyWith(color: scheme.onSurfaceVariant),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  /// Parses the day-of-month from a `yyyy-MM-dd` key.
+  static int _dayOfMonth(String day) =>
+      int.tryParse(day.split('-').last) ?? 0;
 }

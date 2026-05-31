@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/routing/app_router.dart';
 import 'core/settings/settings_controller.dart';
+import 'features/alarm/presentation/alarm_host.dart';
 import 'features/eyecare/application/eyecare_engine.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
@@ -16,18 +17,28 @@ class TarfApp extends ConsumerWidget {
     final settings = ref.watch(settingsControllerProvider);
     final router = ref.watch(goRouterProvider);
 
+    // Screenshot/debug affordance: force a theme regardless of the system or
+    // saved setting (no effect on normal builds, where FORCE_THEME is empty).
+    const forceTheme = String.fromEnvironment('FORCE_THEME');
+    final themeMode = switch (forceTheme) {
+      'light' => ThemeMode.light,
+      'dark' => ThemeMode.dark,
+      _ => settings.themeMode,
+    };
+
     return MaterialApp.router(
       title: 'Tarf',
       debugShowCheckedModeBanner: false,
       theme: TarfTheme.light(),
       darkTheme: TarfTheme.dark(),
-      themeMode: settings.themeMode,
+      themeMode: themeMode,
       locale: settings.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
-      builder: (context, child) =>
-          EyeCareHost(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) => AlarmHost(
+        child: EyeCareHost(child: child ?? const SizedBox.shrink()),
+      ),
     );
   }
 }
