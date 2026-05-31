@@ -215,6 +215,7 @@ class _QuickSetupPage extends ConsumerWidget {
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: TarfTokens.space4),
+          // Look-away interval (minutes) — default 20.
           Text(
             '${l10n.reminderInterval}: '
             '${l10n.minutesShort(config.eyeInterval.inMinutes)}',
@@ -230,10 +231,22 @@ class _QuickSetupPage extends ConsumerWidget {
               config.copyWith(eyeInterval: Duration(minutes: v.round())),
             ),
           ),
-          SwitchListTile(
-            title: Text(l10n.soundLabel),
-            value: config.soundEnabled,
-            onChanged: (v) => controller.update(config.copyWith(soundEnabled: v)),
+          const SizedBox(height: TarfTokens.space3),
+          // Break length (SECONDS) — default 20. This is the 20-20-20 rest.
+          Text(
+            '${l10n.breakLength}: '
+            '${l10n.secondsShort(config.eyeBreakDuration.inSeconds)}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Slider(
+            value: config.eyeBreakDuration.inSeconds.toDouble().clamp(10, 60),
+            min: 10,
+            max: 60,
+            divisions: 10,
+            label: l10n.secondsShort(config.eyeBreakDuration.inSeconds),
+            onChanged: (v) => controller.update(
+              config.copyWith(eyeBreakDuration: Duration(seconds: v.round())),
+            ),
           ),
         ],
       ),
