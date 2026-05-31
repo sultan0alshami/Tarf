@@ -1,0 +1,57 @@
+{
+  "@@locale": "ar",
+  "appName": "طَرْف",
+
+  "tabFocus": "التركيز",
+  "tabTimer": "المؤقّت",
+  "tabAlarm": "المنبّه",
+  "tabStopwatch": "ساعة الإيقاف",
+  "navInsights": "الإحصاءات",
+  "navSettings": "الإعدادات",
+
+  "actionStart": "ابدأ",
+  "actionPause": "إيقاف مؤقّت",
+  "actionResume": "متابعة",
+  "actionStop": "إيقاف",
+  "actionReset": "إعادة ضبط",
+  "actionSkip": "تخطّي",
+  "actionSnooze": "تأجيل",
+  "actionDone": "تمّ",
+  "actionCancel": "إلغاء",
+
+  "eyeCareTitle": "العناية بالعين",
+  "breakLookAway": "انظر إلى مسافة ٦ أمتار",
+  "breakInstruction": "أرِح عينيك لمدّة ٢٠ ثانية",
+  "breakRepeatAfter": "ردّد خلف التلاوة",
+  "breakOver": "يمكنك العودة الآن",
+  "transliterationShow": "إظهار النطق اللاتيني",
+  "transliterationHide": "إخفاء النطق اللاتيني",
+
+  "settingsTitle": "الإعدادات",
+  "appearance": "المظهر",
+  "themeSystem": "تلقائي",
+  "themeLight": "فاتح",
+  "themeDark": "داكن",
+  "language": "اللغة",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "reduceMotion": "تقليل الحركة",
+
+  "signInTitle": "سجّل الدخول للمزامنة",
+  "signInRationale": "سجّل الدخول مرّة واحدة لتفعيل المزامنة بين الأجهزة وحفظ تقدّمك. تعمل فترة راحة العين دون حساب.",
+  "signInGoogle": "المتابعة عبر Google",
+  "signInApple": "المتابعة عبر Apple",
+  "signInEmail": "المتابعة بالبريد الإلكتروني",
+  "continueAsGuest": "المتابعة كضيف",
+
+  "focusDailyGoal": "الهدف اليومي",
+  "focusSessionsToday": "{count} جلسات اليوم",
+  "@focusSessionsToday": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "todayMinutes": "{minutes} دقيقة تركيز اليوم",
+  "@todayMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  }
+}

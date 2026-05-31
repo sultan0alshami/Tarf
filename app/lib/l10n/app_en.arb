@@ -1,0 +1,58 @@
+{
+  "@@locale": "en",
+  "appName": "Tarf",
+  "@appName": { "description": "The app name (brand)." },
+
+  "tabFocus": "Focus",
+  "tabTimer": "Timer",
+  "tabAlarm": "Alarm",
+  "tabStopwatch": "Stopwatch",
+  "navInsights": "Insights",
+  "navSettings": "Settings",
+
+  "actionStart": "Start",
+  "actionPause": "Pause",
+  "actionResume": "Resume",
+  "actionStop": "Stop",
+  "actionReset": "Reset",
+  "actionSkip": "Skip",
+  "actionSnooze": "Snooze",
+  "actionDone": "Done",
+  "actionCancel": "Cancel",
+
+  "eyeCareTitle": "Eye care",
+  "breakLookAway": "Look 20 feet away",
+  "breakInstruction": "Rest your eyes for 20 seconds",
+  "breakRepeatAfter": "Repeat after the recitation",
+  "breakOver": "You may look back now",
+  "transliterationShow": "Show transliteration",
+  "transliterationHide": "Hide transliteration",
+
+  "settingsTitle": "Settings",
+  "appearance": "Appearance",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "reduceMotion": "Reduce motion",
+
+  "signInTitle": "Sign in to sync",
+  "signInRationale": "Sign in once to enable cross-device sync and back up your progress. The eye-care break works without an account.",
+  "signInGoogle": "Continue with Google",
+  "signInApple": "Continue with Apple",
+  "signInEmail": "Continue with email",
+  "continueAsGuest": "Continue as guest",
+
+  "focusDailyGoal": "Daily goal",
+  "focusSessionsToday": "{count} sessions today",
+  "@focusSessionsToday": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "todayMinutes": "{minutes} min focused today",
+  "@todayMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  }
+}
