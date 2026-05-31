@@ -25,6 +25,12 @@ class SettingsScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.push(Routes.eyeCareSettings),
           ),
+          ListTile(
+            leading: const Icon(Icons.account_circle_outlined),
+            title: Text(l10n.accountTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push(Routes.account),
+          ),
           const Divider(),
           _SectionHeader(l10n.appearance),
           RadioGroup<ThemeMode>(

@@ -289,4 +289,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onbGetStarted => 'ابدأ الآن';
+
+  @override
+  String get accountTitle => 'الحساب والمزامنة';
+
+  @override
+  String get accountGuest => 'ضيف — تبقى بياناتك على هذا الجهاز';
+
+  @override
+  String get syncSetupNote =>
+      'تتطلّب المزامنة السحابية وتسجيل الدخول ربط Firebase. راجع docs/firebase-setup.md.';
+
+  @override
+  String get exportData => 'تصدير بياناتي';
+
+  @override
+  String get deleteAllData => 'حذف جميع بياناتي';
+
+  @override
+  String get deleteAllConfirm =>
+      'سيؤدي هذا إلى حذف جميع بيانات طَرْف على هذا الجهاز نهائيًا ولا يمكن التراجع عنه.';
+
+  @override
+  String get dataExported => 'تم نسخ بياناتك إلى الحافظة';
+
+  @override
+  String get dataDeleted => 'تم حذف جميع البيانات';
 }

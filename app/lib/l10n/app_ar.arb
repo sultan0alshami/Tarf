@@ -114,5 +114,14 @@
   "onbChooseTheme": "اختر المظهر",
   "onbQuickSetup": "إعداد سريع",
   "onbNext": "التالي",
-  "onbGetStarted": "ابدأ الآن"
+  "onbGetStarted": "ابدأ الآن",
+
+  "accountTitle": "الحساب والمزامنة",
+  "accountGuest": "ضيف — تبقى بياناتك على هذا الجهاز",
+  "syncSetupNote": "تتطلّب المزامنة السحابية وتسجيل الدخول ربط Firebase. راجع docs/firebase-setup.md.",
+  "exportData": "تصدير بياناتي",
+  "deleteAllData": "حذف جميع بياناتي",
+  "deleteAllConfirm": "سيؤدي هذا إلى حذف جميع بيانات طَرْف على هذا الجهاز نهائيًا ولا يمكن التراجع عنه.",
+  "dataExported": "تم نسخ بياناتك إلى الحافظة",
+  "dataDeleted": "تم حذف جميع البيانات"
 }

@@ -289,4 +289,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onbGetStarted => 'Get started';
+
+  @override
+  String get accountTitle => 'Account & Sync';
+
+  @override
+  String get accountGuest => 'Guest — your data stays on this device';
+
+  @override
+  String get syncSetupNote =>
+      'Cloud sync and sign-in require connecting Firebase. See docs/firebase-setup.md.';
+
+  @override
+  String get exportData => 'Export my data';
+
+  @override
+  String get deleteAllData => 'Delete all my data';
+
+  @override
+  String get deleteAllConfirm =>
+      'This permanently deletes all your Tarf data on this device and cannot be undone.';
+
+  @override
+  String get dataExported => 'Your data was copied to the clipboard';
+
+  @override
+  String get dataDeleted => 'All data deleted';
 }

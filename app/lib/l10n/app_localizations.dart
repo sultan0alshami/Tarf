@@ -631,6 +631,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get started'**
   String get onbGetStarted;
+
+  /// No description provided for @accountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & Sync'**
+  String get accountTitle;
+
+  /// No description provided for @accountGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest — your data stays on this device'**
+  String get accountGuest;
+
+  /// No description provided for @syncSetupNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync and sign-in require connecting Firebase. See docs/firebase-setup.md.'**
+  String get syncSetupNote;
+
+  /// No description provided for @exportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data'**
+  String get exportData;
+
+  /// No description provided for @deleteAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all my data'**
+  String get deleteAllData;
+
+  /// No description provided for @deleteAllConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes all your Tarf data on this device and cannot be undone.'**
+  String get deleteAllConfirm;
+
+  /// No description provided for @dataExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data was copied to the clipboard'**
+  String get dataExported;
+
+  /// No description provided for @dataDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'All data deleted'**
+  String get dataDeleted;
 }
 
 class _AppLocalizationsDelegate

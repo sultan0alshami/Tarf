@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/presentation/account_screen.dart';
 import '../../features/alarm/presentation/alarm_screen.dart';
 import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
 import '../../features/focus/presentation/focus_screen.dart';
@@ -22,6 +23,7 @@ abstract final class Routes {
   static const insights = '/insights';
   static const settings = '/settings';
   static const eyeCareSettings = '/settings/eyecare';
+  static const account = '/settings/account';
   static const tasks = '/tasks';
   static const onboarding = '/onboarding';
 }
@@ -90,6 +92,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.eyeCareSettings,
         builder: (context, state) => const EyeCareSettingsScreen(),
+      ),
+      GoRoute(
+        path: Routes.account,
+        builder: (context, state) => const AccountScreen(),
       ),
       GoRoute(
         path: Routes.tasks,

@@ -115,5 +115,14 @@
   "onbChooseTheme": "Choose your theme",
   "onbQuickSetup": "Quick setup",
   "onbNext": "Next",
-  "onbGetStarted": "Get started"
+  "onbGetStarted": "Get started",
+
+  "accountTitle": "Account & Sync",
+  "accountGuest": "Guest — your data stays on this device",
+  "syncSetupNote": "Cloud sync and sign-in require connecting Firebase. See docs/firebase-setup.md.",
+  "exportData": "Export my data",
+  "deleteAllData": "Delete all my data",
+  "deleteAllConfirm": "This permanently deletes all your Tarf data on this device and cannot be undone.",
+  "dataExported": "Your data was copied to the clipboard",
+  "dataDeleted": "All data deleted"
 }
