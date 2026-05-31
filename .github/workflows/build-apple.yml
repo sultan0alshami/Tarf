@@ -1,0 +1,210 @@
+# Tarf (طَرْف) — Apple targets (iOS + macOS)
+#
+# These run on a macOS runner because the iOS/macOS toolchains (Xcode, CocoaPods)
+# only exist there. By default both builds are UNSIGNED (--no-codesign for iOS),
+# which is enough to prove the projects compile in CI.
+#
+# Signing, provisioning, and notarization are OWNER-PROVIDED: the App Store
+# Connect / Apple Developer account, certificates (.p12), provisioning profiles,
+# and the notarization credentials belong to the project owner and are supplied
+# as encrypted GitHub repository secrets. The signed/notarized release jobs
+# below are written out but COMMENTED so this workflow stays green until the
+# owner adds those secrets, then uncomments and fills in identifiers.
+#
+# Expected repo secrets (OWNER PROVIDES — none are committed):
+#   APPLE_ID                  Apple ID email for notarization / App Store Connect
+#   TEAM_ID                   Apple Developer Team ID (e.g. ABCDE12345)
+#   APP_STORE_CONNECT_PWD     app-specific password (or API key) for notarytool
+#   IOS_DIST_CERT_P12_BASE64  base64 of the distribution certificate (.p12)
+#   IOS_DIST_CERT_PASSWORD    password for the .p12 above
+#   IOS_PROVISION_PROFILE_BASE64    base64 of the .mobileprovision
+#   MACOS_DIST_CERT_P12_BASE64 / MACOS_DIST_CERT_PASSWORD   (Developer ID for macOS)
+#   KEYCHAIN_PASSWORD         throwaway password for the temporary CI keychain
+
+name: Build Apple (iOS + macOS)
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: apple-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep this in lock-step with FLUTTER_VERSION in ci.yml.
+  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_CHANNEL: "stable"
+
+jobs:
+  # ----------------------------------------------------------------------------
+  # iOS — unsigned build to validate the Xcode project + CocoaPods compile.
+  # ----------------------------------------------------------------------------
+  build_ios:
+    name: Build iOS (no-codesign)
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # CocoaPods is preinstalled on macos-latest; resolve native pods.
+      - name: Install CocoaPods
+        run: pod install --project-directory=ios
+
+      # --no-codesign: compiles the app without requiring certs/profiles.
+      # Produces app/build/ios/iphoneos/Runner.app (unsigned).
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload unsigned iOS app
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-ios-unsigned
+          path: app/build/ios/iphoneos/Runner.app
+          if-no-files-found: error
+          retention-days: 14
+
+      # === OWNER PROVIDES SECRETS — signed .ipa + App Store upload =============
+      # Uncomment and complete once the certs/profiles/secrets above are in the
+      # repo. This imports the signing identity into a temporary keychain,
+      # installs the provisioning profile, archives a signed build, and exports
+      # a distribution .ipa for TestFlight / App Store.
+      #
+      # - name: Import signing certificate (iOS)
+      #   env:
+      #     CERT_P12_BASE64: ${{ secrets.IOS_DIST_CERT_P12_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      #   run: |
+      #     echo "$CERT_P12_BASE64" | base64 --decode > /tmp/cert.p12
+      #     security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+      #     security set-keychain-settings -lut 21600 build.keychain
+      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+      #     security import /tmp/cert.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
+      #     security list-keychains -d user -s build.keychain
+      #     security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+      #
+      # - name: Install provisioning profile (iOS)
+      #   env:
+      #     PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+      #   run: |
+      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+      #     echo "$PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/tarf.mobileprovision
+      #
+      # - name: Build signed IPA
+      #   env:
+      #     TEAM_ID: ${{ secrets.TEAM_ID }}
+      #   run: |
+      #     flutter build ipa --release \
+      #       --export-options-plist=ios/ExportOptions.plist
+      #     # ios/ExportOptions.plist references TEAM_ID + the provisioning profile.
+      #
+      # - name: Upload to TestFlight / App Store (notarytool / altool)
+      #   env:
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     APP_STORE_CONNECT_PWD: ${{ secrets.APP_STORE_CONNECT_PWD }}
+      #   run: |
+      #     xcrun altool --upload-app -f build/ios/ipa/*.ipa -t ios \
+      #       -u "$APPLE_ID" -p "$APP_STORE_CONNECT_PWD"
+      # ========================================================================
+
+  # ----------------------------------------------------------------------------
+  # macOS — unsigned desktop build to validate the macOS Runner project.
+  # ----------------------------------------------------------------------------
+  build_macos:
+    name: Build macOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Install CocoaPods
+        run: pod install --project-directory=macos
+
+      # Unsigned .app — proves the macOS target compiles.
+      - name: Build macOS
+        run: flutter build macos --release
+
+      - name: Upload macOS app
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-macos-unsigned
+          # Build/Products/Release/<app>.app — wildcard covers the app name.
+          path: app/build/macos/Build/Products/Release/*.app
+          if-no-files-found: error
+          retention-days: 14
+
+      # === OWNER PROVIDES SECRETS — Developer ID signing + notarization =======
+      # macOS distribution outside the App Store must be signed with a
+      # "Developer ID Application" certificate AND notarized by Apple, then
+      # stapled. Uncomment once MACOS_DIST_CERT_* / APPLE_ID / TEAM_ID /
+      # APP_STORE_CONNECT_PWD secrets are present.
+      #
+      # - name: Import Developer ID certificate (macOS)
+      #   env:
+      #     CERT_P12_BASE64: ${{ secrets.MACOS_DIST_CERT_P12_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.MACOS_DIST_CERT_PASSWORD }}
+      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      #   run: |
+      #     echo "$CERT_P12_BASE64" | base64 --decode > /tmp/cert.p12
+      #     security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+      #     security import /tmp/cert.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
+      #     security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+      #
+      # - name: Codesign .app (Developer ID)
+      #   env:
+      #     TEAM_ID: ${{ secrets.TEAM_ID }}
+      #   run: |
+      #     codesign --force --deep --options runtime \
+      #       --sign "Developer ID Application: <OWNER NAME> ($TEAM_ID)" \
+      #       build/macos/Build/Products/Release/*.app
+      #
+      # - name: Notarize + staple
+      #   env:
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     TEAM_ID: ${{ secrets.TEAM_ID }}
+      #     APP_STORE_CONNECT_PWD: ${{ secrets.APP_STORE_CONNECT_PWD }}
+      #   run: |
+      #     # Zip the .app, submit to notarytool, then staple the ticket.
+      #     ditto -c -k --keepParent build/macos/Build/Products/Release/*.app /tmp/tarf.zip
+      #     xcrun notarytool submit /tmp/tarf.zip \
+      #       --apple-id "$APPLE_ID" --team-id "$TEAM_ID" \
+      #       --password "$APP_STORE_CONNECT_PWD" --wait
+      #     xcrun stapler staple build/macos/Build/Products/Release/*.app
+      # ========================================================================

@@ -57,6 +57,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get actionCancel => 'إلغاء';
 
   @override
+  String get lap => 'لفة';
+
+  @override
+  String get timeUp => 'انتهى الوقت';
+
+  @override
   String get eyeCareTitle => 'العناية بالعين';
 
   @override
@@ -128,6 +134,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get focusDailyGoal => 'الهدف اليومي';
+
+  @override
+  String get focusReady => 'جاهز للتركيز';
+
+  @override
+  String get phaseWork => 'تركيز';
+
+  @override
+  String get phaseShortBreak => 'راحة قصيرة';
+
+  @override
+  String get phaseLongBreak => 'راحة طويلة';
+
+  @override
+  String get restEyes => 'أرِح عينيك';
+
+  @override
+  String focusSessionsProgress(int done, int goal) {
+    return '$done / $goal جلسات اليوم';
+  }
 
   @override
   String focusSessionsToday(int count) {

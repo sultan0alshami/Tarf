@@ -1,0 +1,219 @@
+# Tarf (طَرْف) — primary CI
+#
+# Runs on every push and pull request. The Flutter app lives in ./app (monorepo).
+# Three stages:
+#   1) analyze_test  — formatting / static analysis / unit + widget tests (fast gate)
+#   2) build_*       — real builds for the here-buildable targets:
+#                        - Web/PWA   (Ubuntu)   flutter build web --no-web-resources-cdn
+#                        - Android   (Ubuntu)   flutter build apk --debug   (Java 17 + Android SDK)
+#                        - Windows   (Windows)  flutter build windows
+#
+# iOS + macOS builds live in build-apple.yml (they require a macOS runner).
+# The Chrome extension build lives in build-extension.yml.
+#
+# Flutter is PINNED to a 3.44.x stable release so CI is reproducible. Bump
+# FLUTTER_VERSION deliberately when the app's pinned toolchain changes.
+
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref to save runner minutes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Pinned, repo-wide defaults.
+env:
+  # Pin the Flutter stable release used everywhere in this workflow.
+  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_CHANNEL: "stable"
+
+jobs:
+  # ----------------------------------------------------------------------------
+  # 1) Static gate: format check, analyzer, and the test suite.
+  #    Everything else depends on this passing first.
+  # ----------------------------------------------------------------------------
+  analyze_test:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # All Flutter commands run inside the app package.
+        working-directory: ./app
+    steps:
+      # Check out the full monorepo (app/, extension/, website/, docs/).
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install the pinned Flutter SDK. subosito/flutter-action caches the SDK
+      # and pub packages keyed on the version, so reruns are fast.
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      # Resolve dependencies (uses the committed pubspec.lock for repeatability).
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Run codegen so generated sources (drift, freezed, json, riverpod,
+      # AppLocalizations) exist before analysis/tests. Tolerate "already up to
+      # date"; `--delete-conflicting-outputs` keeps reruns clean.
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # Formatting gate. Non-blocking via `|| true` would hide drift, so we keep
+      # it strict; run `dart format .` locally to fix.
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # Static analysis against the rules in app/analysis_options.yaml.
+      - name: Analyze
+        run: flutter analyze
+
+      # Unit + widget tests (includes RTL/Arabic golden tests).
+      - name: Run tests
+        run: flutter test --reporter expanded
+
+  # ----------------------------------------------------------------------------
+  # 2a) Web / PWA build.
+  #     --no-web-resources-cdn bundles CanvasKit locally (required: the Chrome
+  #     extension reuses this build under a strict CSP with no remote scripts).
+  # ----------------------------------------------------------------------------
+  build_web:
+    name: Build Web (PWA)
+    needs: analyze_test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # CanvasKit renderer, locally bundled (no CDN) per the extension CSP.
+      - name: Build web
+        run: flutter build web --release --no-web-resources-cdn
+
+      # Publish the built web bundle so the extension workflow / website can
+      # reuse it and so reviewers can download a preview.
+      - name: Upload web build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-web
+          path: app/build/web
+          if-no-files-found: error
+          retention-days: 14
+
+  # ----------------------------------------------------------------------------
+  # 2b) Android debug APK.
+  #     Needs a JDK (Gradle) + the Android SDK. setup-java provides Java 17;
+  #     subosito/flutter-action wires up the Android SDK/cmdline-tools.
+  # ----------------------------------------------------------------------------
+  build_android:
+    name: Build Android (debug APK)
+    needs: analyze_test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Java 17 is the supported JDK for the Android Gradle Plugin used by
+      # current Flutter releases.
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # NOTE: A debug APK is unsigned — no keystore/secrets required. Release
+      # AAB signing (Play Console) is an owner-provided step, not run here.
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-android-debug-apk
+          path: app/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  # ----------------------------------------------------------------------------
+  # 2c) Windows desktop build (requires a Windows runner with the C++ toolchain,
+  #     which windows-latest provides out of the box).
+  # ----------------------------------------------------------------------------
+  build_windows:
+    name: Build Windows
+    needs: analyze_test
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      # The runnable bundle (.exe + DLLs + data/) lives under the arch folder.
+      # MSIX packaging is an owner-provided release step (cert required).
+      - name: Upload Windows build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-windows
+          path: app/build/windows/x64/runner/Release
+          if-no-files-found: error
+          retention-days: 14

@@ -19,6 +19,8 @@
   "actionDone": "تمّ",
   "actionCancel": "إلغاء",
 
+  "lap": "لفة",
+  "timeUp": "انتهى الوقت",
   "eyeCareTitle": "العناية بالعين",
   "takeBreakNow": "خذ راحة الآن",
   "breakLookAway": "انظر إلى مسافة ٦ أمتار",
@@ -46,6 +48,15 @@
   "continueAsGuest": "المتابعة كضيف",
 
   "focusDailyGoal": "الهدف اليومي",
+  "focusReady": "جاهز للتركيز",
+  "phaseWork": "تركيز",
+  "phaseShortBreak": "راحة قصيرة",
+  "phaseLongBreak": "راحة طويلة",
+  "restEyes": "أرِح عينيك",
+  "focusSessionsProgress": "{done} / {goal} جلسات اليوم",
+  "@focusSessionsProgress": {
+    "placeholders": { "done": { "type": "int" }, "goal": { "type": "int" } }
+  },
   "focusSessionsToday": "{count} جلسات اليوم",
   "@focusSessionsToday": {
     "placeholders": { "count": { "type": "int" } }

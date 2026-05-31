@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="title.home">طَرْف — راحةٌ للعين وذِكرٌ للقلب</title>
+  <meta name="description" content="طَرْف: تطبيق هادئ يجمع راحة العين ٢٠-٢٠-٢٠ مع فاصل ذِكر. مجاني، يعمل دون اتصال. Tarf — a calm 20-20-20 eye break fused with a dhikr break." />
+  <meta name="theme-color" content="#0E7C66" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- ===================================================== Header / nav -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Tarf">
+        <img class="mark" src="assets/logo.svg" alt="" />
+        <span class="wordmark-ar" data-i18n="brand.name">طَرْف</span>
+      </a>
+      <div class="nav-spacer"></div>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" data-i18n-attr="aria-label:nav.menu" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav class="nav-links" data-nav-links>
+        <a href="#features" data-i18n="nav.features">المزايا</a>
+        <a href="#how" data-i18n="nav.howItWorks">كيف يعمل</a>
+        <a href="download.html" data-i18n="nav.download">التحميل</a>
+        <a href="support.html" data-i18n="nav.support">ادعمنا</a>
+        <button class="lang-toggle" data-lang-toggle aria-label="Switch to English">EN</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================== Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <img class="hero-logo" src="assets/logo.svg" alt="" />
+          <h1>
+            <span class="wordmark-ar" data-i18n="hero.h1.app">طَرْف</span>
+          </h1>
+          <p class="tagline" data-i18n="hero.tagline">راحةٌ للعين، وذِكرٌ للقلب.</p>
+          <p class="lede" data-i18n="hero.lede">تطبيق هادئ يذكّرك أن ترفع بصرك عن الشاشة كل عشرين دقيقة من العمل الفعلي — فيتحوّل الفاصل إلى لحظة ذِكرٍ مع صوتٍ يمتد عشرين ثانية، فنهاية الصوت هي إشارة العودة.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="download.html" data-i18n="hero.cta.download">حمّل التطبيق</a>
+            <a class="btn btn-ghost" href="support.html" data-i18n="hero.cta.support">ادعمنا</a>
+          </div>
+          <p class="hero-note" data-i18n="hero.note">مجاني بالكامل، مموّل بالتبرّعات — بلا إعلانات، ولا شيء تجاري قُرب النص المقدّس.</p>
+        </div>
+
+        <!-- The dhikr break preview -->
+        <div class="break-card" aria-hidden="false">
+          <p class="bc-label" data-i18n="hero.break.label">حان وقت الراحة</p>
+          <p class="dhikr-ar" data-i18n="hero.break.dhikr">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</p>
+          <p class="dhikr-translit" data-i18n="hero.break.translit">Subḥānallāhi wa bi-ḥamdih</p>
+          <p class="dhikr-en" data-i18n="hero.break.en">Glory and praise be to Allah</p>
+          <div class="ring">
+            <svg viewBox="0 0 56 56" aria-hidden="true">
+              <circle class="bc-progress" cx="28" cy="28" r="24"/>
+              <circle class="bc-progress-fg" cx="28" cy="28" r="24"/>
+            </svg>
+            <div class="ring-text">
+              <strong data-i18n="hero.break.ringStrong">٢٠ ثانية</strong>
+              <span data-i18n="hero.break.ring">انظر بعيدًا حتى ينتهي الصوت</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== How it works (20-20-20) -->
+    <section id="how">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow" data-i18n="how.eyebrow">قاعدة ٢٠-٢٠-٢٠</span>
+          <h2 data-i18n="how.h2">راحةٌ ذكيّة، تأتي في وقتها فقط</h2>
+          <p data-i18n="how.lede">بعكس المنبّهات التي تُزعجك حين لا تكون أمام الشاشة، يحتسب طَرْف وقت العمل الفعلي فحسب — فلا تذكير إلا حين تحتاجه عينك حقًّا.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div class="num"><span class="num" style="font-size:2.6rem;font-weight:800;color:var(--accent)">٢٠</span>&nbsp;<span data-i18n="how.step1.unit">دقيقة</span></div>
+            <h3 data-i18n="how.step1.h3">كل عشرين دقيقة عمل</h3>
+            <p data-i18n="how.step1.p">يحتسب طَرْف وقت نشاطك الفعلي على الشاشة، لا الساعة فحسب، فيتوقّف حين تبتعد ويستأنف حين تعود.</p>
+          </article>
+          <article class="step">
+            <div class="num"><span class="num" style="font-size:2.6rem;font-weight:800;color:var(--accent)">٢٠</span>&nbsp;<span data-i18n="how.step2.unit">قدمًا</span></div>
+            <h3 data-i18n="how.step2.h3">انظر إلى ستة أمتار</h3>
+            <p data-i18n="how.step2.p">انقل بصرك إلى شيء بعيد نحو ستة أمتار؛ فهذا يُرخي عضلات العين ويخفّف إجهاد الشاشة.</p>
+          </article>
+          <article class="step">
+            <div class="num"><span class="num" style="font-size:2.6rem;font-weight:800;color:var(--accent)">٢٠</span>&nbsp;<span data-i18n="how.step3.unit">ثانية</span></div>
+            <h3 data-i18n="how.step3.h3">مع ذِكرٍ ثابت</h3>
+            <p data-i18n="how.step3.p">يظهر ذِكرٌ واحد على شاشة هادئة مع صوتٍ يمتد عشرين ثانية بالتمام، فنهاية الصوت هي إشارة العودة.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== Features -->
+    <section id="features" class="band">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow" data-i18n="feat.eyebrow">المزايا</span>
+          <h2 data-i18n="feat.h2">كل ما تحتاجه راحةً وتركيزًا، في هدوءٍ واحد</h2>
+          <p data-i18n="feat.lede">أداة متقنة متعدّدة المنصّات، عربيّة أوّلًا، تعمل دون اتصال.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3 data-i18n="feat.activity.h3">راحةٌ واعية بالنشاط</h3>
+            <p data-i18n="feat.activity.p">لا يُذكّرك إلا حين تكون أمام الشاشة فعلًا — يتوقّف تلقائيًّا حين تبتعد أو تقفل الجهاز، ويستأنف حين تعود.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+            <h3 data-i18n="feat.dhikr.h3">فاصل الذِّكر</h3>
+            <p data-i18n="feat.dhikr.p">أذكار صحيحة متّفق عليها مع التشكيل الكامل والمصدر، تتناوب لا تتكرّر، بصوتٍ هادئ يمتد عشرين ثانية.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/></svg></div>
+            <h3 data-i18n="feat.tools.h3">تركيز ومؤقّت ومنبّه وساعة إيقاف</h3>
+            <p data-i18n="feat.tools.p">طبقة إنتاجية رشيقة: جلسات تركيز (بومودورو)، ومؤقّتات مسمّاة، ومنبّهات، وساعة إيقاف مع لفّات.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/><path d="M2 12h3M19 12h3"/></svg></div>
+            <h3 data-i18n="feat.offline.h3">يعمل دون اتصال، ويُزامن عند الحاجة</h3>
+            <p data-i18n="feat.offline.p">النواة تعمل بلا شبكة أبدًا (وضع الضيف). وعند تسجيل الدخول تُزامَن بياناتك بأمان عبر السحابة.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></div>
+            <h3 data-i18n="feat.prayer.h3">إيقاف وقت الصلاة</h3>
+            <p data-i18n="feat.prayer.p">حساب أوقات الصلوات الخمس محليًّا، فتتوقّف التذكيرات حول الصلاة تلقائيًّا — اختياري بالكامل.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
+            <h3 data-i18n="feat.appearance.h3">فاتح وداكن، وأرقام عربيّة</h3>
+            <p data-i18n="feat.appearance.p">مظهر يتبع نظامك، تاريخ هجري اختياري، وأرقام عربيّة-هنديّة (٠١٢٣) في الواجهة العربيّة.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg></div>
+            <h3 data-i18n="feat.arabic.h3">عربيّة أوّلًا، لا مترجمة</h3>
+            <p data-i18n="feat.arabic.p">صُمّم من اليمين إلى اليسار منذ اليوم الأول، واختُبر بنصٍّ عربيٍّ حقيقي — مع احترامٍ تامّ للنص المقدّس.</p>
+          </article>
+          <article class="feature">
+            <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg></div>
+            <h3 data-i18n="feat.access.h3">وصولٌ ميسّر</h3>
+            <p data-i18n="feat.access.p">يلتزم معايير WCAG 2.1 AA: أهداف لمسٍ كبيرة، خطٌّ ديناميكي، تقليل الحركة والشفافية، وقارئ شاشة.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== CTA band -->
+    <section>
+      <div class="container band-cta">
+        <h2 data-i18n="cta.h2">ابدأ راحتك الأولى اليوم</h2>
+        <p data-i18n="cta.p">جرّبه ضيفًا دون تسجيل — تعمل نواة راحة العين والذِّكر فورًا، دون اتصال.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="download.html" data-i18n="cta.download">حمّل طَرْف</a>
+          <a class="btn btn-ghost" href="support.html" data-i18n="cta.support">ادعم المشروع</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================== Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="Tarf">
+            <img class="mark" src="assets/logo.svg" alt="" />
+            <span class="wordmark-ar" data-i18n="brand.name">طَرْف</span>
+          </a>
+          <p data-i18n="footer.about">تطبيق هادئ يجمع راحة العين ٢٠-٢٠-٢٠ مع فاصل ذِكرٍ يطمئن القلب. مجاني، مموّل بالتبرّعات، يعمل دون اتصال.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-col">
+            <h4 data-i18n="footer.product">المنتج</h4>
+            <a href="index.html#features" data-i18n="footer.links.features">المزايا</a>
+            <a href="download.html" data-i18n="footer.links.download">التحميل</a>
+            <a href="support.html" data-i18n="footer.links.support">ادعمنا</a>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="footer.legal">قانوني</h4>
+            <a href="privacy.html" data-i18n="footer.links.privacy">سياسة الخصوصية</a>
+            <a href="terms.html" data-i18n="footer.links.terms">شروط الاستخدام</a>
+            <a href="licenses.html" data-i18n="footer.links.licenses">التراخيص والاعتمادات</a>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span data-i18n="footer.copyright">© ٢٠٢٦ طَرْف. جميع الحقوق محفوظة.</span>
+        <span data-i18n="footer.madeWith">صُنع بعنايةٍ واحترامٍ للنص المقدّس.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/i18n.js"></script>
+</body>
+</html>

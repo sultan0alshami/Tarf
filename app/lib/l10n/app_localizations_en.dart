@@ -57,6 +57,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionCancel => 'Cancel';
 
   @override
+  String get lap => 'Lap';
+
+  @override
+  String get timeUp => 'Time\'s up';
+
+  @override
   String get eyeCareTitle => 'Eye care';
 
   @override
@@ -128,6 +134,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get focusDailyGoal => 'Daily goal';
+
+  @override
+  String get focusReady => 'Ready to focus';
+
+  @override
+  String get phaseWork => 'Focus';
+
+  @override
+  String get phaseShortBreak => 'Short break';
+
+  @override
+  String get phaseLongBreak => 'Long break';
+
+  @override
+  String get restEyes => 'Rest eyes';
+
+  @override
+  String focusSessionsProgress(int done, int goal) {
+    return '$done / $goal sessions today';
+  }
 
   @override
   String focusSessionsToday(int count) {

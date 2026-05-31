@@ -194,6 +194,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get actionCancel;
 
+  /// No description provided for @lap.
+  ///
+  /// In en, this message translates to:
+  /// **'Lap'**
+  String get lap;
+
+  /// No description provided for @timeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up'**
+  String get timeUp;
+
   /// No description provided for @eyeCareTitle.
   ///
   /// In en, this message translates to:
@@ -337,6 +349,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Daily goal'**
   String get focusDailyGoal;
+
+  /// No description provided for @focusReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to focus'**
+  String get focusReady;
+
+  /// No description provided for @phaseWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus'**
+  String get phaseWork;
+
+  /// No description provided for @phaseShortBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Short break'**
+  String get phaseShortBreak;
+
+  /// No description provided for @phaseLongBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Long break'**
+  String get phaseLongBreak;
+
+  /// No description provided for @restEyes.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest eyes'**
+  String get restEyes;
+
+  /// No description provided for @focusSessionsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} / {goal} sessions today'**
+  String focusSessionsProgress(int done, int goal);
 
   /// No description provided for @focusSessionsToday.
   ///

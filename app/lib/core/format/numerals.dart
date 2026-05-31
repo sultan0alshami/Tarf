@@ -45,6 +45,16 @@ abstract final class Numerals {
     return '${padded(minutes, system)}:${padded(seconds, system)}';
   }
 
+  /// Formats a stopwatch string mm:ss.cc (centiseconds) in [system].
+  static String stopwatch(Duration d, NumeralSystem system) {
+    final total = d.inMilliseconds.abs();
+    final minutes = total ~/ 60000;
+    final seconds = (total ~/ 1000) % 60;
+    final centis = (total % 1000) ~/ 10;
+    return '${padded(minutes, system)}:${padded(seconds, system)}'
+        '.${padded(centis, system)}';
+  }
+
   static String _toArabicIndic(String western) {
     final buffer = StringBuffer();
     for (final ch in western.codeUnits) {

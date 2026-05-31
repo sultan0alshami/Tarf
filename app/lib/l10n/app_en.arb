@@ -20,6 +20,8 @@
   "actionDone": "Done",
   "actionCancel": "Cancel",
 
+  "lap": "Lap",
+  "timeUp": "Time's up",
   "eyeCareTitle": "Eye care",
   "takeBreakNow": "Take a break now",
   "breakLookAway": "Look 20 feet away",
@@ -47,6 +49,15 @@
   "continueAsGuest": "Continue as guest",
 
   "focusDailyGoal": "Daily goal",
+  "focusReady": "Ready to focus",
+  "phaseWork": "Focus",
+  "phaseShortBreak": "Short break",
+  "phaseLongBreak": "Long break",
+  "restEyes": "Rest eyes",
+  "focusSessionsProgress": "{done} / {goal} sessions today",
+  "@focusSessionsProgress": {
+    "placeholders": { "done": { "type": "int" }, "goal": { "type": "int" } }
+  },
   "focusSessionsToday": "{count} sessions today",
   "@focusSessionsToday": {
     "placeholders": { "count": { "type": "int" } }

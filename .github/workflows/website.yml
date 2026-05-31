@@ -1,0 +1,120 @@
+# Tarf (طَرْف) — website (download + Support/Donate)
+#
+# The static marketing/download site with the Support/Donate page lives in
+# website/. This workflow installs deps, lints, and builds the site. The deploy
+# step (Vercel) is COMMENTED OUT pending the owner-provided Vercel token + IDs.
+#
+# website/ is delivered by a separate sprint. Every step GUARDS on its presence
+# so this workflow is green until the site lands, then activates automatically.
+#
+# Expected repo secrets for deploy (OWNER PROVIDES — none committed):
+#   VERCEL_TOKEN        Vercel access token
+#   VERCEL_ORG_ID       Vercel organization/team ID
+#   VERCEL_PROJECT_ID   Vercel project ID
+
+name: Website
+
+on:
+  push:
+    branches: ["**"]
+    # Scope to website changes once the dir exists; harmless before then.
+    paths:
+      - "website/**"
+      - ".github/workflows/website.yml"
+  pull_request:
+    branches: ["**"]
+    paths:
+      - "website/**"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: web-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  build_website:
+    name: Lint & build website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Detect whether the website package exists yet.
+      - name: Detect website
+        id: detect
+        shell: bash
+        run: |
+          if [ -f website/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "website/package.json not present yet — skipping (delivered by a later sprint)."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.detect.outputs.present == 'true'
+        working-directory: ./website
+        run: npm ci || npm install
+
+      # Lint is best-effort: only runs if a "lint" script is defined.
+      - name: Lint
+        if: steps.detect.outputs.present == 'true'
+        working-directory: ./website
+        run: |
+          if npm run | grep -qE '^\s*lint'; then
+            npm run lint
+          else
+            echo "No lint script defined — skipping."
+          fi
+
+      # Build is best-effort: only runs if a "build" script is defined.
+      - name: Build
+        if: steps.detect.outputs.present == 'true'
+        working-directory: ./website
+        run: |
+          if npm run | grep -qE '^\s*build'; then
+            npm run build
+          else
+            echo "No build script defined — skipping."
+          fi
+
+      # Upload the static output (covers Next.js `out/`, Vite/SvelteKit `dist/`,
+      # and `build/`). `warn` keeps the job green if none of these exist.
+      - name: Upload site build artifact
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-website
+          path: |
+            website/out
+            website/dist
+            website/build
+          if-no-files-found: warn
+          retention-days: 14
+
+      # === OWNER PROVIDES TOKEN — Vercel deploy ===============================
+      # Uncomment once VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID secrets
+      # are added. Deploys to production only on pushes to the default branch.
+      #
+      # - name: Deploy to Vercel
+      #   if: steps.detect.outputs.present == 'true' && github.ref == 'refs/heads/main'
+      #   working-directory: ./website
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      #   run: |
+      #     npm i -g vercel@latest
+      #     vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      #     vercel build --prod --token="$VERCEL_TOKEN"
+      #     vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      # ========================================================================

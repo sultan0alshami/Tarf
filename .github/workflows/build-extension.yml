@@ -1,0 +1,133 @@
+# Tarf (طَرْف) — Chrome extension (MV3) build
+#
+# The extension reuses the Flutter web build as its popup / side-panel UI:
+#   1) Build the Flutter web bundle (CanvasKit, locally bundled, no CDN — the
+#      MV3 CSP forbids remote scripts: script-src 'self' 'wasm-unsafe-eval').
+#   2) Run the extension's build script, which copies that web build into
+#      extension/ui and assembles the unpacked extension (manifest.json,
+#      background.js service worker, offscreen.html/js, fallback popup).
+#   3) Zip extension/ for upload to the Chrome Web Store and as a CI artifact.
+#
+# The extension/ subsystem is delivered by a separate sprint. Until it lands,
+# the build-script and zip steps GUARD on existence so this workflow is green
+# (the Flutter web build still runs and uploads). Once extension/ is committed
+# with a build script (package.json "build" or extension/build.(sh|mjs)), the
+# guarded steps activate automatically.
+
+name: Build Chrome Extension
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: ext-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in lock-step with ci.yml.
+  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_CHANNEL: "stable"
+  NODE_VERSION: "20"
+
+jobs:
+  build_extension:
+    name: Build extension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      # Node is used by the extension's build/zip script (and any JS test suite
+      # mirroring the Dart engine).
+      - name: Set up Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # --- Flutter web build (the extension UI) -------------------------------
+      - name: Install Flutter dependencies
+        working-directory: ./app
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        working-directory: ./app
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # CanvasKit locally bundled (no CDN) so the MV3 CSP is satisfied.
+      - name: Build Flutter web (extension UI)
+        working-directory: ./app
+        run: flutter build web --release --no-web-resources-cdn
+
+      # --- Extension assembly + zip -------------------------------------------
+      # Runs the extension's own build script, which is responsible for copying
+      # app/build/web into extension/ui and producing the packaged zip. We probe
+      # the common entry points so this works regardless of how the extension
+      # sprint wires it up.
+      - name: Build & package extension (if present)
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d extension ]; then
+            echo "extension/ not present yet — skipping (delivered by a later sprint)."
+            echo "built=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          cd extension
+          if [ -f package.json ]; then
+            echo "Found package.json — running npm build script."
+            npm ci || npm install
+            # Pass the freshly built web bundle to the script via env.
+            WEB_BUILD="$GITHUB_WORKSPACE/app/build/web" npm run build
+          elif [ -f build.mjs ]; then
+            echo "Found build.mjs — running it."
+            WEB_BUILD="$GITHUB_WORKSPACE/app/build/web" node build.mjs
+          elif [ -f build.sh ]; then
+            echo "Found build.sh — running it."
+            WEB_BUILD="$GITHUB_WORKSPACE/app/build/web" bash build.sh
+          else
+            echo "No extension build script found — copying web build into ui/ and zipping directly."
+            mkdir -p ui
+            cp -r "$GITHUB_WORKSPACE/app/build/web/." ui/
+          fi
+
+          # Ensure a distributable zip exists. If the build script already made
+          # one, keep it; otherwise zip the assembled extension (excluding the
+          # node toolchain and any stale zips).
+          if ! ls ./*.zip >/dev/null 2>&1; then
+            echo "No zip produced by build script — creating tarf-extension.zip."
+            zip -r -X tarf-extension.zip . \
+              -x "node_modules/*" -x "*.zip" -x ".git/*"
+          fi
+          echo "built=true" >> "$GITHUB_OUTPUT"
+
+      # Always upload the Flutter web bundle (useful even before extension/ lands).
+      - name: Upload Flutter web bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-extension-web
+          path: app/build/web
+          if-no-files-found: error
+          retention-days: 14
+
+      # Upload the packaged extension zip only when one was produced.
+      - name: Upload extension zip
+        if: steps.package.outputs.built == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-extension-zip
+          path: extension/*.zip
+          if-no-files-found: warn
+          retention-days: 14
