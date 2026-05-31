@@ -224,4 +224,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get alarmNativeNote =>
       'Alarms will ring once native scheduling is enabled on this device.';
+
+  @override
+  String get eyeCareEnabled => 'Eye-care reminders';
+
+  @override
+  String get reminderInterval => 'Reminder interval';
+
+  @override
+  String get breakLength => 'Break length';
+
+  @override
+  String get twoTierBreaks => 'Add longer stand/stretch breaks';
+
+  @override
+  String get longBreakInterval => 'Long break interval';
+
+  @override
+  String get longBreakLength => 'Long break length';
+
+  @override
+  String get strictMode => 'Strict mode (no skip)';
+
+  @override
+  String get soundLabel => 'Sound';
+
+  @override
+  String get hapticsLabel => 'Haptics';
+
+  @override
+  String get prayerPauseLabel => 'Pause around prayer times';
+
+  @override
+  String get loudThroughSilenceLabel => 'Play through silent mode';
+
+  @override
+  String minutesShort(int n) {
+    return '$n min';
+  }
+
+  @override
+  String secondsShort(int n) {
+    return '$n s';
+  }
 }

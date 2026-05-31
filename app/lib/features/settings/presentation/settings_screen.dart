@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../l10n/app_localizations.dart';
 
@@ -17,6 +19,13 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
+          ListTile(
+            leading: const Icon(Icons.visibility_outlined),
+            title: Text(l10n.eyeCareTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push(Routes.eyeCareSettings),
+          ),
+          const Divider(),
           _SectionHeader(l10n.appearance),
           RadioGroup<ThemeMode>(
             groupValue: settings.themeMode,

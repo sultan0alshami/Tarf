@@ -90,5 +90,21 @@
   "alarms": "المنبّهات",
   "addAlarm": "إضافة منبّه",
   "noAlarms": "لا توجد منبّهات بعد",
-  "alarmNativeNote": "ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز."
+  "alarmNativeNote": "ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز.",
+
+  "eyeCareEnabled": "تذكيرات العناية بالعين",
+  "reminderInterval": "مدة التذكير",
+  "breakLength": "مدة الراحة",
+  "twoTierBreaks": "إضافة فترات راحة أطول للوقوف والتمدّد",
+  "longBreakInterval": "مدة الراحة الطويلة",
+  "longBreakLength": "طول الراحة الطويلة",
+  "strictMode": "الوضع الصارم (بدون تخطّي)",
+  "soundLabel": "الصوت",
+  "hapticsLabel": "الاهتزاز",
+  "prayerPauseLabel": "الإيقاف حول أوقات الصلاة",
+  "loudThroughSilenceLabel": "التشغيل رغم الوضع الصامت",
+  "minutesShort": "{n} دقيقة",
+  "@minutesShort": { "placeholders": { "n": { "type": "int" } } },
+  "secondsShort": "{n} ثانية",
+  "@secondsShort": { "placeholders": { "n": { "type": "int" } } }
 }

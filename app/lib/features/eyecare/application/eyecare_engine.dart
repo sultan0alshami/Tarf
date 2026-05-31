@@ -1,0 +1,95 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../focus/application/focus_controller.dart';
+import '../core/active_time_tracker.dart';
+import '../core/precedence.dart';
+import '../presentation/show_break.dart';
+import 'eyecare_config_controller.dart';
+
+/// Hosts the in-app eye-care engine. While the app is in the foreground it
+/// accumulates *active* time and, when a break is due and the precedence rules
+/// allow it, presents the break overlay automatically — then resets.
+///
+/// This makes the 20-20-20 core work whenever the app/tab is open. Firing while
+/// the app is backgrounded is the job of the native schedulers (P4).
+class EyeCareHost extends ConsumerStatefulWidget {
+  const EyeCareHost({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<EyeCareHost> createState() => _EyeCareHostState();
+}
+
+class _EyeCareHostState extends ConsumerState<EyeCareHost>
+    with WidgetsBindingObserver {
+  Timer? _timer;
+  ActiveTimeTracker? _tracker;
+  bool _resumed = true;
+  bool _breakShowing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _onTick());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _resumed = state == AppLifecycleState.resumed;
+  }
+
+  ActiveTimeTracker _ensureTracker() {
+    final config = ref.read(eyeCareConfigProvider);
+    final t = _tracker;
+    if (t != null &&
+        t.idleThreshold == config.idleThreshold &&
+        t.idleResetThreshold == config.idleResetThreshold) {
+      return t;
+    }
+    return _tracker = ActiveTimeTracker(
+      idleThreshold: config.idleThreshold,
+      idleResetThreshold: config.idleResetThreshold,
+    );
+  }
+
+  Future<void> _onTick() async {
+    if (_breakShowing) return;
+    final config = ref.read(eyeCareConfigProvider);
+    if (!config.enabled) return;
+
+    final tracker = _ensureTracker()
+      ..tick(const Duration(seconds: 1), active: _resumed);
+    if (!tracker.isDue(config.eyeInterval)) return;
+
+    final focus = ref.read(focusControllerProvider);
+    final state = SchedulerState(
+      now: DateTime.now(),
+      isScreenOff: !_resumed,
+      pomodoroBreakActive: focus.isBreak && focus.running,
+    );
+    if (decideBreak(state) != BreakDecision.fire) return;
+
+    _breakShowing = true;
+    try {
+      await showEyeBreak(context, ref);
+    } finally {
+      tracker.reset();
+      _breakShowing = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}

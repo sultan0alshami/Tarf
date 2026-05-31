@@ -91,5 +91,21 @@
   "alarms": "Alarms",
   "addAlarm": "Add alarm",
   "noAlarms": "No alarms yet",
-  "alarmNativeNote": "Alarms will ring once native scheduling is enabled on this device."
+  "alarmNativeNote": "Alarms will ring once native scheduling is enabled on this device.",
+
+  "eyeCareEnabled": "Eye-care reminders",
+  "reminderInterval": "Reminder interval",
+  "breakLength": "Break length",
+  "twoTierBreaks": "Add longer stand/stretch breaks",
+  "longBreakInterval": "Long break interval",
+  "longBreakLength": "Long break length",
+  "strictMode": "Strict mode (no skip)",
+  "soundLabel": "Sound",
+  "hapticsLabel": "Haptics",
+  "prayerPauseLabel": "Pause around prayer times",
+  "loudThroughSilenceLabel": "Play through silent mode",
+  "minutesShort": "{n} min",
+  "@minutesShort": { "placeholders": { "n": { "type": "int" } } },
+  "secondsShort": "{n} s",
+  "@secondsShort": { "placeholders": { "n": { "type": "int" } } }
 }

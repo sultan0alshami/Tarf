@@ -224,4 +224,47 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get alarmNativeNote =>
       'ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز.';
+
+  @override
+  String get eyeCareEnabled => 'تذكيرات العناية بالعين';
+
+  @override
+  String get reminderInterval => 'مدة التذكير';
+
+  @override
+  String get breakLength => 'مدة الراحة';
+
+  @override
+  String get twoTierBreaks => 'إضافة فترات راحة أطول للوقوف والتمدّد';
+
+  @override
+  String get longBreakInterval => 'مدة الراحة الطويلة';
+
+  @override
+  String get longBreakLength => 'طول الراحة الطويلة';
+
+  @override
+  String get strictMode => 'الوضع الصارم (بدون تخطّي)';
+
+  @override
+  String get soundLabel => 'الصوت';
+
+  @override
+  String get hapticsLabel => 'الاهتزاز';
+
+  @override
+  String get prayerPauseLabel => 'الإيقاف حول أوقات الصلاة';
+
+  @override
+  String get loudThroughSilenceLabel => 'التشغيل رغم الوضع الصامت';
+
+  @override
+  String minutesShort(int n) {
+    return '$n دقيقة';
+  }
+
+  @override
+  String secondsShort(int n) {
+    return '$n ثانية';
+  }
 }

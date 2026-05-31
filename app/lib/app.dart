@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/routing/app_router.dart';
 import 'core/settings/settings_controller.dart';
+import 'features/eyecare/application/eyecare_engine.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
 
@@ -25,6 +26,8 @@ class TarfApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
+      builder: (context, child) =>
+          EyeCareHost(child: child ?? const SizedBox.shrink()),
     );
   }
 }

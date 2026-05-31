@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/alarm/presentation/alarm_screen.dart';
+import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
 import '../../features/focus/presentation/focus_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -18,6 +19,7 @@ abstract final class Routes {
   static const stopwatch = '/stopwatch';
   static const insights = '/insights';
   static const settings = '/settings';
+  static const eyeCareSettings = '/settings/eyecare';
   static const tasks = '/tasks';
 }
 
@@ -70,6 +72,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: Routes.eyeCareSettings,
+        builder: (context, state) => const EyeCareSettingsScreen(),
       ),
       GoRoute(
         path: Routes.tasks,

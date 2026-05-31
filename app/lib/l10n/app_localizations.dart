@@ -511,6 +511,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Alarms will ring once native scheduling is enabled on this device.'**
   String get alarmNativeNote;
+
+  /// No description provided for @eyeCareEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Eye-care reminders'**
+  String get eyeCareEnabled;
+
+  /// No description provided for @reminderInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder interval'**
+  String get reminderInterval;
+
+  /// No description provided for @breakLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Break length'**
+  String get breakLength;
+
+  /// No description provided for @twoTierBreaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Add longer stand/stretch breaks'**
+  String get twoTierBreaks;
+
+  /// No description provided for @longBreakInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Long break interval'**
+  String get longBreakInterval;
+
+  /// No description provided for @longBreakLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Long break length'**
+  String get longBreakLength;
+
+  /// No description provided for @strictMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Strict mode (no skip)'**
+  String get strictMode;
+
+  /// No description provided for @soundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get soundLabel;
+
+  /// No description provided for @hapticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Haptics'**
+  String get hapticsLabel;
+
+  /// No description provided for @prayerPauseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause around prayer times'**
+  String get prayerPauseLabel;
+
+  /// No description provided for @loudThroughSilenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play through silent mode'**
+  String get loudThroughSilenceLabel;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} min'**
+  String minutesShort(int n);
+
+  /// No description provided for @secondsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} s'**
+  String secondsShort(int n);
 }
 
 class _AppLocalizationsDelegate
