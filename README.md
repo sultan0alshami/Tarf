@@ -28,10 +28,14 @@ Flutter codebase.
 | **Insights** (today stats, streak, 7-day chart, CSV export) | ✅ Built, tested, web-verified |
 | **To-dos** (estimated/actual, bind a task to a focus session) | ✅ Built, tested, web-verified |
 | **Alarm** (management UI + persistence) | ✅ Built; native *ringing* pending platform scheduling |
-| **Native notifications / background audio / tray / prayer times** | 🟡 Specified; code/integration pending (mobile/desktop) |
+| **Break audio** (real synthesized 20s sound, cross-platform via just_audio) | ✅ Built, web-verified, license-free |
+| **Prayer-time pause** (adhan: 5 daily times, defer breaks) | ✅ Built, tested (location/method in config) |
+| **Onboarding** (language/theme/quick-setup, first-launch) | ✅ Built, tested |
+| **Account & Sync screen** (sign-in entry, data export + delete-all) | ✅ Built, web-verified (store-required export/deletion work locally) |
+| **Native *notifications* (backgrounded) + desktop tray** | 🟡 Specified; needs flutter_local_notifications + device testing (in-app auto-engine works while open) |
 | **iOS / macOS signed builds, store submission** | 🔴 Need a Mac + Apple Developer account (see `docs/store/`) |
 | **Windows desktop build** | 🔴 Needs Developer Mode enabled (one toggle — see below) |
-| **Bundled audio + dhikr scholarly sign-off** | 🔴 Owner-provided (synth tone ships in the extension; app uses an audio abstraction) |
+| **Dhikr scholarly sign-off** | 🔴 Owner-provided editorial review of the bundled adhkar text before public release |
 
 ✅ = built & verified here · 🟡 = ready/scaffolded, needs work or your config · 🔴 = blocked on your accounts/keys/toggle
 
