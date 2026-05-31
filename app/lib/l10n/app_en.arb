@@ -107,5 +107,13 @@
   "minutesShort": "{n} min",
   "@minutesShort": { "placeholders": { "n": { "type": "int" } } },
   "secondsShort": "{n} s",
-  "@secondsShort": { "placeholders": { "n": { "type": "int" } } }
+  "@secondsShort": { "placeholders": { "n": { "type": "int" } } },
+
+  "onbTitle": "Rest your eyes, remember Allah",
+  "onbBody": "Every 20 minutes, Tarf gently invites you to look away for 20 seconds with a calm dhikr — caring for your eyes and your heart.",
+  "onbChooseLanguage": "Choose your language",
+  "onbChooseTheme": "Choose your theme",
+  "onbQuickSetup": "Quick setup",
+  "onbNext": "Next",
+  "onbGetStarted": "Get started"
 }

@@ -5,10 +5,12 @@ import '../../features/alarm/presentation/alarm_screen.dart';
 import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
 import '../../features/focus/presentation/focus_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stopwatch/presentation/stopwatch_screen.dart';
 import '../../features/timer/presentation/timer_screen.dart';
 import '../../features/todos/presentation/todos_screen.dart';
+import '../settings/settings_controller.dart';
 import '../widgets/app_scaffold.dart';
 
 /// App route paths.
@@ -21,12 +23,24 @@ abstract final class Routes {
   static const settings = '/settings';
   static const eyeCareSettings = '/settings/eyecare';
   static const tasks = '/tasks';
+  static const onboarding = '/onboarding';
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: Routes.focus,
+    redirect: (context, state) {
+      final done = ref.read(settingsControllerProvider).onboardingComplete;
+      final atOnboarding = state.matchedLocation == Routes.onboarding;
+      if (!done && !atOnboarding) return Routes.onboarding;
+      if (done && atOnboarding) return Routes.focus;
+      return null;
+    },
     routes: [
+      GoRoute(
+        path: Routes.onboarding,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AppScaffold(navigationShell: navigationShell),

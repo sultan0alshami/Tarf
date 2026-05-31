@@ -267,4 +267,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String secondsShort(int n) {
     return '$n s';
   }
+
+  @override
+  String get onbTitle => 'Rest your eyes, remember Allah';
+
+  @override
+  String get onbBody =>
+      'Every 20 minutes, Tarf gently invites you to look away for 20 seconds with a calm dhikr — caring for your eyes and your heart.';
+
+  @override
+  String get onbChooseLanguage => 'Choose your language';
+
+  @override
+  String get onbChooseTheme => 'Choose your theme';
+
+  @override
+  String get onbQuickSetup => 'Quick setup';
+
+  @override
+  String get onbNext => 'Next';
+
+  @override
+  String get onbGetStarted => 'Get started';
 }

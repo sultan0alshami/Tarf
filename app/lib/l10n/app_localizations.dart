@@ -589,6 +589,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} s'**
   String secondsShort(int n);
+
+  /// No description provided for @onbTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest your eyes, remember Allah'**
+  String get onbTitle;
+
+  /// No description provided for @onbBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 20 minutes, Tarf gently invites you to look away for 20 seconds with a calm dhikr — caring for your eyes and your heart.'**
+  String get onbBody;
+
+  /// No description provided for @onbChooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your language'**
+  String get onbChooseLanguage;
+
+  /// No description provided for @onbChooseTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your theme'**
+  String get onbChooseTheme;
+
+  /// No description provided for @onbQuickSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick setup'**
+  String get onbQuickSetup;
+
+  /// No description provided for @onbNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onbNext;
+
+  /// No description provided for @onbGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onbGetStarted;
 }
 
 class _AppLocalizationsDelegate

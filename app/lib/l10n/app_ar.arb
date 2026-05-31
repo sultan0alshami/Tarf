@@ -106,5 +106,13 @@
   "minutesShort": "{n} دقيقة",
   "@minutesShort": { "placeholders": { "n": { "type": "int" } } },
   "secondsShort": "{n} ثانية",
-  "@secondsShort": { "placeholders": { "n": { "type": "int" } } }
+  "@secondsShort": { "placeholders": { "n": { "type": "int" } } },
+
+  "onbTitle": "أرِح عينيك واذكر الله",
+  "onbBody": "كل ٢٠ دقيقة، يدعوك طَرْف بلطف إلى النظر بعيدًا لمدة ٢٠ ثانية مع ذكرٍ هادئ — عنايةً بعينيك وقلبك.",
+  "onbChooseLanguage": "اختر لغتك",
+  "onbChooseTheme": "اختر المظهر",
+  "onbQuickSetup": "إعداد سريع",
+  "onbNext": "التالي",
+  "onbGetStarted": "ابدأ الآن"
 }

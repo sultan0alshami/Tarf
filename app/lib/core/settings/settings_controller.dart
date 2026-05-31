@@ -48,6 +48,9 @@ class SettingsController extends Notifier<AppSettings> {
 
   Future<void> setReduceMotion({required bool value}) =>
       _persist(state.copyWith(reduceMotion: value));
+
+  Future<void> completeOnboarding() =>
+      _persist(state.copyWith(onboardingComplete: true));
 }
 
 final settingsControllerProvider =

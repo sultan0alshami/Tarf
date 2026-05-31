@@ -267,4 +267,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String secondsShort(int n) {
     return '$n ثانية';
   }
+
+  @override
+  String get onbTitle => 'أرِح عينيك واذكر الله';
+
+  @override
+  String get onbBody =>
+      'كل ٢٠ دقيقة، يدعوك طَرْف بلطف إلى النظر بعيدًا لمدة ٢٠ ثانية مع ذكرٍ هادئ — عنايةً بعينيك وقلبك.';
+
+  @override
+  String get onbChooseLanguage => 'اختر لغتك';
+
+  @override
+  String get onbChooseTheme => 'اختر المظهر';
+
+  @override
+  String get onbQuickSetup => 'إعداد سريع';
+
+  @override
+  String get onbNext => 'التالي';
+
+  @override
+  String get onbGetStarted => 'ابدأ الآن';
 }

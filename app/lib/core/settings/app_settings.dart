@@ -11,6 +11,7 @@ class AppSettings {
     this.localeCode = 'ar',
     this.numeralSystem,
     this.reduceMotion = false,
+    this.onboardingComplete = false,
   });
 
   final ThemeMode themeMode;
@@ -23,6 +24,9 @@ class AppSettings {
 
   final bool reduceMotion;
 
+  /// Whether the first-launch onboarding has been completed.
+  final bool onboardingComplete;
+
   Locale get locale => Locale(localeCode);
 
   NumeralSystem get effectiveNumerals =>
@@ -34,6 +38,7 @@ class AppSettings {
     NumeralSystem? numeralSystem,
     bool clearNumeralSystem = false,
     bool? reduceMotion,
+    bool? onboardingComplete,
   }) {
     return AppSettings(
       themeMode: themeMode ?? this.themeMode,
@@ -41,6 +46,7 @@ class AppSettings {
       numeralSystem:
           clearNumeralSystem ? null : (numeralSystem ?? this.numeralSystem),
       reduceMotion: reduceMotion ?? this.reduceMotion,
+      onboardingComplete: onboardingComplete ?? this.onboardingComplete,
     );
   }
 
@@ -49,6 +55,7 @@ class AppSettings {
         'localeCode': localeCode,
         'numeralSystem': numeralSystem?.name,
         'reduceMotion': reduceMotion,
+        'onboardingComplete': onboardingComplete,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> json) {
@@ -63,6 +70,7 @@ class AppSettings {
         _ => null,
       },
       reduceMotion: (json['reduceMotion'] as bool?) ?? false,
+      onboardingComplete: (json['onboardingComplete'] as bool?) ?? false,
     );
   }
 }
