@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../audio/break_audio.dart';
+import '../audio/just_audio_break_player.dart';
 import '../data/dhikr_repository.dart';
 
 /// Loads the bundled adhkar set once.
@@ -8,11 +9,12 @@ final dhikrRepositoryProvider = FutureProvider<DhikrRepository>(
   (ref) => DhikrRepository.load(),
 );
 
-/// The break audio player. Defaults to silent; the native backend
-/// (just_audio / TTS / offscreen) overrides this per platform in P4.
-final breakAudioProvider = Provider<BreakAudioPlayer>(
-  (ref) => const SilentBreakAudio(),
-);
+/// The break audio player — a real cross-platform synthesized 20s sound.
+final breakAudioProvider = Provider<BreakAudioPlayer>((ref) {
+  final player = JustAudioBreakPlayer();
+  ref.onDispose(player.dispose);
+  return player;
+});
 
 /// Persisted rotation counter so the dhikr varies across breaks and restarts.
 class DhikrRotation extends Notifier<int> {

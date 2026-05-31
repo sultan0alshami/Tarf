@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../focus/application/focus_controller.dart';
 import '../core/active_time_tracker.dart';
+import '../core/prayer_service.dart';
 import '../core/precedence.dart';
 import '../presentation/show_break.dart';
 import 'eyecare_config_controller.dart';
@@ -67,10 +68,24 @@ class _EyeCareHostState extends ConsumerState<EyeCareHost>
     if (!tracker.isDue(config.eyeInterval)) return;
 
     final focus = ref.read(focusControllerProvider);
+    final now = DateTime.now();
+    var inPrayer = false;
+    if (config.prayerPauseEnabled) {
+      inPrayer = PrayerService.inWindow(
+        latitude: config.prayerLatitude,
+        longitude: config.prayerLongitude,
+        now: now,
+        window: config.prayerPauseWindow,
+        method: config.prayerMethod,
+        madhab: config.prayerMadhab,
+      );
+    }
     final state = SchedulerState(
-      now: DateTime.now(),
+      now: now,
       isScreenOff: !_resumed,
       pomodoroBreakActive: focus.isBreak && focus.running,
+      prayerPauseEnabled: config.prayerPauseEnabled,
+      inPrayerWindow: inPrayer,
     );
     if (decideBreak(state) != BreakDecision.fire) return;
 

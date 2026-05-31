@@ -53,6 +53,10 @@ class EyeCareConfig {
     this.workingHours,
     this.prayerPauseEnabled = false,
     this.prayerPauseWindow = const Duration(minutes: 15),
+    this.prayerLatitude = 24.7136, // Riyadh by default
+    this.prayerLongitude = 46.6753,
+    this.prayerMethod = 'ummAlQura',
+    this.prayerMadhab = 'shafi',
     this.mergeWithPomodoro = false,
   });
 
@@ -82,6 +86,10 @@ class EyeCareConfig {
   final MinuteRange? workingHours;
   final bool prayerPauseEnabled;
   final Duration prayerPauseWindow;
+  final double prayerLatitude;
+  final double prayerLongitude;
+  final String prayerMethod;
+  final String prayerMadhab;
   final bool mergeWithPomodoro;
 
   EyeCareConfig copyWith({
@@ -107,6 +115,10 @@ class EyeCareConfig {
     bool clearWorkingHours = false,
     bool? prayerPauseEnabled,
     Duration? prayerPauseWindow,
+    double? prayerLatitude,
+    double? prayerLongitude,
+    String? prayerMethod,
+    String? prayerMadhab,
     bool? mergeWithPomodoro,
   }) {
     return EyeCareConfig(
@@ -132,6 +144,10 @@ class EyeCareConfig {
           clearWorkingHours ? null : (workingHours ?? this.workingHours),
       prayerPauseEnabled: prayerPauseEnabled ?? this.prayerPauseEnabled,
       prayerPauseWindow: prayerPauseWindow ?? this.prayerPauseWindow,
+      prayerLatitude: prayerLatitude ?? this.prayerLatitude,
+      prayerLongitude: prayerLongitude ?? this.prayerLongitude,
+      prayerMethod: prayerMethod ?? this.prayerMethod,
+      prayerMadhab: prayerMadhab ?? this.prayerMadhab,
       mergeWithPomodoro: mergeWithPomodoro ?? this.mergeWithPomodoro,
     );
   }
@@ -158,6 +174,10 @@ class EyeCareConfig {
         'workingHours': workingHours?.toJson(),
         'prayerPauseEnabled': prayerPauseEnabled,
         'prayerPauseWindowS': prayerPauseWindow.inSeconds,
+        'prayerLat': prayerLatitude,
+        'prayerLng': prayerLongitude,
+        'prayerMethod': prayerMethod,
+        'prayerMadhab': prayerMadhab,
         'mergeWithPomodoro': mergeWithPomodoro,
       };
 
@@ -192,6 +212,10 @@ class EyeCareConfig {
       },
       prayerPauseEnabled: (j['prayerPauseEnabled'] as bool?) ?? false,
       prayerPauseWindow: secs(j['prayerPauseWindowS'], 900),
+      prayerLatitude: (j['prayerLat'] as num?)?.toDouble() ?? 24.7136,
+      prayerLongitude: (j['prayerLng'] as num?)?.toDouble() ?? 46.6753,
+      prayerMethod: (j['prayerMethod'] as String?) ?? 'ummAlQura',
+      prayerMadhab: (j['prayerMadhab'] as String?) ?? 'shafi',
       mergeWithPomodoro: (j['mergeWithPomodoro'] as bool?) ?? false,
     );
   }
