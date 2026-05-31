@@ -25,8 +25,10 @@ Flutter codebase.
 | **CI** (GitHub Actions: analyze/test/build web+apk+windows, apple, extension) | ✅ Authored |
 | **Project_Sprint skill** (`~/.claude/skills/Project_Sprint`) | ✅ Authored |
 | **Cloud sync + auth** (Firebase/Firestore) | 🟡 Designed + rules + setup guide; **needs your Firebase project** (app runs offline/guest today) |
+| **Insights** (today stats, streak, 7-day chart, CSV export) | ✅ Built, tested, web-verified |
+| **To-dos** (estimated/actual, bind a task to a focus session) | ✅ Built, tested, web-verified |
+| **Alarm** (management UI + persistence) | ✅ Built; native *ringing* pending platform scheduling |
 | **Native notifications / background audio / tray / prayer times** | 🟡 Specified; code/integration pending (mobile/desktop) |
-| **Insights, To-dos, Alarm screens** | 🟡 Routed placeholders; controllers/UI pending |
 | **iOS / macOS signed builds, store submission** | 🔴 Need a Mac + Apple Developer account (see `docs/store/`) |
 | **Windows desktop build** | 🔴 Needs Developer Mode enabled (one toggle — see below) |
 | **Bundled audio + dhikr scholarly sign-off** | 🔴 Owner-provided (synth tone ships in the extension; app uses an audio abstraction) |
