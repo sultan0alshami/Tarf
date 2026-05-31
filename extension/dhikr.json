@@ -1,0 +1,11 @@
+{
+  "dhikr": [
+    {"arabic": "سُبْحَانَ اللّٰهِ", "transliteration": "Subhan-Allah", "english": "Glory be to Allah."},
+    {"arabic": "الْحَمْدُ لِلّٰهِ", "transliteration": "Al-hamdu lillah", "english": "All praise is for Allah."},
+    {"arabic": "لَا إِلٰهَ إِلَّا اللّٰهُ", "transliteration": "La ilaha illa-llah", "english": "There is no deity except Allah."},
+    {"arabic": "اللّٰهُ أَكْبَرُ", "transliteration": "Allahu akbar", "english": "Allah is the Greatest."},
+    {"arabic": "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ", "transliteration": "Subhan-Allahi wa bihamdihi", "english": "Glory and praise be to Allah."},
+    {"arabic": "أَسْتَغْفِرُ اللّٰهَ", "transliteration": "Astaghfiru-llah", "english": "I seek the forgiveness of Allah."},
+    {"arabic": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ", "transliteration": "La hawla wa la quwwata illa billah", "english": "There is no might nor power except with Allah."}
+  ]
+}

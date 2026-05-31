@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Tarf</title>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="ar">طَرْف</span>
+        <span class="en">Tarf · Eye care &amp; dhikr</span>
+      </div>
+      <label class="switch" title="Enable eye-care reminders">
+        <input type="checkbox" id="enabled" />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <section class="status" id="status">Loading…</section>
+
+    <section class="row">
+      <label for="interval">Every</label>
+      <select id="interval">
+        <option value="10">10 min</option>
+        <option value="20" selected>20 min</option>
+        <option value="30">30 min</option>
+        <option value="45">45 min</option>
+        <option value="60">60 min</option>
+      </select>
+    </section>
+
+    <button class="primary" id="breakNow">Take a break now</button>
+
+    <section class="snooze">
+      <span>Snooze</span>
+      <button data-min="5">5m</button>
+      <button data-min="15">15m</button>
+      <button data-min="60">1h</button>
+    </section>
+
+    <footer>20 · 20 · 20 — look ~6 m away for 20 s, every 20 min.</footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="title.support">ادعم طَرْف</title>
+  <meta name="description" content="ادعم طَرْف بتبرّع عبر مدى وVisa وMastercard. تتم المعالجة عبر بوّابة دفع معتمدة. Support Tarf with Mada, Visa, or Mastercard." />
+  <meta name="theme-color" content="#0E7C66" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Tarf">
+        <img class="mark" src="assets/logo.svg" alt="" />
+        <span class="wordmark-ar" data-i18n="brand.name">طَرْف</span>
+      </a>
+      <div class="nav-spacer"></div>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" data-i18n-attr="aria-label:nav.menu" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html#features" data-i18n="nav.features">المزايا</a>
+        <a href="index.html#how" data-i18n="nav.howItWorks">كيف يعمل</a>
+        <a href="download.html" data-i18n="nav.download">التحميل</a>
+        <a href="support.html" aria-current="page" data-i18n="nav.support">ادعمنا</a>
+        <button class="lang-toggle" data-lang-toggle aria-label="Switch to English">EN</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <h1 data-i18n="sup.head.h1">ادعم طَرْف</h1>
+        <p data-i18n="sup.head.p">طَرْف مجاني للجميع وبلا إعلانات. تبرّعك يبقيه كذلك — ويُموّل أصواتًا أنقى وميزاتٍ أهدأ.</p>
+      </div>
+    </section>
+
+    <section class="mt-0" style="padding-top:8px">
+      <div class="container donate-wrap">
+
+        <!-- ============================ Donation form -->
+        <div class="donate-card">
+          <h2 data-i18n="sup.form.title">تبرّع لمرّة واحدة</h2>
+
+          <form id="donate-form" novalidate>
+            <fieldset style="border:0;padding:0;margin:0 0 8px">
+              <legend class="field" style="padding:0">
+                <span data-i18n="sup.form.amount">اختر مبلغًا</span>
+              </legend>
+              <div class="amount-grid" role="radiogroup" aria-label="amount">
+                <div class="amount-opt">
+                  <input type="radio" name="amount" id="amt-10" value="10" />
+                  <label for="amt-10">١٠ <span class="cur" data-i18n="sup.currency">ريال</span></label>
+                </div>
+                <div class="amount-opt">
+                  <input type="radio" name="amount" id="amt-25" value="25" checked />
+                  <label for="amt-25">٢٥ <span class="cur" data-i18n="sup.currency">ريال</span></label>
+                </div>
+                <div class="amount-opt">
+                  <input type="radio" name="amount" id="amt-50" value="50" />
+                  <label for="amt-50">٥٠ <span class="cur" data-i18n="sup.currency">ريال</span></label>
+                </div>
+                <div class="amount-opt">
+                  <input type="radio" name="amount" id="amt-100" value="100" />
+                  <label for="amt-100">١٠٠ <span class="cur" data-i18n="sup.currency">ريال</span></label>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="custom-amount" data-i18n="sup.field.customAmount">مبلغ مخصّص (ريال سعودي)</label>
+              <div class="input-prefix">
+                <span class="pfx" data-i18n="sup.currency">ريال</span>
+                <input type="number" id="custom-amount" name="customAmount" inputmode="decimal" min="1" step="1" placeholder="—" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="donor-name" data-i18n="sup.field.name">الاسم (اختياري)</label>
+              <input type="text" id="donor-name" name="name" autocomplete="name" placeholder="كيف نشكرك؟" data-i18n-attr="placeholder:sup.field.namePh" />
+            </div>
+
+            <div class="field">
+              <label for="donor-email" data-i18n="sup.field.email">البريد الإلكتروني (لإيصال التبرّع)</label>
+              <input type="email" id="donor-email" name="email" autocomplete="email" placeholder="you@example.com" data-i18n-attr="placeholder:sup.field.emailPh" />
+            </div>
+
+            <div class="field">
+              <label for="donor-message" data-i18n="sup.field.message">رسالة (اختياريّة)</label>
+              <textarea id="donor-message" name="message" rows="2" placeholder="كلمة طيّبة تصلنا…" data-i18n-attr="placeholder:sup.field.messagePh"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="sup.submit">تابِع إلى الدفع الآمن</button>
+
+            <div id="donate-status" class="form-status" role="status" aria-live="polite"></div>
+
+            <div class="secure-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span data-i18n="sup.secure">تتم المعالجة عبر بوّابة دفع معتمدة (PCI DSS). لا تُدخَل بيانات بطاقتك في هذه الصفحة إطلاقًا.</span>
+            </div>
+
+            <div class="card-marks" aria-label="accepted cards">
+              <span class="card-mark">mada</span>
+              <span class="card-mark">VISA</span>
+              <span class="card-mark">Mastercard</span>
+            </div>
+          </form>
+        </div>
+
+        <!-- ============================ Aside -->
+        <aside class="donate-aside">
+          <div class="info-block">
+            <h3 data-i18n="sup.aside.how.h3">كيف يعمل الدفع</h3>
+            <p data-i18n="sup.aside.how.p">عند الضغط على «تابِع إلى الدفع»، نُنشئ عمليّة دفع آمنة لدى بوّابتنا (Moyasar) ونحوّلك إلى صفحتها المستضافة لإدخال بطاقتك. بيانات البطاقة لا تمرّ عبر خوادمنا أبدًا.</p>
+          </div>
+
+          <div class="info-block">
+            <h3 data-i18n="sup.aside.where.h3">أين يذهب تبرّعك</h3>
+            <ul>
+              <li data-i18n="sup.aside.where.li1">ترخيص أصوات وتلاوات نقيّة ومُصرّح بها.</li>
+              <li data-i18n="sup.aside.where.li2">استضافة المزامنة السحابيّة وتشغيل الخدمة.</li>
+              <li data-i18n="sup.aside.where.li3">مراجعة شرعيّة وتدقيق لغوي للنصوص المقدّسة.</li>
+              <li data-i18n="sup.aside.where.li4">تطوير مستمرّ عبر كل المنصّات.</li>
+            </ul>
+          </div>
+
+          <div class="info-block">
+            <h3 data-i18n="sup.aside.ios.h3">ملاحظة لمستخدمي iOS</h3>
+            <p data-i18n="sup.aside.ios.p">وفقًا لسياسات آبل، لا يعرض تطبيق iOS رابط تبرّع؛ يكتفي بشكرٍ ومشاركة. يمكنك التبرّع من هذه الصفحة عبر المتصفّح.</p>
+          </div>
+
+          <div class="callout">
+            <p data-i18n="sup.callout">لا إعلانات، ولا تتبّع، ولا أي محتوى تجاري بجوار الذِّكر — هذا وعدٌ دائم، لا خطّة تسعير.</p>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="Tarf">
+            <img class="mark" src="assets/logo.svg" alt="" />
+            <span class="wordmark-ar" data-i18n="brand.name">طَرْف</span>
+          </a>
+          <p data-i18n="footer.about">تطبيق هادئ يجمع راحة العين ٢٠-٢٠-٢٠ مع فاصل ذِكرٍ يطمئن القلب. مجاني، مموّل بالتبرّعات، يعمل دون اتصال.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-col">
+            <h4 data-i18n="footer.product">المنتج</h4>
+            <a href="index.html#features" data-i18n="footer.links.features">المزايا</a>
+            <a href="download.html" data-i18n="footer.links.download">التحميل</a>
+            <a href="support.html" data-i18n="footer.links.support">ادعمنا</a>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="footer.legal">قانوني</h4>
+            <a href="privacy.html" data-i18n="footer.links.privacy">سياسة الخصوصية</a>
+            <a href="terms.html" data-i18n="footer.links.terms">شروط الاستخدام</a>
+            <a href="licenses.html" data-i18n="footer.links.licenses">التراخيص والاعتمادات</a>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span data-i18n="footer.copyright">© ٢٠٢٦ طَرْف. جميع الحقوق محفوظة.</span>
+        <span data-i18n="footer.madeWith">صُنع بعنايةٍ واحترامٍ للنص المقدّس.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/i18n.js"></script>
+  <script>
+    // ---------------------------------------------------------------------
+    // Donate form: validates client-side, POSTs JSON to /api/donate, then
+    // redirects to the hosted/redirect payment URL the serverless function
+    // returns. No card data is ever collected here.
+    // ---------------------------------------------------------------------
+    (function () {
+      "use strict";
+      var form = document.getElementById("donate-form");
+      var statusEl = document.getElementById("donate-status");
+      var T = function (k) { return window.Tarf.i18n.t(window.Tarf.i18n.current(), k); };
+
+      function setStatus(kind, key) {
+        statusEl.className = "form-status show " + kind;
+        statusEl.textContent = T(key);
+      }
+      function clearStatus() { statusEl.className = "form-status"; statusEl.textContent = ""; }
+
+      // Selecting a preset clears the custom field, and vice-versa.
+      var customField = document.getElementById("custom-amount");
+      form.querySelectorAll('input[name="amount"]').forEach(function (r) {
+        r.addEventListener("change", function () { customField.value = ""; });
+      });
+      customField.addEventListener("input", function () {
+        if (customField.value) {
+          form.querySelectorAll('input[name="amount"]').forEach(function (r) { r.checked = false; });
+        }
+      });
+
+      function selectedAmount() {
+        if (customField.value) return parseFloat(customField.value);
+        var checked = form.querySelector('input[name="amount"]:checked');
+        return checked ? parseFloat(checked.value) : NaN;
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearStatus();
+
+        var amount = selectedAmount();
+        if (!amount || isNaN(amount) || amount < 1) {
+          setStatus("err", "sup.status.errAmount");
+          return;
+        }
+        var email = document.getElementById("donor-email").value.trim();
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setStatus("err", "sup.status.errEmail");
+          return;
+        }
+
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        setStatus("ok", "sup.status.validating");
+
+        fetch("/api/donate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: amount,
+            currency: "SAR",
+            name: document.getElementById("donor-name").value.trim(),
+            email: email,
+            message: document.getElementById("donor-message").value.trim(),
+            lang: window.Tarf.i18n.current()
+          })
+        })
+          .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, body: j }; }); })
+          .then(function (r) {
+            if (r.ok && r.body && r.body.redirectUrl) {
+              if (r.body.testMode) {
+                // In TEST mode the function returns a sandbox URL — show a note,
+                // then redirect so the owner can see the full flow.
+                setStatus("ok", "sup.status.testMode");
+                setTimeout(function () { window.location.href = r.body.redirectUrl; }, 1600);
+              } else {
+                setStatus("ok", "sup.status.redirecting");
+                window.location.href = r.body.redirectUrl;
+              }
+            } else {
+              btn.disabled = false;
+              setStatus("err", (r.body && r.body.errorKey) ? r.body.errorKey : "sup.status.errNetwork");
+            }
+          })
+          .catch(function () {
+            btn.disabled = false;
+            setStatus("err", "sup.status.errNetwork");
+          });
+      });
+
+      // Re-translate dynamic status text when the language flips.
+      document.addEventListener("tarf:langchange", function () {
+        if (statusEl.classList.contains("show")) { /* leave last message; key not stored */ }
+      });
+    })();
+  </script>
+</body>
+</html>
