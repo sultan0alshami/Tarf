@@ -164,4 +164,64 @@ class AppLocalizationsAr extends AppLocalizations {
   String todayMinutes(int minutes) {
     return '$minutes دقيقة تركيز اليوم';
   }
+
+  @override
+  String get insightsToday => 'اليوم';
+
+  @override
+  String insightsStreak(int days) {
+    return 'سلسلة $days يوم';
+  }
+
+  @override
+  String get labelFocusMinutes => 'دقائق التركيز';
+
+  @override
+  String get labelSessions => 'الجلسات';
+
+  @override
+  String get labelBreaks => 'فترات الراحة';
+
+  @override
+  String get last7Days => 'آخر ٧ أيام';
+
+  @override
+  String get exportCsv => 'تصدير CSV';
+
+  @override
+  String get copiedToClipboard => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get noDataYet => 'لا توجد بيانات بعد — ابدأ جلسة تركيز';
+
+  @override
+  String get tasks => 'المهام';
+
+  @override
+  String get addTask => 'إضافة مهمة';
+
+  @override
+  String get taskHint => 'بماذا تعمل الآن؟';
+
+  @override
+  String get noTasks => 'لا توجد مهام بعد';
+
+  @override
+  String get startFocus => 'ابدأ التركيز';
+
+  @override
+  String get estLabel => 'متوقع';
+
+  @override
+  String get alarms => 'المنبّهات';
+
+  @override
+  String get addAlarm => 'إضافة منبّه';
+
+  @override
+  String get noAlarms => 'لا توجد منبّهات بعد';
+
+  @override
+  String get alarmNativeNote =>
+      'ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز.';
 }

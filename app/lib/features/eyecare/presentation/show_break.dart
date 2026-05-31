@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/settings/settings_controller.dart';
+import '../../insights/application/progress_controller.dart';
 import '../application/eyecare_config_controller.dart';
 import '../application/eyecare_providers.dart';
 import '../core/precedence.dart';
@@ -27,7 +28,13 @@ Future<void> showEyeBreak(
       ? config.longBreakDuration
       : config.eyeBreakDuration;
 
+  final progress = ref.read(progressControllerProvider.notifier);
   final navigator = Navigator.of(context, rootNavigator: true);
+  void recordAndPop({required bool taken}) {
+    progress.addBreak(DateTime.now(), taken: taken);
+    navigator.pop();
+  }
+
   await navigator.push<void>(
     PageRouteBuilder<void>(
       fullscreenDialog: true,
@@ -40,8 +47,8 @@ Future<void> showEyeBreak(
         strict: config.strict,
         soundEnabled: config.soundEnabled,
         reduceMotion: settings.reduceMotion,
-        onFinished: navigator.pop,
-        onSkip: config.strict ? null : navigator.pop,
+        onFinished: () => recordAndPop(taken: true),
+        onSkip: config.strict ? null : () => recordAndPop(taken: false),
         onSnooze: config.strict ? null : (_) => navigator.pop(),
       ),
       transitionsBuilder: (_, animation, _, child) =>

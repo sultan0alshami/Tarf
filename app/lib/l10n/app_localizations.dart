@@ -397,6 +397,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{minutes} min focused today'**
   String todayMinutes(int minutes);
+
+  /// No description provided for @insightsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get insightsToday;
+
+  /// No description provided for @insightsStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-day streak'**
+  String insightsStreak(int days);
+
+  /// No description provided for @labelFocusMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus minutes'**
+  String get labelFocusMinutes;
+
+  /// No description provided for @labelSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get labelSessions;
+
+  /// No description provided for @labelBreaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Breaks taken'**
+  String get labelBreaks;
+
+  /// No description provided for @last7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days'**
+  String get last7Days;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
+  String get exportCsv;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @noDataYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No data yet — start a focus session'**
+  String get noDataYet;
+
+  /// No description provided for @tasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get tasks;
+
+  /// No description provided for @addTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Add task'**
+  String get addTask;
+
+  /// No description provided for @taskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you working on?'**
+  String get taskHint;
+
+  /// No description provided for @noTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks yet'**
+  String get noTasks;
+
+  /// No description provided for @startFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Start focus'**
+  String get startFocus;
+
+  /// No description provided for @estLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'est.'**
+  String get estLabel;
+
+  /// No description provided for @alarms.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarms'**
+  String get alarms;
+
+  /// No description provided for @addAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Add alarm'**
+  String get addAlarm;
+
+  /// No description provided for @noAlarms.
+  ///
+  /// In en, this message translates to:
+  /// **'No alarms yet'**
+  String get noAlarms;
+
+  /// No description provided for @alarmNativeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarms will ring once native scheduling is enabled on this device.'**
+  String get alarmNativeNote;
 }
 
 class _AppLocalizationsDelegate

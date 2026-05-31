@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/settings/settings_controller.dart';
+import '../../insights/application/progress_controller.dart';
+import '../../todos/application/todos_controller.dart';
 import '../domain/focus_models.dart';
 
 const _cfgKey = 'tarf.focus_config.v1';
@@ -55,6 +57,20 @@ class FocusController extends Notifier<FocusState> {
   void _tick() {
     if (!state.running || state.phase == FocusPhase.idle) return;
     state = advanceFocus(state, _cfg, const Duration(seconds: 1));
+    if (state.justCompletedPhase == FocusPhase.work) _recordCompletedWork();
+  }
+
+  /// Credits a naturally-completed work session to today's progress and to the
+  /// bound task (skips do not credit).
+  void _recordCompletedWork() {
+    final now = DateTime.now();
+    ref
+        .read(progressControllerProvider.notifier)
+        .addFocusSession(now, _cfg.work.inMinutes);
+    final taskId = state.taskId;
+    if (taskId != null) {
+      ref.read(todosControllerProvider.notifier).incrementActual(taskId);
+    }
   }
 
   /// Starts (or restarts) a work session, optionally bound to a to-do task.

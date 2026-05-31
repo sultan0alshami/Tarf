@@ -66,5 +66,30 @@
   "todayMinutes": "{minutes} min focused today",
   "@todayMinutes": {
     "placeholders": { "minutes": { "type": "int" } }
-  }
+  },
+
+  "insightsToday": "Today",
+  "insightsStreak": "{days}-day streak",
+  "@insightsStreak": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "labelFocusMinutes": "Focus minutes",
+  "labelSessions": "Sessions",
+  "labelBreaks": "Breaks taken",
+  "last7Days": "Last 7 days",
+  "exportCsv": "Export CSV",
+  "copiedToClipboard": "Copied to clipboard",
+  "noDataYet": "No data yet — start a focus session",
+
+  "tasks": "Tasks",
+  "addTask": "Add task",
+  "taskHint": "What are you working on?",
+  "noTasks": "No tasks yet",
+  "startFocus": "Start focus",
+  "estLabel": "est.",
+
+  "alarms": "Alarms",
+  "addAlarm": "Add alarm",
+  "noAlarms": "No alarms yet",
+  "alarmNativeNote": "Alarms will ring once native scheduling is enabled on this device."
 }

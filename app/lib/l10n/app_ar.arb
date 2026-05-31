@@ -65,5 +65,30 @@
   "todayMinutes": "{minutes} دقيقة تركيز اليوم",
   "@todayMinutes": {
     "placeholders": { "minutes": { "type": "int" } }
-  }
+  },
+
+  "insightsToday": "اليوم",
+  "insightsStreak": "سلسلة {days} يوم",
+  "@insightsStreak": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "labelFocusMinutes": "دقائق التركيز",
+  "labelSessions": "الجلسات",
+  "labelBreaks": "فترات الراحة",
+  "last7Days": "آخر ٧ أيام",
+  "exportCsv": "تصدير CSV",
+  "copiedToClipboard": "تم النسخ إلى الحافظة",
+  "noDataYet": "لا توجد بيانات بعد — ابدأ جلسة تركيز",
+
+  "tasks": "المهام",
+  "addTask": "إضافة مهمة",
+  "taskHint": "بماذا تعمل الآن؟",
+  "noTasks": "لا توجد مهام بعد",
+  "startFocus": "ابدأ التركيز",
+  "estLabel": "متوقع",
+
+  "alarms": "المنبّهات",
+  "addAlarm": "إضافة منبّه",
+  "noAlarms": "لا توجد منبّهات بعد",
+  "alarmNativeNote": "ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز."
 }

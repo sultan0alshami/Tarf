@@ -45,6 +45,11 @@ class FocusScreen extends ConsumerWidget {
             onPressed: () => showEyeBreak(context, ref),
           ),
           IconButton(
+            icon: const Icon(Icons.checklist_outlined),
+            tooltip: l10n.tasks,
+            onPressed: () => context.push(Routes.tasks),
+          ),
+          IconButton(
             icon: const Icon(Icons.insights_outlined),
             tooltip: l10n.navInsights,
             onPressed: () => context.push(Routes.insights),

@@ -164,4 +164,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String todayMinutes(int minutes) {
     return '$minutes min focused today';
   }
+
+  @override
+  String get insightsToday => 'Today';
+
+  @override
+  String insightsStreak(int days) {
+    return '$days-day streak';
+  }
+
+  @override
+  String get labelFocusMinutes => 'Focus minutes';
+
+  @override
+  String get labelSessions => 'Sessions';
+
+  @override
+  String get labelBreaks => 'Breaks taken';
+
+  @override
+  String get last7Days => 'Last 7 days';
+
+  @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get noDataYet => 'No data yet — start a focus session';
+
+  @override
+  String get tasks => 'Tasks';
+
+  @override
+  String get addTask => 'Add task';
+
+  @override
+  String get taskHint => 'What are you working on?';
+
+  @override
+  String get noTasks => 'No tasks yet';
+
+  @override
+  String get startFocus => 'Start focus';
+
+  @override
+  String get estLabel => 'est.';
+
+  @override
+  String get alarms => 'Alarms';
+
+  @override
+  String get addAlarm => 'Add alarm';
+
+  @override
+  String get noAlarms => 'No alarms yet';
+
+  @override
+  String get alarmNativeNote =>
+      'Alarms will ring once native scheduling is enabled on this device.';
 }

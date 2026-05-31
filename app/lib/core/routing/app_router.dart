@@ -7,6 +7,7 @@ import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stopwatch/presentation/stopwatch_screen.dart';
 import '../../features/timer/presentation/timer_screen.dart';
+import '../../features/todos/presentation/todos_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 /// App route paths.
@@ -17,6 +18,7 @@ abstract final class Routes {
   static const stopwatch = '/stopwatch';
   static const insights = '/insights';
   static const settings = '/settings';
+  static const tasks = '/tasks';
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -68,6 +70,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: Routes.tasks,
+        builder: (context, state) => const TodosScreen(),
       ),
     ],
   );
