@@ -151,6 +151,9 @@ All values verified for WCAG AA on their stated surfaces.
   stability at stopwatch hundredths speed for *both* systems.
 
 ### 4.4 Spacing, radii, motion
+
+> **The full motion system** — duration/curve/spring tokens and the per-component Reduce-Motion table —
+> is consolidated in the **Motion & interaction appendix (§13)**. The notes below are a quick reference.
 - **Spacing (4pt grid):** 4 / 8 / 16 / 24 / 40 / 64. Edge gutter 20–24; card padding 16–20; section
   gaps 24–40. Dark mode uses ~20–30% more padding (calm signal).
 - **Radii:** S 8 (chips) / M 16 (cards) / L 28 (sheets) / XL 40 (hero break/dhikr); buttons & tab bar
@@ -256,6 +259,12 @@ design reference, not a layout constraint** — every screen must reflow on narr
 - **Batch C** — Insights · To‑dos · Settings · Account
 - **Extra states** (mostly code‑only): alarm‑ringing modal, focus‑complete bloom, permission/degraded
   banner, empty states, account error/offline (prompts in §8.12).
+
+> **Implementation status (synced with the shipped app).** Batches A–C plus the **active-session
+> shelf**, the **alarm-ringing modal**, and the **focus-complete bloom** are **built**; their final
+> as-shipped specs are in **§8.13** (they graduated from the §8.12 prompts). The **empty-state**
+> pattern is built (`TarfEmptyState`). Still prompts only: the permission/degraded banner and the
+> account error/offline variants. Motion for everything is consolidated in **§13**.
 
 ---
 
@@ -398,13 +407,10 @@ Background #0B0F0E; cards #14191A; text #F4F6F5 / secondary #A7B2AF / caption #9
 clear. iOS, 393px, RTL — mirror avatar to start/right, pill/chevrons to end/left; keep email/timestamp
 LTR.*
 
-### 8.12 Extra‑state prompts (named states that need their own screen)
-- **Alarm ringing (modal):** *…full‑screen alarm‑ringing modal: an oversized tabular time "06:30" hero,
-  the alarm label "Fajr" beneath, and two large stacked pill buttons "Snooze" (filled‑tonal) and "Stop"
-  (filled teal). Calm dark ground #0B0F0E, no tab bar. iOS, 393px, RTL; numerals LTR.*
-- **Focus complete:** *…focus‑complete state: the ring fully filled teal with a centered check and
-  "Session complete", a supportive line "1 of 4 done", and two pills "Start break" (filled) / "Skip"
-  (text).*
+### 8.12 Extra‑state prompts (not yet built)
+> The **alarm-ringing modal** and **focus-complete bloom** graduated from these prompts to **shipped**
+> features — see their final as-built specs in **§8.13** (alongside the active-session shelf). The
+> prompts below remain for states not yet implemented.
 - **Permission / degraded banner:** *…a calm inset card near the Home hero: warning‑tinted icon
   (#E0A65A on dark), one honest line "On this device, reminders work while Tarf is open. Enable
   notifications for more.", and a "Open Settings" text link. Never alarming.*
@@ -413,6 +419,45 @@ LTR.*
 - **Account error / offline:** *…signed‑out with an error toast "Sign‑in cancelled — try again", three
   equal sign‑in buttons (Google, Apple, Email — Apple NOT pre‑selected), and a "Continue as guest" text
   button; plus an offline variant with a sync pill "Offline — will sync".*
+
+### 8.13 Implemented system states (as-shipped, built in Flutter — not Stitch-generated)
+
+> Documented from the shipped code, not as generation prompts. Tokens reference the live
+> `TarfColors`/`ColorScheme`; all motion is consolidated in **§13**.
+
+**A. Active-session shelf (focus).** A persistent "now-playing" strip for a running focus session,
+docked **above** the tab bar; absent when idle.
+- *Container:* a floating glass capsule — `ClipRRect` radius **L (28)** + `BackdropFilter` blur **18** +
+  `surfaceContainerHigh` @ 90% + a 60%-`outline` hairline border — visually matched to the capsule tab
+  bar, with a `space2` bottom gap above the bar.
+- *Full form (mobile):* a `Row` of → a 34 px depleting **ProgressRing** (stroke 4; accent = `primary`
+  for work / `tertiary` for a break) · a 2-line block (phase label in `labelMedium`/`onSurfaceVariant`
+  + remaining **mm:ss** in `titleMedium` w600, **tabular, forced LTR**) · a pause/resume `IconButton` ·
+  a stop `IconButton`. Tapping the strip pushes the full-screen focus session.
+- *Compact form (desktop rail, width < 220):* a `Column` — the ring (tap → open session) over one
+  pause/resume button. (Desktop also gets the tray / mini-window per §5.)
+- *Control-stack rule (§6):* while a session runs the shelf is the single live control stratum; it is
+  hidden inside true modals (it lives in the shell, which modals cover).
+- *RTL:* mirrors via `start`/`end`; the ring and numerals do **not** mirror.
+
+**B. Alarm-ringing modal.** Full-screen `fullscreenDialog`, fades in over **280 ms**; no tab bar.
+- *Layout (centered column on `surface`):* a 44 px `Icons.alarm` glyph in **accent** · the alarm time
+  as an oversized **Display L** tabular numeral (`FittedBox` auto-fit, forced LTR) · the optional label
+  in `titleMedium`/`onSurfaceVariant` · then two **stacked full-width pills**: **Snooze** (filled-tonal)
+  over **Stop** (filled, accent), each ≥56 tall.
+- *Behavior (shipped foreground watcher `AlarmHost`):* while the app is open, a 10 s ticker rings an
+  enabled alarm when its `HH:MM` matches now (respecting repeat days) — **Snooze** re-arms it **+5 min**;
+  **Stop** dismisses, and a **one-shot** alarm switches itself off so it can't repeat. Background
+  ringing remains a native-scheduling owner task and is stated honestly in-app.
+- *RTL:* numerals LTR; otherwise centered/mirrored.
+
+**C. Focus-complete bloom.** A celebratory overlay shown when a **work** phase finishes (a `ref.listen`
+catches the completion), over the running session.
+- *Layout:* a dim **scrim** (`scrim` @ 60%) with a centered group → a 96 px accent-tinted disc holding a
+  52 px check, then **"Session complete"** (`headlineSmall` w600), then **"{done} / {goal} sessions
+  today"** (`bodyMedium`/`onSurfaceVariant`).
+- *Motion:* scale **0.8 → 1.0** + fade over **320 ms** `easeOutBack`; **tap anywhere** dismisses and it
+  **auto-dismisses after ~2.8 s**. Reduce-Motion → appears **instantly** (0 ms, no scale). See §13.
 
 ---
 
@@ -495,4 +540,83 @@ produces **static** screens — motion is documented here for the code stage, no
   tabular Arabic numeral font (§4.3).
 - **Distinctiveness:** the "Ambient Ring + reverence margins + Amiri typography" signature (§1) is what
   separates Tarf from a generic template — invest the polish budget there.
+
+---
+
+## 13. Motion & interaction appendix
+
+> Consolidates the motion system (previously scattered across §4.4–§4.7 and the screen specs) into one
+> reference, and records what is **shipped** vs **spec-only** so design and code stay honest.
+
+### 13.1 Duration tokens
+| Token | ms | Use |
+|---|---|---|
+| `fast` | 150 | taps, toggles, micro state-layer changes |
+| `normal` | 280 | most state transitions (expand/collapse, segmented morph) |
+| `slow` | 480 | full screen changes |
+| `overlayFade` | 420 | dhikr break overlay enter/exit (shipped) |
+| `alarmFade` | 280 | alarm-ringing modal enter (shipped) |
+| `bloom` | 320 | focus-complete bloom scale+fade (shipped) |
+| `breathe` | 3000–6000 | slow breathing loops on rest/sacred content |
+
+Exit animations run at ~60–70% of their enter duration; no single transition exceeds 500 ms.
+
+### 13.2 Curves & springs
+- **Standard easing:** `easeOutCubic` (enter) / `easeIn` (exit). **Emphasized:** `easeOutQuint`.
+- **Bloom:** `easeOutBack` — the only overshoot in the app (focus-complete only).
+- **Springs:** utility surfaces use a near-critically-damped spring (damping ≈ 0.9); two *Expressive*
+  springs (damping ≈ 0.8) are reserved for the **dhikr reveal** and the **break-complete bloom**.
+- **Linear is banned** for UI transitions — except the steady countdown ring sweep, which is linear by
+  nature, and **never mirrors** in RTL (it depletes clockwise in both directions).
+
+### 13.3 Per-component motion  (✅ shipped · ◐ partial · ○ spec-only)
+| Element | Motion | Status |
+|---|---|---|
+| Break countdown ring | linear depletion over the break duration; rounded cap | ✅ |
+| Break breathing | whole ring scale 1.0→1.02, ~5 s loop (reverse) | ✅ |
+| Break focal dot | opacity ~0.18, scale recede 1.0→0.55 across the break | ✅ |
+| Break overlay enter | `overlayFade` 420 ms fade | ✅ |
+| Break-complete bloom | Expressive spring scale+fade at zero | ○ (impl shows an instant done-state) |
+| Dhikr reveal | gentle Expressive spring | ○ (impl fades in with the overlay) |
+| Focus-complete bloom | scale 0.8→1.0 + fade, 320 ms `easeOutBack`, auto-dismiss ~2.8 s | ✅ |
+| Alarm-ringing modal | `alarmFade` 280 ms fade, `fullscreenDialog` | ✅ |
+| Active-session shelf | reveals/hides with session state; glass blur 18 | ✅ (no entrance spring) |
+| Capsule tab bar | floating glass blur 18 | ◐ ("minimize on scroll-down" is spec-only) |
+| Active ring (Home/Focus idle) | breathing scale 1.0→1.02 loop | ○ (ring is static today) |
+| Button / card press | Material state layer + `InkSparkle` ripple | ◐ (spec's spring "corner squish" not custom) |
+| Segmented control | selected segment morph + neighbor squeeze | ◐ (Material `SegmentedButton` default) |
+| Sliders / steppers | detents + light haptic per step | ◐ (timer steppers fire haptics; slider detents spec-only) |
+| Screen push/pop | directional slide (forward left/up, back right/down) | ◐ (go_router platform default; break/alarm fade) |
+| Bottom sheet | spring slide-up, radius 28 | ✅ (Material default) |
+
+### 13.4 Interaction & gesture feedback
+- **Tap feedback within 100 ms**; input latency target < 100 ms; never block input during an animation,
+  and keep every animation **interruptible** (a tap/gesture cancels it immediately).
+- **Press:** a visible state-layer/ripple on every interactive surface; ≥44×44 hit rects (§4.6).
+- **Drag/swipe:** real-time tracking with a small start threshold; swipe-to-delete on list rows
+  (alarms) uses an `endToStart` affordance with a tap/long-press fallback.
+- **Haptics (paired with audio, §4.5):** light tick on selection/step (shipped on timer steppers);
+  medium on confirm / break-start; heavy on completion; on the break, a soft chime **and** a brief
+  haptic fire as **equal** end cues (haptic there is **opt-out**).
+
+### 13.5 Reduce-Motion  (true `prefers-reduced-motion` → zero motion where possible)
+| Element | Normal | Reduced | Status |
+|---|---|---|---|
+| Break breathing ring | scale 1.0→1.02 loop | hold static 1.0, no loop | ✅ |
+| Break focal dot recede | slow scale | static dot | ◐ (loop tied to breathe; recede follows the countdown) |
+| Break-complete bloom | spring scale+fade | instant state change | ✅ (instant today) |
+| Dhikr reveal | Expressive spring | instant / ≤120 ms opacity | ✅ |
+| Focus-complete bloom | 320 ms scale+fade | **instant (0 ms), no scale** | ✅ (honors `reduceMotion`) |
+| Screen transitions | slide/spring 280–480 ms | 0 ms or ≤100 ms crossfade | ○ (not yet gated on the flag) |
+| Capsule bar minimize | slide | no minimize | ◐ (no minimize implemented) |
+
+- Flag source of truth: `settings.reduceMotion` (Settings → Appearance); also honor the OS
+  `MediaQuery.disableAnimations` where Material applies it automatically.
+- **Reduce Transparency:** glass/blur layers (tab bar, shelf, sheets, break veil) move toward solid
+  `surfaceContainerHigh`/`overlay`.
+
+### 13.6 Motion backlog (to fully realize this spec)
+The ○/◐ rows are the open work: the break-complete bloom + dhikr-reveal Expressive springs, the
+Home/Focus active-ring breathing, press-scale springs, the scroll-to-minimize tab bar, slider detent
+haptics, and gating screen transitions on Reduce-Motion.
 </content>
