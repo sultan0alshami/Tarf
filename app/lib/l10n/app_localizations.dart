@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Eye care'**
   String get eyeCareTitle;
 
+  /// No description provided for @takeBreakNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break now'**
+  String get takeBreakNow;
+
   /// No description provided for @breakLookAway.
   ///
   /// In en, this message translates to:

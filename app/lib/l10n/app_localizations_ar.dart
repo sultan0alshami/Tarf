@@ -60,6 +60,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get eyeCareTitle => 'العناية بالعين';
 
   @override
+  String get takeBreakNow => 'خذ راحة الآن';
+
+  @override
   String get breakLookAway => 'انظر إلى مسافة ٦ أمتار';
 
   @override

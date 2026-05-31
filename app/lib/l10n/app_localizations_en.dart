@@ -60,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eyeCareTitle => 'Eye care';
 
   @override
+  String get takeBreakNow => 'Take a break now';
+
+  @override
   String get breakLookAway => 'Look 20 feet away';
 
   @override

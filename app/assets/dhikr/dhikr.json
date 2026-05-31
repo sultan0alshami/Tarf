@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "note": "Curated, non-sectarian short adhkar suitable for a ~20s break. Arabic is fully vocalized and treated as immutable. REQUIRES scholarly/editorial sign-off before public release (see docs/specs and the asset provenance process).",
+    "transliterationScheme": "Light ALA-LC-style, no special characters, approachable for repetition.",
+    "version": 1
+  },
+  "dhikr": [
+    {
+      "id": "subhanallah",
+      "arabic": "سُبْحَانَ اللّٰهِ",
+      "transliteration": "Subhan-Allah",
+      "english": "Glory be to Allah.",
+      "reference": "Sahih al-Bukhari 6406; Sahih Muslim 2694",
+      "virtue": "Light on the tongue, heavy on the scale, beloved to the Most Merciful.",
+      "audio": null
+    },
+    {
+      "id": "alhamdulillah",
+      "arabic": "الْحَمْدُ لِلّٰهِ",
+      "transliteration": "Al-hamdu lillah",
+      "english": "All praise is for Allah.",
+      "reference": "Sahih Muslim 223",
+      "virtue": "It fills the scale of good deeds.",
+      "audio": null
+    },
+    {
+      "id": "la-ilaha-illallah",
+      "arabic": "لَا إِلٰهَ إِلَّا اللّٰهُ",
+      "transliteration": "La ilaha illa-llah",
+      "english": "There is no deity worthy of worship except Allah.",
+      "reference": "Sahih al-Bukhari; Sahih Muslim",
+      "virtue": "The best of remembrance.",
+      "audio": null
+    },
+    {
+      "id": "allahu-akbar",
+      "arabic": "اللّٰهُ أَكْبَرُ",
+      "transliteration": "Allahu akbar",
+      "english": "Allah is the Greatest.",
+      "reference": "Sahih al-Bukhari; Sahih Muslim",
+      "virtue": "Among the most beloved words to Allah.",
+      "audio": null
+    },
+    {
+      "id": "subhanallah-wa-bihamdihi",
+      "arabic": "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ",
+      "transliteration": "Subhan-Allahi wa bihamdihi",
+      "english": "Glory be to Allah and praise be to Him.",
+      "reference": "Sahih al-Bukhari 6405; Sahih Muslim 2691",
+      "virtue": "Whoever says it 100 times a day, his sins are wiped away though they be like the foam of the sea.",
+      "audio": null
+    },
+    {
+      "id": "subhanallah-azim",
+      "arabic": "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ، سُبْحَانَ اللّٰهِ الْعَظِيمِ",
+      "transliteration": "Subhan-Allahi wa bihamdihi, Subhan-Allahil-‘Azim",
+      "english": "Glory and praise be to Allah; glory be to Allah the Magnificent.",
+      "reference": "Sahih al-Bukhari 6406; Sahih Muslim 2694",
+      "virtue": "Two phrases light on the tongue, heavy on the scale, beloved to the Most Merciful.",
+      "audio": null
+    },
+    {
+      "id": "astaghfirullah",
+      "arabic": "أَسْتَغْفِرُ اللّٰهَ",
+      "transliteration": "Astaghfiru-llah",
+      "english": "I seek the forgiveness of Allah.",
+      "reference": "Sahih Muslim 2702",
+      "virtue": "The Prophet ﷺ sought forgiveness more than seventy times a day.",
+      "audio": null
+    },
+    {
+      "id": "la-hawla",
+      "arabic": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ",
+      "transliteration": "La hawla wa la quwwata illa billah",
+      "english": "There is no might nor power except with Allah.",
+      "reference": "Sahih al-Bukhari 6384; Sahih Muslim 2704",
+      "virtue": "A treasure from the treasures of Paradise.",
+      "audio": null
+    },
+    {
+      "id": "salawat",
+      "arabic": "اللّٰهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ",
+      "transliteration": "Allahumma salli wa sallim ‘ala nabiyyina Muhammad",
+      "english": "O Allah, send blessings and peace upon our Prophet Muhammad.",
+      "reference": "Sahih Muslim 408 (on the virtue of salawat)",
+      "virtue": "Whoever sends blessings upon the Prophet ﷺ once, Allah sends ten upon him.",
+      "audio": null
+    }
+  ]
+}
