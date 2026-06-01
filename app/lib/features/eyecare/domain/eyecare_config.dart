@@ -58,6 +58,7 @@ class EyeCareConfig {
     this.prayerLongitude = 46.6753,
     this.prayerMethod = 'ummAlQura',
     this.prayerMadhab = 'shafi',
+    this.prayerAlarmsEnabled = const {'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'},
     this.mergeWithPomodoro = false,
   });
 
@@ -94,6 +95,10 @@ class EyeCareConfig {
   final double prayerLongitude;
   final String prayerMethod;
   final String prayerMadhab;
+
+  /// Which daily prayers ring as alarms in Prayer mode (subset of
+  /// fajr/dhuhr/asr/maghrib/isha).
+  final Set<String> prayerAlarmsEnabled;
   final bool mergeWithPomodoro;
 
   EyeCareConfig copyWith({
@@ -124,6 +129,7 @@ class EyeCareConfig {
     double? prayerLongitude,
     String? prayerMethod,
     String? prayerMadhab,
+    Set<String>? prayerAlarmsEnabled,
     bool? mergeWithPomodoro,
   }) {
     return EyeCareConfig(
@@ -154,6 +160,7 @@ class EyeCareConfig {
       prayerLongitude: prayerLongitude ?? this.prayerLongitude,
       prayerMethod: prayerMethod ?? this.prayerMethod,
       prayerMadhab: prayerMadhab ?? this.prayerMadhab,
+      prayerAlarmsEnabled: prayerAlarmsEnabled ?? this.prayerAlarmsEnabled,
       mergeWithPomodoro: mergeWithPomodoro ?? this.mergeWithPomodoro,
     );
   }
@@ -185,6 +192,7 @@ class EyeCareConfig {
         'prayerLng': prayerLongitude,
         'prayerMethod': prayerMethod,
         'prayerMadhab': prayerMadhab,
+        'prayerAlarms': prayerAlarmsEnabled.toList(),
         'mergeWithPomodoro': mergeWithPomodoro,
       };
 
@@ -224,6 +232,8 @@ class EyeCareConfig {
       prayerLongitude: (j['prayerLng'] as num?)?.toDouble() ?? 46.6753,
       prayerMethod: (j['prayerMethod'] as String?) ?? 'ummAlQura',
       prayerMadhab: (j['prayerMadhab'] as String?) ?? 'shafi',
+      prayerAlarmsEnabled: ((j['prayerAlarms'] as List?)?.cast<String>().toSet()) ??
+          const {'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'},
       mergeWithPomodoro: (j['mergeWithPomodoro'] as bool?) ?? false,
     );
   }

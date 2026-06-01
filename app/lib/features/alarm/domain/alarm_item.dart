@@ -9,6 +9,9 @@ class AlarmItem {
     this.label = '',
     this.enabled = true,
     this.days = const <int>{},
+    this.sound = 'default',
+    this.ringDurationSeconds = 60,
+    this.snoozeMinutes = 5,
   });
 
   final String id;
@@ -20,6 +23,16 @@ class AlarmItem {
   /// Weekdays to repeat on (DateTime.monday=1 .. sunday=7). Empty = one-shot.
   final Set<int> days;
 
+  /// Sound id (e.g. 'default'); stored now, played once a native audio backend
+  /// lands (see User_Actions.md).
+  final String sound;
+
+  /// How long the alarm rings before it auto-dismisses.
+  final int ringDurationSeconds;
+
+  /// Minutes added to the time when the user snoozes.
+  final int snoozeMinutes;
+
   int get minuteOfDay => hour * 60 + minute;
 
   AlarmItem copyWith({
@@ -28,6 +41,9 @@ class AlarmItem {
     String? label,
     bool? enabled,
     Set<int>? days,
+    String? sound,
+    int? ringDurationSeconds,
+    int? snoozeMinutes,
   }) =>
       AlarmItem(
         id: id,
@@ -36,6 +52,9 @@ class AlarmItem {
         label: label ?? this.label,
         enabled: enabled ?? this.enabled,
         days: days ?? this.days,
+        sound: sound ?? this.sound,
+        ringDurationSeconds: ringDurationSeconds ?? this.ringDurationSeconds,
+        snoozeMinutes: snoozeMinutes ?? this.snoozeMinutes,
       );
 
   Map<String, Object?> toJson() => {
@@ -45,6 +64,9 @@ class AlarmItem {
         'label': label,
         'on': enabled,
         'days': days.toList(),
+        'snd': sound,
+        'rds': ringDurationSeconds,
+        'snz': snoozeMinutes,
       };
 
   factory AlarmItem.fromJson(Map<String, Object?> j) => AlarmItem(
@@ -54,5 +76,8 @@ class AlarmItem {
         label: (j['label'] as String?) ?? '',
         enabled: (j['on'] as bool?) ?? true,
         days: ((j['days'] as List?)?.cast<int>() ?? const []).toSet(),
+        sound: (j['snd'] as String?) ?? 'default',
+        ringDurationSeconds: (j['rds'] as int?) ?? 60,
+        snoozeMinutes: (j['snz'] as int?) ?? 5,
       );
 }

@@ -450,4 +450,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get behaviorAlertsGroupLabel => 'Behavior & alerts';
+
+  @override
+  String get alarmStandard => 'Standard';
+
+  @override
+  String get alarmPrayer => 'Prayer';
+
+  @override
+  String ringInHm(int h, int m) {
+    return 'Ring in ${h}h ${m}m';
+  }
+
+  @override
+  String get editAlarm => 'Edit alarm';
+
+  @override
+  String get newAlarm => 'New alarm';
+
+  @override
+  String get alarmRepeat => 'Repeat';
+
+  @override
+  String get alarmLabel => 'Label';
+
+  @override
+  String get alarmRingDuration => 'Ring duration';
+
+  @override
+  String get alarmSnoozeDuration => 'Snooze duration';
+
+  @override
+  String get actionDelete => 'Delete';
+
+  @override
+  String get soundDefault => 'Default';
+
+  @override
+  String get soundBell => 'Bell';
+
+  @override
+  String get soundChime => 'Chime';
+
+  @override
+  String get soundCalm => 'Calm';
+
+  @override
+  String get prayerFajr => 'Fajr';
+
+  @override
+  String get prayerDhuhr => 'Dhuhr';
+
+  @override
+  String get prayerAsr => 'Asr';
+
+  @override
+  String get prayerMaghrib => 'Maghrib';
+
+  @override
+  String get prayerIsha => 'Isha';
+
+  @override
+  String prayerTimesForDate(String date) {
+    return 'Prayer times · $date';
+  }
+
+  @override
+  String get locationAndMethod => 'Location & method';
 }

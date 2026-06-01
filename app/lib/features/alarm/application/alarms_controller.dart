@@ -43,6 +43,15 @@ class AlarmsController extends Notifier<List<AlarmItem>> {
         AlarmItem(id: 'a$nowMs', hour: hour, minute: minute, label: label, days: days),
       ]);
 
+  /// Adds [item] if its id is new, otherwise replaces the alarm with that id.
+  Future<void> upsert(AlarmItem item) {
+    final exists = state.any((a) => a.id == item.id);
+    final next = exists
+        ? [for (final a in state) if (a.id == item.id) item else a]
+        : [...state, item];
+    return _persist(next);
+  }
+
   Future<void> toggle(String id) => _persist([
         for (final a in state)
           if (a.id == id) a.copyWith(enabled: !a.enabled) else a,

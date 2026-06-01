@@ -450,4 +450,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get behaviorAlertsGroupLabel => 'السلوك والتنبيهات';
+
+  @override
+  String get alarmStandard => 'عادي';
+
+  @override
+  String get alarmPrayer => 'الصلاة';
+
+  @override
+  String ringInHm(int h, int m) {
+    return 'يرنّ خلال $hس $mد';
+  }
+
+  @override
+  String get editAlarm => 'تعديل المنبّه';
+
+  @override
+  String get newAlarm => 'منبّه جديد';
+
+  @override
+  String get alarmRepeat => 'التكرار';
+
+  @override
+  String get alarmLabel => 'التسمية';
+
+  @override
+  String get alarmRingDuration => 'مدة الرنين';
+
+  @override
+  String get alarmSnoozeDuration => 'مدة التأجيل';
+
+  @override
+  String get actionDelete => 'حذف';
+
+  @override
+  String get soundDefault => 'افتراضي';
+
+  @override
+  String get soundBell => 'جرس';
+
+  @override
+  String get soundChime => 'رنين';
+
+  @override
+  String get soundCalm => 'هادئ';
+
+  @override
+  String get prayerFajr => 'الفجر';
+
+  @override
+  String get prayerDhuhr => 'الظهر';
+
+  @override
+  String get prayerAsr => 'العصر';
+
+  @override
+  String get prayerMaghrib => 'المغرب';
+
+  @override
+  String get prayerIsha => 'العشاء';
+
+  @override
+  String prayerTimesForDate(String date) {
+    return 'أوقات الصلاة · $date';
+  }
+
+  @override
+  String get locationAndMethod => 'الموقع والطريقة';
 }

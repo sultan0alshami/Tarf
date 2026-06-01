@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/app_localizations.dart';
+import '../../eyecare/application/eyecare_config_controller.dart';
+import '../../eyecare/core/prayer_service.dart';
 import '../application/alarms_controller.dart';
 import '../domain/alarm_item.dart';
 import 'alarm_ringing_screen.dart';
@@ -67,6 +70,46 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
         return;
       }
     }
+
+    // 3) Computed prayer alarms (Prayer mode), at their times today.
+    final cfg = ref.read(eyeCareConfigProvider);
+    if (cfg.prayerAlarmsEnabled.isNotEmpty && mounted) {
+      final times = PrayerService.timesFor(
+        latitude: cfg.prayerLatitude,
+        longitude: cfg.prayerLongitude,
+        day: now,
+        method: cfg.prayerMethod,
+        madhab: cfg.prayerMadhab,
+      );
+      const ids = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+      final l10n = AppLocalizations.of(context);
+      for (var i = 0; i < ids.length && i < times.length; i++) {
+        if (!cfg.prayerAlarmsEnabled.contains(ids[i])) continue;
+        final t = times[i];
+        if (t.hour != now.hour || t.minute != now.minute) continue;
+        final key = _minuteKey('prayer_${ids[i]}', now);
+        if (_firedThisMinute.contains(key)) continue;
+        _firedThisMinute.add(key);
+        final name = switch (ids[i]) {
+          'fajr' => l10n.prayerFajr,
+          'dhuhr' => l10n.prayerDhuhr,
+          'asr' => l10n.prayerAsr,
+          'maghrib' => l10n.prayerMaghrib,
+          _ => l10n.prayerIsha,
+        };
+        await _ring(
+          AlarmItem(
+            id: 'prayer_${ids[i]}',
+            hour: t.hour,
+            minute: t.minute,
+            label: name,
+            days: const {1, 2, 3, 4, 5, 6, 7},
+          ),
+          now,
+        );
+        return;
+      }
+    }
   }
 
   Future<void> _ring(AlarmItem item, DateTime now) async {
@@ -83,7 +126,8 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
     }
 
     void snooze() {
-      _snoozeUntil[item.id] = DateTime.now().add(const Duration(minutes: 5));
+      _snoozeUntil[item.id] =
+          DateTime.now().add(Duration(minutes: item.snoozeMinutes));
       navigator.pop();
     }
 

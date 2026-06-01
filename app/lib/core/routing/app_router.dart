@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/account_screen.dart';
 import '../../features/alarm/domain/alarm_item.dart';
+import '../../features/alarm/presentation/alarm_editor_screen.dart';
 import '../../features/alarm/presentation/alarm_ringing_screen.dart';
 import '../../features/alarm/presentation/alarm_screen.dart';
 import '../../features/eyecare/presentation/break_screen.dart';
@@ -26,6 +27,7 @@ abstract final class Routes {
   static const timer = '/timer';
   static const alarm = '/alarm';
   static const alarmRinging = '/alarm-ringing';
+  static const alarmEditor = '/alarm-edit';
   static const stopwatch = '/stopwatch';
   static const insights = '/insights';
   static const settings = '/settings';
@@ -127,6 +129,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AlarmRingingScreen(
           item: AlarmItem(id: 'preview', hour: 6, minute: 30),
         ),
+      ),
+      GoRoute(
+        path: Routes.alarmEditor,
+        builder: (context, state) =>
+            AlarmEditorScreen(existing: state.extra as AlarmItem?),
       ),
     ],
   );

@@ -937,6 +937,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Behavior & alerts'**
   String get behaviorAlertsGroupLabel;
+
+  /// No description provided for @alarmStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get alarmStandard;
+
+  /// No description provided for @alarmPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get alarmPrayer;
+
+  /// No description provided for @ringInHm.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring in {h}h {m}m'**
+  String ringInHm(int h, int m);
+
+  /// No description provided for @editAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit alarm'**
+  String get editAlarm;
+
+  /// No description provided for @newAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'New alarm'**
+  String get newAlarm;
+
+  /// No description provided for @alarmRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get alarmRepeat;
+
+  /// No description provided for @alarmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get alarmLabel;
+
+  /// No description provided for @alarmRingDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring duration'**
+  String get alarmRingDuration;
+
+  /// No description provided for @alarmSnoozeDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze duration'**
+  String get alarmSnoozeDuration;
+
+  /// No description provided for @actionDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get actionDelete;
+
+  /// No description provided for @soundDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get soundDefault;
+
+  /// No description provided for @soundBell.
+  ///
+  /// In en, this message translates to:
+  /// **'Bell'**
+  String get soundBell;
+
+  /// No description provided for @soundChime.
+  ///
+  /// In en, this message translates to:
+  /// **'Chime'**
+  String get soundChime;
+
+  /// No description provided for @soundCalm.
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get soundCalm;
+
+  /// No description provided for @prayerFajr.
+  ///
+  /// In en, this message translates to:
+  /// **'Fajr'**
+  String get prayerFajr;
+
+  /// No description provided for @prayerDhuhr.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhuhr'**
+  String get prayerDhuhr;
+
+  /// No description provided for @prayerAsr.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr'**
+  String get prayerAsr;
+
+  /// No description provided for @prayerMaghrib.
+  ///
+  /// In en, this message translates to:
+  /// **'Maghrib'**
+  String get prayerMaghrib;
+
+  /// No description provided for @prayerIsha.
+  ///
+  /// In en, this message translates to:
+  /// **'Isha'**
+  String get prayerIsha;
+
+  /// No description provided for @prayerTimesForDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times · {date}'**
+  String prayerTimesForDate(String date);
+
+  /// No description provided for @locationAndMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Location & method'**
+  String get locationAndMethod;
 }
 
 class _AppLocalizationsDelegate
