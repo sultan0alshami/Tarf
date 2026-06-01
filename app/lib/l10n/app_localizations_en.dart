@@ -516,5 +516,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String prayerTimeUpdated(String date) {
+    return 'Prayer time updated: $date';
+  }
+
+  @override
   String get locationAndMethod => 'Location & method';
 }

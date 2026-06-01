@@ -1058,6 +1058,12 @@ abstract class AppLocalizations {
   /// **'Prayer times · {date}'**
   String prayerTimesForDate(String date);
 
+  /// No description provided for @prayerTimeUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer time updated: {date}'**
+  String prayerTimeUpdated(String date);
+
   /// No description provided for @locationAndMethod.
   ///
   /// In en, this message translates to:

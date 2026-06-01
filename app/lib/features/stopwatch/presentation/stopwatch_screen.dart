@@ -50,7 +50,7 @@ class StopwatchScreen extends ConsumerWidget {
             // Analog dial is the hero until the first lap is recorded; after
             // that the digital time + lap list take over (design.md §8.13).
             if (showDial) ...[
-              _StopwatchDial(elapsed: data.elapsed, size: 240),
+              _StopwatchDial(elapsed: data.elapsed, size: 260, numerals: n),
               const SizedBox(height: TarfTokens.space4),
             ],
             Center(
@@ -158,13 +158,19 @@ class StopwatchScreen extends ConsumerWidget {
   }
 }
 
-/// An analog stopwatch face: an outer 60-second ring with ticks + a sweeping
-/// second hand, and an inner 30-minute sub-dial with a short hand. Calm, teal.
+/// An analog stopwatch face: an outer 60-second ring (ticks + 5..60 numerals) +
+/// a sweeping second hand, and an inner 30-minute sub-dial (5..30 numerals) with
+/// a short hand — modeled on the reference clock. Calm, teal.
 class _StopwatchDial extends StatelessWidget {
-  const _StopwatchDial({required this.elapsed, required this.size});
+  const _StopwatchDial({
+    required this.elapsed,
+    required this.size,
+    required this.numerals,
+  });
 
   final Duration elapsed;
   final double size;
+  final NumeralSystem numerals;
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +183,8 @@ class _StopwatchDial extends StatelessWidget {
           elapsed: elapsed,
           track: context.tarf.ringTrack,
           accent: scheme.primary,
+          numberColor: scheme.onSurfaceVariant,
+          numerals: numerals,
         ),
       ),
     );
@@ -188,11 +196,32 @@ class _StopwatchDialPainter extends CustomPainter {
     required this.elapsed,
     required this.track,
     required this.accent,
+    required this.numberColor,
+    required this.numerals,
   });
 
   final Duration elapsed;
   final Color track;
   final Color accent;
+  final Color numberColor;
+  final NumeralSystem numerals;
+
+  void _label(Canvas canvas, Offset center, double radius, double angle,
+      String text, Color color, double fontSize) {
+    final tp = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          color: color,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final pos = center + Offset(math.cos(angle) * radius, math.sin(angle) * radius);
+    tp.paint(canvas, pos - Offset(tp.width / 2, tp.height / 2));
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -213,7 +242,7 @@ class _StopwatchDialPainter extends CustomPainter {
       final major = i % 5 == 0;
       final a = -math.pi / 2 + i * (2 * math.pi / 60);
       final outer = r - 4;
-      final inner = outer - (major ? 12 : 6);
+      final inner = outer - (major ? 11 : 5);
       tick.strokeWidth = major ? 2.5 : 1.0;
       canvas.drawLine(
         center + Offset(math.cos(a) * inner, math.sin(a) * inner),
@@ -222,14 +251,30 @@ class _StopwatchDialPainter extends CustomPainter {
       );
     }
 
+    // Outer 5..60 numerals (60 at the top).
+    for (var i = 1; i <= 12; i++) {
+      final v = i * 5;
+      final a = -math.pi / 2 + (v / 60) * 2 * math.pi;
+      _label(canvas, center, r - 30, a, Numerals.formatInt(v, numerals),
+          numberColor, r * 0.10);
+    }
+
     // Inner 30-minute sub-dial.
-    final innerR = r * 0.42;
+    final innerR = r * 0.5;
     canvas.drawCircle(center, innerR, ring..strokeWidth = 1.5);
+    for (var i = 1; i <= 6; i++) {
+      final v = i * 5;
+      final a = -math.pi / 2 + (v / 30) * 2 * math.pi;
+      _label(canvas, center, innerR - 13, a, Numerals.formatInt(v, numerals),
+          numberColor.withValues(alpha: 0.8), r * 0.066);
+    }
+
     final minFrac = ((elapsed.inSeconds / 60) % 30) / 30;
     final minA = -math.pi / 2 + minFrac * 2 * math.pi;
     canvas.drawLine(
       center,
-      center + Offset(math.cos(minA) * innerR * 0.8, math.sin(minA) * innerR * 0.8),
+      center +
+          Offset(math.cos(minA) * innerR * 0.7, math.sin(minA) * innerR * 0.7),
       Paint()
         ..color = accent.withValues(alpha: 0.7)
         ..strokeWidth = 3
@@ -241,7 +286,7 @@ class _StopwatchDialPainter extends CustomPainter {
     final secA = -math.pi / 2 + secFrac * 2 * math.pi;
     canvas.drawLine(
       center,
-      center + Offset(math.cos(secA) * (r - 16), math.sin(secA) * (r - 16)),
+      center + Offset(math.cos(secA) * (r - 18), math.sin(secA) * (r - 18)),
       Paint()
         ..color = accent
         ..strokeWidth = 3
@@ -253,7 +298,11 @@ class _StopwatchDialPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_StopwatchDialPainter old) =>
-      old.elapsed != elapsed || old.track != track || old.accent != accent;
+      old.elapsed != elapsed ||
+      old.track != track ||
+      old.accent != accent ||
+      old.numberColor != numberColor ||
+      old.numerals != numerals;
 }
 
 class _LapRow extends StatelessWidget {

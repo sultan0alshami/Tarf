@@ -516,5 +516,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String prayerTimeUpdated(String date) {
+    return 'تحديث أوقات الصلاة: $date';
+  }
+
+  @override
   String get locationAndMethod => 'الموقع والطريقة';
 }

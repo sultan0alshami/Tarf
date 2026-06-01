@@ -204,5 +204,7 @@
   "prayerIsha": "Isha",
   "prayerTimesForDate": "Prayer times · {date}",
   "@prayerTimesForDate": { "placeholders": { "date": { "type": "String" } } },
+  "prayerTimeUpdated": "Prayer time updated: {date}",
+  "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
   "locationAndMethod": "Location & method"
 }

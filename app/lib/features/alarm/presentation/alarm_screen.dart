@@ -77,6 +77,10 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
       body: ListView(
         padding: const EdgeInsets.all(TarfTokens.space3),
         children: [
+          if (_mode == AlarmMode.prayer) ...[
+            const _PrayerBanner(),
+            const SizedBox(height: TarfTokens.space3),
+          ],
           if (nextIn != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(
@@ -108,7 +112,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
           if (_mode == AlarmMode.standard)
             ..._standard(l10n)
           else
-            ..._prayer(l10n),
+            _prayerView(l10n),
         ],
       ),
     );
@@ -170,95 +174,121 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
     ];
   }
 
-  List<Widget> _prayer(AppLocalizations l10n) {
+  Widget _prayerView(AppLocalizations l10n) {
     final prayers = ref.watch(prayerAlarmsProvider);
     final n = ref.watch(
       settingsControllerProvider.select((s) => s.effectiveNumerals),
     );
-    final scheme = Theme.of(context).colorScheme;
-    // Localized month name, but Western digits for day/year (Tarf's numerals
-    // rule) — DateFormat would render Arabic-Indic digits for the `ar` locale.
+    final base = Theme.of(context);
+    final isDark = base.brightness == Brightness.dark;
+    final green = isDark ? const Color(0xFF53C892) : const Color(0xFF2E7D55);
+    final cardGreen = isDark ? const Color(0xFF16382A) : const Color(0xFFDCEEE3);
+    final use24 = MediaQuery.of(context).alwaysUse24HourFormat;
+    // Localized month name, but Western digits (Tarf's numerals rule).
     final locale = Localizations.localeOf(context).toString();
     final now = DateTime.now();
     final date = '${Numerals.padded(now.day, n, width: 1)} '
         '${DateFormat.MMMM(locale).format(now)} '
         '${Numerals.padded(now.year, n, width: 1)}';
 
-    return [
-      Padding(
-        padding: const EdgeInsetsDirectional.only(
-          start: TarfTokens.space2,
-          bottom: TarfTokens.space2,
-        ),
-        child: Text(
-          l10n.prayerTimesForDate(date),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: context.tarf.textTertiary),
-        ),
+    return Theme(
+      // Prayer mode wears a reverent green over the teal brand (owner request).
+      data: base.copyWith(
+        colorScheme: base.colorScheme.copyWith(primary: green),
       ),
-      TarfGroup(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: TarfTokens.space2,
+              bottom: TarfTokens.space2,
+            ),
+            child: Text(
+              l10n.prayerTimeUpdated(date),
+              style: base.textTheme.bodySmall?.copyWith(color: green),
+            ),
+          ),
           for (final p in prayers)
             Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: TarfTokens.space3,
-                vertical: TarfTokens.space2,
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.brightness_3,
-                      size: 20, color: scheme.primary),
-                  const SizedBox(width: TarfTokens.space3),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TarfTimeText(
-                          '${Numerals.padded(p.time.hour, n)}:'
-                          '${Numerals.padded(p.time.minute, n)}',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                          color: p.enabled
-                              ? scheme.onSurface
-                              : context.tarf.textTertiary,
-                        ),
-                        Text(
-                          _prayerName(l10n, p.id),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant),
-                        ),
-                      ],
+              padding: const EdgeInsets.only(bottom: TarfTokens.space2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: cardGreen,
+                  borderRadius: BorderRadius.circular(TarfTokens.radiusM),
+                ),
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: TarfTokens.space3,
+                  vertical: 10,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.brightness_3, size: 22, color: green),
+                    const SizedBox(width: TarfTokens.space3),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TarfTimeText(
+                            _time12(p.time.hour, p.time.minute, n, use24),
+                            style: base.textTheme.headlineSmall,
+                            color: p.enabled
+                                ? base.colorScheme.onSurface
+                                : context.tarf.textTertiary,
+                          ),
+                          Text(
+                            _prayerName(l10n, p.id),
+                            style: base.textTheme.bodySmall?.copyWith(
+                              color: base.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Switch(
-                    value: p.enabled,
-                    onChanged: (on) => _togglePrayer(p.id, on),
-                  ),
-                ],
+                    Switch(
+                      value: p.enabled,
+                      onChanged: (on) => _togglePrayer(p.id, on),
+                    ),
+                  ],
+                ),
               ),
             ),
-        ],
-      ),
-      const SizedBox(height: TarfTokens.space3),
-      TarfGroup(
-        children: [
-          TarfListRow(
-            icon: Icons.place_outlined,
-            title: l10n.locationAndMethod,
-            trailing: Icon(
-              Directionality.of(context) == TextDirection.rtl
-                  ? Icons.chevron_left
-                  : Icons.chevron_right,
-              color: scheme.onSurfaceVariant,
+          const SizedBox(height: TarfTokens.space3),
+          Center(
+            child: Material(
+              color: green,
+              shape: const StadiumBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => context.push(Routes.eyeCareSettings),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TarfTokens.space5,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.mosque, color: Colors.white, size: 22),
+                      Container(
+                        width: 1,
+                        height: 22,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: TarfTokens.space3,
+                        ),
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                      const Icon(Icons.location_city,
+                          color: Colors.white, size: 22),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            onTap: () => context.push(Routes.eyeCareSettings),
           ),
         ],
       ),
-    ];
+    );
   }
 }
 
@@ -341,5 +371,56 @@ class _AlarmRow extends ConsumerWidget {
       if (a[i] != b[i]) return false;
     }
     return true;
+  }
+}
+
+/// 12-hour "h:mm AM/PM" (or 24-hour HH:MM), Western digits via [Numerals].
+String _time12(int hour, int minute, NumeralSystem n, bool use24) {
+  if (use24) {
+    return '${Numerals.padded(hour, n)}:${Numerals.padded(minute, n)}';
+  }
+  final pm = hour >= 12;
+  final h = hour % 12 == 0 ? 12 : hour % 12;
+  return '${Numerals.formatInt(h, n)}:${Numerals.padded(minute, n)} '
+      '${pm ? 'PM' : 'AM'}';
+}
+
+/// The Prayer-mode hero banner: a green gradient with a crescent + mosque —
+/// reverent green per owner request (approximates the reference illustration).
+class _PrayerBanner extends StatelessWidget {
+  const _PrayerBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final green = isDark ? const Color(0xFF1C5237) : const Color(0xFF2E7D55);
+    final glow = isDark ? const Color(0xFF2E7A52) : const Color(0xFF82C99D);
+    return Container(
+      height: 150,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(TarfTokens.radiusL),
+        gradient: RadialGradient(
+          center: const Alignment(0.45, -0.35),
+          radius: 1.1,
+          colors: [glow, green],
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 16,
+            right: 44,
+            child: Icon(
+              Icons.brightness_3,
+              size: 92,
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
+          const Icon(Icons.mosque, size: 60, color: Colors.white),
+        ],
+      ),
+    );
   }
 }

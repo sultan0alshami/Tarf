@@ -203,5 +203,7 @@
   "prayerIsha": "العشاء",
   "prayerTimesForDate": "أوقات الصلاة · {date}",
   "@prayerTimesForDate": { "placeholders": { "date": { "type": "String" } } },
+  "prayerTimeUpdated": "تحديث أوقات الصلاة: {date}",
+  "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
   "locationAndMethod": "الموقع والطريقة"
 }
