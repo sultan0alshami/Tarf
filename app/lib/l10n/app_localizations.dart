@@ -518,6 +518,66 @@ abstract class AppLocalizations {
   /// **'Alarms will ring once native scheduling is enabled on this device.'**
   String get alarmNativeNote;
 
+  /// No description provided for @notifPrimingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Break reminders'**
+  String get notifPrimingTitle;
+
+  /// No description provided for @notifPrimingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.'**
+  String get notifPrimingBody;
+
+  /// No description provided for @exactAlarmPrimingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'So your alarm rings at the exact time, Tarf needs the ‘exact alarms’ permission.'**
+  String get exactAlarmPrimingBody;
+
+  /// No description provided for @permEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get permEnable;
+
+  /// No description provided for @permNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get permNotNow;
+
+  /// No description provided for @permOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get permOpenSettings;
+
+  /// No description provided for @bgRemindersOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Background reminders off — Tarf will only remind you while it\'s open.'**
+  String get bgRemindersOff;
+
+  /// No description provided for @bgForegroundOnlyPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'On this platform, reminders fire only while Tarf is open.'**
+  String get bgForegroundOnlyPlatform;
+
+  /// No description provided for @bgExactAlarmOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders may arrive a few minutes late — enable exact alarms for precise timing.'**
+  String get bgExactAlarmOff;
+
+  /// No description provided for @bgRemindersOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Background reminders on.'**
+  String get bgRemindersOn;
+
   /// No description provided for @eyeCareEnabled.
   ///
   /// In en, this message translates to:

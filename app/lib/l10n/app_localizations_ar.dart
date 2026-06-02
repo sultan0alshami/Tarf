@@ -229,6 +229,41 @@ class AppLocalizationsAr extends AppLocalizations {
       'ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز.';
 
   @override
+  String get notifPrimingTitle => 'تذكيرات الراحة';
+
+  @override
+  String get notifPrimingBody =>
+      'حتى يصلك تذكير الراحة وأنت خارج التطبيق، يحتاج طَرْف إذنك بالإشعارات. بدونها سيُذكّرك أثناء فتحه فقط.';
+
+  @override
+  String get exactAlarmPrimingBody =>
+      'لكي يرنّ المنبّه في وقته بالضبط، يحتاج طَرْف إذن «التنبيهات الدقيقة».';
+
+  @override
+  String get permEnable => 'تفعيل';
+
+  @override
+  String get permNotNow => 'لاحقًا';
+
+  @override
+  String get permOpenSettings => 'فتح الإعدادات';
+
+  @override
+  String get bgRemindersOff =>
+      'التنبيهات في الخلفية متوقّفة — سيُذكّرك طَرْف أثناء فتحه فقط.';
+
+  @override
+  String get bgForegroundOnlyPlatform =>
+      'على هذه المنصّة، تظهر التذكيرات أثناء فتح طَرْف فقط.';
+
+  @override
+  String get bgExactAlarmOff =>
+      'قد تصل التذكيرات متأخرة بضع دقائق — فعّل التنبيهات الدقيقة لتوقيت أدق.';
+
+  @override
+  String get bgRemindersOn => 'التنبيهات في الخلفية مفعّلة.';
+
+  @override
   String get eyeCareEnabled => 'تذكيرات العناية بالعين';
 
   @override

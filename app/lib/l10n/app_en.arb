@@ -94,6 +94,17 @@
   "noAlarms": "No alarms yet",
   "alarmNativeNote": "Alarms will ring once native scheduling is enabled on this device.",
 
+  "notifPrimingTitle": "Break reminders",
+  "notifPrimingBody": "To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.",
+  "exactAlarmPrimingBody": "So your alarm rings at the exact time, Tarf needs the ‘exact alarms’ permission.",
+  "permEnable": "Enable",
+  "permNotNow": "Not now",
+  "permOpenSettings": "Open settings",
+  "bgRemindersOff": "Background reminders off — Tarf will only remind you while it's open.",
+  "bgForegroundOnlyPlatform": "On this platform, reminders fire only while Tarf is open.",
+  "bgExactAlarmOff": "Reminders may arrive a few minutes late — enable exact alarms for precise timing.",
+  "bgRemindersOn": "Background reminders on.",
+
   "eyeCareEnabled": "Eye-care reminders",
   "reminderInterval": "Reminder interval",
   "breakLength": "Break length",

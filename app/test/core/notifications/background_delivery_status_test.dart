@@ -6,6 +6,7 @@ import 'package:tarf/core/notifications/background_delivery_status.dart';
 import 'package:tarf/core/notifications/notification_service.dart';
 import 'package:tarf/core/notifications/permission_state.dart';
 import 'package:tarf/core/settings/settings_controller.dart';
+import 'package:tarf/l10n/app_localizations_en.dart';
 
 void main() {
   group('BackgroundCapability', () {
@@ -85,5 +86,13 @@ void main() {
       expect(status.isDegraded, isTrue);
       expect(status.reason, DegradedReason.exactAlarmDenied);
     });
+  });
+
+  test('degraded l10n keys are generated', () {
+    final en = AppLocalizationsEn();
+    expect(en.bgRemindersOff.isNotEmpty, isTrue);
+    expect(en.bgForegroundOnlyPlatform.isNotEmpty, isTrue);
+    expect(en.bgExactAlarmOff.isNotEmpty, isTrue);
+    expect(en.notifPrimingTitle.isNotEmpty, isTrue);
   });
 }

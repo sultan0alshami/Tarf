@@ -229,6 +229,41 @@ class AppLocalizationsEn extends AppLocalizations {
       'Alarms will ring once native scheduling is enabled on this device.';
 
   @override
+  String get notifPrimingTitle => 'Break reminders';
+
+  @override
+  String get notifPrimingBody =>
+      'To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.';
+
+  @override
+  String get exactAlarmPrimingBody =>
+      'So your alarm rings at the exact time, Tarf needs the ‘exact alarms’ permission.';
+
+  @override
+  String get permEnable => 'Enable';
+
+  @override
+  String get permNotNow => 'Not now';
+
+  @override
+  String get permOpenSettings => 'Open settings';
+
+  @override
+  String get bgRemindersOff =>
+      'Background reminders off — Tarf will only remind you while it\'s open.';
+
+  @override
+  String get bgForegroundOnlyPlatform =>
+      'On this platform, reminders fire only while Tarf is open.';
+
+  @override
+  String get bgExactAlarmOff =>
+      'Reminders may arrive a few minutes late — enable exact alarms for precise timing.';
+
+  @override
+  String get bgRemindersOn => 'Background reminders on.';
+
+  @override
   String get eyeCareEnabled => 'Eye-care reminders';
 
   @override
