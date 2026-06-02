@@ -172,6 +172,64 @@ void main() {
       expect(g.scheduled.length, 1);
     });
 
+    test('one-shot fired in background does not repeat (re-armed)', () async {
+      final g = FakeNotificationGateway();
+      final c = _container(prefs, g);
+      addTearDown(c.dispose);
+      c.read(permissionStateProvider.notifier).setForTest(
+          PermissionState.initial
+              .afterNotificationResult(PermissionStatus.granted));
+      await c.read(eyeCareConfigProvider.notifier).update(noPrayers);
+      final svc = c.read(notificationServiceProvider.notifier);
+
+      // A one-shot alarm (no repeat days) for 09:00.
+      await c
+          .read(alarmsControllerProvider.notifier)
+          .upsert(const AlarmItem(id: 'a1', hour: 9, minute: 0));
+
+      // First reconcile at 08:00 arms it for today 09:00.
+      await svc.reconcile(now: DateTime(2026, 6, 1, 8, 0));
+      expect(g.scheduled.length, 1);
+      expect(g.scheduled.single.$2, DateTime(2026, 6, 1, 9, 0));
+
+      // The OS delivers it at 09:00 while the app is CLOSED (no foreground ring,
+      // so the one-shot is never toggled off by _ring). The app re-opens at
+      // 10:00 and reconciles: the one-shot must NOT be re-armed for tomorrow.
+      await svc.reconcile(now: DateTime(2026, 6, 1, 10, 0));
+      expect(g.scheduled, isEmpty, reason: 'fired one-shot must not re-arm');
+      // And the alarm itself is now disabled (won't fire in the foreground
+      // tomorrow either).
+      expect(
+        c.read(alarmsControllerProvider).single.enabled,
+        isFalse,
+      );
+    });
+
+    test('repeating alarm whose time passed still re-arms (not disabled)',
+        () async {
+      final g = FakeNotificationGateway();
+      final c = _container(prefs, g);
+      addTearDown(c.dispose);
+      c.read(permissionStateProvider.notifier).setForTest(
+          PermissionState.initial
+              .afterNotificationResult(PermissionStatus.granted));
+      await c.read(eyeCareConfigProvider.notifier).update(noPrayers);
+      final svc = c.read(notificationServiceProvider.notifier);
+
+      // A DAILY alarm at 09:00.
+      await c.read(alarmsControllerProvider.notifier).upsert(
+          const AlarmItem(
+              id: 'a1', hour: 9, minute: 0, days: {1, 2, 3, 4, 5, 6, 7}));
+      await svc.reconcile(now: DateTime(2026, 6, 1, 8, 0));
+      expect(g.scheduled.single.$2, DateTime(2026, 6, 1, 9, 0));
+
+      // Re-open after it fired: a repeating alarm re-arms for tomorrow and stays
+      // enabled (only one-shots auto-disable).
+      await svc.reconcile(now: DateTime(2026, 6, 1, 10, 0));
+      expect(g.scheduled.single.$2, DateTime(2026, 6, 2, 9, 0));
+      expect(c.read(alarmsControllerProvider).single.enabled, isTrue);
+    });
+
     test('removing an alarm cancels its schedule on next reconcile', () async {
       final g = FakeNotificationGateway();
       final c = _container(prefs, g);

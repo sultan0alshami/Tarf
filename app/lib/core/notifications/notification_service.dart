@@ -64,7 +64,14 @@ class NotificationService extends Notifier<bool> {
 
   static const _prayerIds = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
+  /// Persisted `{alarmId -> armedFireMillis}` for one-shot alarms only. Lets us
+  /// detect a one-shot that the OS delivered while the app was closed (so the
+  /// foreground `_ring` never toggled it off) and disable it instead of
+  /// re-arming it for the next day. Survives process death (the whole point).
+  static const _oneShotArmedKey = 'tarf.oneshot_armed.v1';
+
   bool _listening = false;
+  bool _reconciling = false;
 
   /// Subscribe to the three scheduling inputs; reconcile on any change. Also
   /// reconciles when permission becomes granted. Call once from main() after
@@ -134,20 +141,99 @@ class NotificationService extends Notifier<bool> {
     return out;
   }
 
+  Map<String, int> _readOneShotArmed() {
+    final raw = ref.read(sharedPreferencesProvider).getString(_oneShotArmedKey);
+    if (raw == null) return {};
+    try {
+      return (jsonDecode(raw) as Map<String, Object?>)
+          .map((k, v) => MapEntry(k, v as int));
+    } catch (_) {
+      return {};
+    }
+  }
+
+  Future<void> _writeOneShotArmed(Map<String, int> map) =>
+      ref.read(sharedPreferencesProvider).setString(
+            _oneShotArmedKey,
+            jsonEncode(map),
+          );
+
+  /// Disable any enabled one-shot alarm whose previously-armed fire time is now
+  /// in the past: the OS delivered it while the app was closed, so the
+  /// foreground `_ring` never toggled it off. Without this, the next reconcile
+  /// would compute tomorrow's occurrence and re-arm it, repeating daily forever.
+  /// Returns the swept-down armed map (entries for fired/disabled alarms cleared).
+  Future<Map<String, int>> _disableFiredOneShots(DateTime now) async {
+    final armed = _readOneShotArmed();
+    if (armed.isEmpty) return armed;
+    final alarms = ref.read(alarmsControllerProvider);
+    final controller = ref.read(alarmsControllerProvider.notifier);
+    var changed = false;
+    for (final entry in armed.entries.toList()) {
+      final fireMs = entry.value;
+      if (fireMs >= now.millisecondsSinceEpoch) continue; // not fired yet
+      final matches = alarms.where((a) => a.id == entry.key);
+      final a = matches.isEmpty ? null : matches.first;
+      // Only one-shots are tracked; if it is still an enabled one-shot, the
+      // delivery already happened in the background -> turn it off.
+      if (a != null && a.enabled && a.days.isEmpty) {
+        await controller.toggle(a.id);
+      }
+      armed.remove(entry.key);
+      changed = true;
+    }
+    if (changed) await _writeOneShotArmed(armed);
+    return armed;
+  }
+
   /// Cancel everything and reschedule the desired set. Honest: only schedules
-  /// if the user has granted/limited notification permission.
-  Future<void> reconcile() async {
-    final perm = ref.read(permissionStateProvider);
-    await _gateway.cancelAll();
-    if (!perm.canSchedule) {
-      state = false;
-      return;
+  /// if the user has granted/limited notification permission. [now] is injectable
+  /// for tests; production passes the wall clock.
+  Future<void> reconcile({DateTime? now}) async {
+    if (_reconciling) return; // guard re-entrancy (disabling a one-shot relists)
+    _reconciling = true;
+    try {
+      final clock = now ?? DateTime.now();
+      final perm = ref.read(permissionStateProvider);
+      await _gateway.cancelAll();
+      if (!perm.canSchedule) {
+        state = false;
+        return;
+      }
+      // Self-heal one-shots the OS already delivered while we were closed.
+      await _disableFiredOneShots(clock);
+
+      final armed = _readOneShotArmed();
+      final desired = _desired(clock);
+      final nextArmed = <String, int>{};
+      for (final (item, at) in desired) {
+        await _gateway.schedule(item, at);
+        // Record the armed fire time for one-shot standard alarms so a future
+        // reconcile can tell whether this delivery already happened.
+        if (item.kind == ScheduledKind.standardAlarm &&
+            _isOneShot(item.id)) {
+          nextArmed[item.id] = at.millisecondsSinceEpoch;
+        }
+      }
+      // Persist only if the armed set actually changed (avoid needless writes).
+      if (!_sameMap(armed, nextArmed)) await _writeOneShotArmed(nextArmed);
+      state = true;
+    } finally {
+      _reconciling = false;
     }
-    final now = DateTime.now();
-    for (final (item, at) in _desired(now)) {
-      await _gateway.schedule(item, at);
+  }
+
+  bool _isOneShot(String alarmId) {
+    final matches = ref.read(alarmsControllerProvider).where((a) => a.id == alarmId);
+    return matches.isNotEmpty && matches.first.days.isEmpty;
+  }
+
+  static bool _sameMap(Map<String, int> a, Map<String, int> b) {
+    if (a.length != b.length) return false;
+    for (final e in a.entries) {
+      if (b[e.key] != e.value) return false;
     }
-    state = true;
+    return true;
   }
 }
 
