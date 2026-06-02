@@ -209,5 +209,6 @@
   "locationAndMethod": "Location & method",
   "tapToEnableSound": "Tap to enable sound",
   "breakSoundLabel": "Break sound",
-  "soundPreview": "Preview"
+  "soundPreview": "Preview",
+  "timerDoneTapToDismiss": "Tap reset to dismiss"
 }

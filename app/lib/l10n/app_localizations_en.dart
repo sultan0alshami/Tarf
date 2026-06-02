@@ -531,4 +531,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get soundPreview => 'Preview';
+
+  @override
+  String get timerDoneTapToDismiss => 'Tap reset to dismiss';
 }

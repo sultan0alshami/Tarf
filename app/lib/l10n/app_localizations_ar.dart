@@ -531,4 +531,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get soundPreview => 'استماع';
+
+  @override
+  String get timerDoneTapToDismiss => 'اضغط إعادة للإغلاق';
 }

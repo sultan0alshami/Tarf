@@ -208,5 +208,6 @@
   "locationAndMethod": "الموقع والطريقة",
   "tapToEnableSound": "اضغط لتفعيل الصوت",
   "breakSoundLabel": "صوت الاستراحة",
-  "soundPreview": "استماع"
+  "soundPreview": "استماع",
+  "timerDoneTapToDismiss": "اضغط إعادة للإغلاق"
 }

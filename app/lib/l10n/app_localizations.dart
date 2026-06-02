@@ -1087,6 +1087,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preview'**
   String get soundPreview;
+
+  /// No description provided for @timerDoneTapToDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap reset to dismiss'**
+  String get timerDoneTapToDismiss;
 }
 
 class _AppLocalizationsDelegate

@@ -264,6 +264,15 @@ class _ActiveView extends StatelessWidget {
                       Numerals.timer(Duration.zero, n),
                       style: displayStyle,
                     ),
+                    const SizedBox(height: TarfTokens.space2),
+                    // Calm equal-visual cue that the looping completion sound
+                    // can be silenced — pairs with the audio/haptic at zero.
+                    Text(
+                      l10n.timerDoneTapToDismiss,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 )
               : TarfTimeText(
