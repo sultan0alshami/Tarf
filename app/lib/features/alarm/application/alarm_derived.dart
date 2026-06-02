@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/notifications/next_fire.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../eyecare/core/prayer_service.dart';
-import '../domain/alarm_item.dart';
 import 'alarms_controller.dart';
 
 /// A computed prayer "alarm": the prayer [id] (fajr…isha), its [time] today, and
@@ -58,23 +58,10 @@ final nextAlarmProvider = Provider<Duration?>((ref) {
   }
 
   for (final a in alarms) {
-    if (a.enabled) consider(_nextOccurrence(a, now));
+    if (a.enabled) consider(NextFire.standard(a, now));
   }
   for (final p in prayers) {
     if (p.enabled && p.time.isAfter(now)) consider(p.time);
   }
   return soonest?.difference(now);
 });
-
-/// The next time [a] will fire on or after [now], honoring its repeat [days]
-/// (empty days = one-shot → the next future occurrence of that clock time).
-DateTime _nextOccurrence(AlarmItem a, DateTime now) {
-  for (var add = 0; add <= 7; add++) {
-    final d = DateTime(now.year, now.month, now.day, a.hour, a.minute)
-        .add(Duration(days: add));
-    if (!d.isAfter(now)) continue;
-    if (a.days.isEmpty || a.days.contains(d.weekday)) return d;
-  }
-  return DateTime(now.year, now.month, now.day, a.hour, a.minute)
-      .add(const Duration(days: 1));
-}

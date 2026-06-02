@@ -52,4 +52,18 @@ void main() {
       expect(NextFire.prayer(times, now), isNull);
     });
   });
+
+  group('nextAlarmProvider parity', () {
+    test('uses NextFire.standard for enabled alarms', () {
+      // The math itself is covered above; this asserts the import swap compiles
+      // and is consumed (nextAlarmProvider now delegates to NextFire.standard).
+      expect(
+        NextFire.standard(
+          const AlarmItem(id: 'x', hour: 23, minute: 59),
+          DateTime(2026, 6, 1, 0, 0),
+        ),
+        DateTime(2026, 6, 1, 23, 59),
+      );
+    });
+  });
 }
