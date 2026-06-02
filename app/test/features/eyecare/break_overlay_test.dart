@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tarf/core/audio/audio_haptics.dart';
 import 'package:tarf/core/format/numerals.dart';
 import 'package:tarf/features/eyecare/audio/break_audio.dart';
 import 'package:tarf/features/eyecare/domain/dhikr.dart';
@@ -79,5 +80,50 @@ void main() {
 
     expect(find.text('Skip'), findsNothing);
     expect(find.text('Snooze'), findsNothing);
+  });
+
+  testWidgets('fires an equal breakEnd haptic when the countdown completes',
+      (tester) async {
+    final audio = FakeBreakAudio();
+    final sink = RecordingHapticSink();
+
+    await tester.pumpWidget(
+      _host(
+        BreakOverlay(
+          dhikr: _dhikr,
+          duration: const Duration(seconds: 1),
+          audio: audio,
+          numerals: NumeralSystem.western,
+          hapticEnabled: true,
+          haptics: AudioHaptics(sink),
+          onFinished: () {},
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(sink.events, isEmpty); // not yet
+    await tester.pump(const Duration(milliseconds: 1100));
+    expect(sink.events, contains(HapticKind.breakEnd));
+  });
+
+  testWidgets('no haptic at completion when hapticEnabled is false',
+      (tester) async {
+    final sink = RecordingHapticSink();
+    await tester.pumpWidget(
+      _host(
+        BreakOverlay(
+          dhikr: _dhikr,
+          duration: const Duration(seconds: 1),
+          audio: FakeBreakAudio(),
+          numerals: NumeralSystem.western,
+          hapticEnabled: false,
+          haptics: AudioHaptics(sink),
+          onFinished: () {},
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1100));
+    expect(sink.events, isEmpty);
   });
 }

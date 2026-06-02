@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../core/audio/audio_haptics.dart';
 import '../../../core/format/numerals.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
@@ -27,6 +28,8 @@ class BreakOverlay extends StatefulWidget {
     this.soundEnabled = true,
     this.showTransliteration = true,
     this.reduceMotion = false,
+    this.hapticEnabled = true,
+    this.haptics = const AudioHaptics(),
   });
 
   final Dhikr dhikr;
@@ -40,6 +43,12 @@ class BreakOverlay extends StatefulWidget {
   final bool soundEnabled;
   final bool showTransliteration;
   final bool reduceMotion;
+
+  /// Whether the equal end-cue haptic fires; independent of reduce-motion.
+  final bool hapticEnabled;
+
+  /// Injectable so tests can assert the equal haptic cue.
+  final AudioHaptics haptics;
 
   @override
   State<BreakOverlay> createState() => _BreakOverlayState();
@@ -60,6 +69,9 @@ class _BreakOverlayState extends State<BreakOverlay>
       ..addStatusListener((s) {
         if (s == AnimationStatus.completed && mounted) {
           setState(() => _finished = true);
+          // Equal cue: the visual bloom + audio end already mark completion;
+          // this is the matching haptic (honors hapticEnabled, not reduce-motion).
+          widget.haptics.cue(HapticKind.breakEnd, enabled: widget.hapticEnabled);
         }
       });
     _breathe = AnimationController(

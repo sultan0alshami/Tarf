@@ -47,6 +47,7 @@ Future<void> showEyeBreak(
         strict: config.strict,
         soundEnabled: config.soundEnabled,
         reduceMotion: settings.reduceMotion,
+        hapticEnabled: config.hapticEnabled,
         onFinished: () => recordAndPop(taken: true),
         onSkip: config.strict ? null : () => recordAndPop(taken: false),
         onSnooze: config.strict ? null : (_) => navigator.pop(),
