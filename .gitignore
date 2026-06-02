@@ -77,3 +77,7 @@ _setup/chromeprofile/
 
 # Agent worktrees (git-managed; never track)
 .claude/worktrees/
+
+# Agent per-agent memory (local)
+.claude/agent-memory-local/
+.claude/agent-memory/
