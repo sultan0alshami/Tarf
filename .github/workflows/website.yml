@@ -76,6 +76,13 @@ jobs:
             echo "No lint script defined — skipping."
           fi
 
+      # Test: runs the node:test suite (donate + webhook + site static guards).
+      - name: Test
+        if: steps.detect.outputs.present == 'true'
+        working-directory: ./website
+        run: |
+          if npm run | grep -qE '^\s*test'; then npm test; else echo "No test script — skipping."; fi
+
       # Build is best-effort: only runs if a "build" script is defined.
       - name: Build
         if: steps.detect.outputs.present == 'true'
