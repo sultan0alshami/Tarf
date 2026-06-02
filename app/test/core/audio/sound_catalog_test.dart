@@ -29,7 +29,7 @@ void main() {
           id: synthesizeTone(SoundCatalog.byId(id),
               duration: const Duration(seconds: 1)),
       };
-      final ids = SoundCatalog.alarmIds;
+      const ids = SoundCatalog.alarmIds;
       for (var i = 0; i < ids.length; i++) {
         for (var j = i + 1; j < ids.length; j++) {
           final a = rendered[ids[i]]!;

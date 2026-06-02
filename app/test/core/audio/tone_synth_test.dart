@@ -83,7 +83,7 @@ void main() {
     });
 
     test('never clips: all samples stay within int16 range', () {
-      final loud = SoundSpec.synth('loud', role: SoundRole.alarm, gain: 4.0, layers: const [
+      const loud = SoundSpec.synth('loud', role: SoundRole.alarm, gain: 4.0, layers: [
         SoundLayer(frequencyHz: 440, peak: 0.9, decay: 0.1, sustain: true),
         SoundLayer(frequencyHz: 441, peak: 0.9, decay: 0.1, sustain: true),
       ]);

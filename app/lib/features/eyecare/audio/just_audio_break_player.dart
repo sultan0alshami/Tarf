@@ -1,19 +1,52 @@
-// just_audio marks StreamAudioResponse experimental, but it is the documented,
-// widely-used way to serve in-memory audio; safe to use here.
-// ignore_for_file: experimental_member_use
-import 'package:flutter/foundation.dart';
-import 'package:just_audio/just_audio.dart';
-
+// Private fields are assigned from public named constructor params so callers
+// use clean names (audio:/soundtrackId:) rather than underscore-prefixed ones.
+// ignore_for_file: prefer_initializing_formals
+import '../../../core/audio/sound_catalog.dart';
+import '../../../core/audio/sound_spec.dart';
+import '../../../core/audio/tarf_audio_service.dart';
 import '../domain/dhikr.dart';
 import 'break_audio.dart';
-import 'break_audio_synth.dart';
 
-/// Real cross-platform break audio. Plays a synthesized 20-second WAV via
-/// just_audio: a data URI on web, an in-memory byte source on native. Honors
-/// the silent setting and degrades gracefully (the visual ring still drives the
-/// break) if playback is blocked (e.g. web autoplay without a user gesture).
+/// Real cross-platform break audio, now a thin adapter over the shared
+/// [TarfAudioService]. Plays the configured soundtrack (a calm catalog bed, or a
+/// bundled recitation clip when [recitationAssetPath] is set) for the full break
+/// duration so the SOUND ending is the cue that the break is over. Honors the
+/// silent setting and degrades gracefully (visual ring still drives the break)
+/// if playback is blocked (e.g. web autoplay without a user gesture).
 class JustAudioBreakPlayer implements BreakAudioPlayer {
-  final AudioPlayer _player = AudioPlayer();
+  JustAudioBreakPlayer({
+    required TarfAudioService audio,
+    required String soundtrackId,
+    String? recitationAssetPath,
+    void Function()? onBlocked,
+    bool ownsService = false,
+  })  : _audio = audio,
+        _soundtrackId = soundtrackId,
+        _recitationAssetPath = recitationAssetPath,
+        _onBlocked = onBlocked,
+        _ownsService = ownsService;
+
+  final TarfAudioService _audio;
+  final String _soundtrackId;
+  final String? _recitationAssetPath;
+  final void Function()? _onBlocked;
+  final bool _ownsService;
+
+  SoundSpec _spec() {
+    // Bundled recitation clip wins when configured AND present (owner-supplied).
+    final recitation = _recitationAssetPath;
+    if (recitation != null) {
+      return SoundSpec.asset(_soundtrackId, recitation,
+          role: SoundRole.breakBed);
+    }
+    final base = SoundCatalog.byId(_soundtrackId);
+    // Force the breakBed role so it sits on the breakBed channel semantics.
+    return SoundSpec.synth(base.id,
+        role: SoundRole.breakBed,
+        layers: base.layers,
+        defaultDuration: base.defaultDuration,
+        gain: base.gain);
+  }
 
   @override
   Future<void> start({
@@ -22,50 +55,24 @@ class JustAudioBreakPlayer implements BreakAudioPlayer {
     Dhikr? dhikr,
   }) async {
     if (!soundEnabled) return;
-    final wav = synthesizeBreakWav(duration);
-    try {
-      if (kIsWeb) {
-        await _player.setAudioSource(
-          AudioSource.uri(Uri.dataFromBytes(wav, mimeType: 'audio/wav')),
-        );
-      } else {
-        await _player.setAudioSource(_BytesSource(wav));
-      }
-      await _player.play();
-    } catch (_) {
-      // Best-effort: a blocked/failed play must never break the experience.
-    }
+    // A dhikr that bundles its own recitation overrides the soundtrack bed.
+    final assetFromDhikr = dhikr?.audio;
+    final spec = assetFromDhikr != null
+        ? SoundSpec.asset(dhikr!.id, assetFromDhikr, role: SoundRole.breakBed)
+        : _spec();
+    final ok = await _audio.play(
+      spec,
+      channel: AudioChannel.breakBed,
+      duration: duration, // sound ends == break ends
+    );
+    if (!ok) _onBlocked?.call();
   }
 
   @override
-  Future<void> stop() async {
-    try {
-      await _player.stop();
-    } catch (_) {}
-  }
+  Future<void> stop() async => _audio.stop(AudioChannel.breakBed);
 
   @override
   Future<void> dispose() async {
-    await _player.dispose();
-  }
-}
-
-/// Serves the synthesized WAV bytes to just_audio on native platforms.
-class _BytesSource extends StreamAudioSource {
-  _BytesSource(this._bytes);
-
-  final Uint8List _bytes;
-
-  @override
-  Future<StreamAudioResponse> request([int? start, int? end]) async {
-    final s = start ?? 0;
-    final e = end ?? _bytes.length;
-    return StreamAudioResponse(
-      sourceLength: _bytes.length,
-      contentLength: e - s,
-      offset: s,
-      stream: Stream.value(_bytes.sublist(s, e)),
-      contentType: 'audio/wav',
-    );
+    if (_ownsService) await _audio.dispose();
   }
 }
