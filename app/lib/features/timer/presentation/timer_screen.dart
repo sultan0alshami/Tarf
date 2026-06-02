@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/audio/audio_haptics.dart';
 import '../../../core/audio/audio_providers.dart';
@@ -8,6 +9,7 @@ import '../../../core/audio/sound_catalog.dart';
 import '../../../core/audio/sound_spec.dart';
 import '../../../core/audio/tarf_audio_service.dart';
 import '../../../core/format/numerals.dart';
+import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/widgets/progress_ring.dart';
 import '../../../core/widgets/tarf_wheel_picker.dart';
@@ -15,7 +17,9 @@ import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
+import '../application/saved_timers_controller.dart';
 import '../application/timer_controller.dart';
+import '../domain/saved_timer.dart';
 
 const _presetMinutes = [1, 5, 10, 20, 30, 40];
 
@@ -68,7 +72,17 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     final isIdle = !data.running && !data.finished;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.tabTimer)),
+      appBar: AppBar(
+        title: Text(l10n.tabTimer),
+        actions: [
+          if (isIdle)
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: l10n.timerAddSaved,
+              onPressed: () => context.push(Routes.savedTimerEditor),
+            ),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -170,7 +184,54 @@ class _IdleView extends StatelessWidget {
             child: Text(l10n.actionStart),
           ),
         ),
+        // Saved timers (presets that load into the single runner). Hidden until
+        // the user saves their first one, so the idle view stays calm.
+        Consumer(builder: (context, ref, _) {
+          final saved = ref.watch(savedTimersControllerProvider);
+          if (saved.isEmpty) return const SizedBox.shrink();
+          return Padding(
+            padding: const EdgeInsets.only(top: TarfTokens.space5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TarfSectionHeader(l10n.timerSavedTitle),
+                TarfGroup(children: [
+                  for (final t in saved) _SavedTimerRow(timer: t, n: n),
+                ]),
+              ],
+            ),
+          );
+        }),
       ],
+    );
+  }
+}
+
+/// One saved-timer row: tap loads it into the runner and starts; long-press
+/// opens the editor.
+class _SavedTimerRow extends ConsumerWidget {
+  const _SavedTimerRow({required this.timer, required this.n});
+  final SavedTimer timer;
+  final NumeralSystem n;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final label = timer.label.isEmpty ? l10n.timerUnnamed : timer.label;
+    return TarfListRow(
+      icon: Icons.timer_outlined,
+      title: label,
+      subtitle: Numerals.timer(timer.duration, n),
+      // An edit affordance that doesn't steal the row tap (which runs the timer).
+      trailing: IconButton(
+        icon: const Icon(Icons.edit_outlined),
+        tooltip: l10n.timerEditSaved,
+        onPressed: () => context.push(Routes.savedTimerEditor, extra: timer),
+      ),
+      onTap: () {
+        ref.read(timerControllerProvider.notifier).runSaved(timer);
+        ref.read(timerControllerProvider.notifier).start();
+      },
     );
   }
 }

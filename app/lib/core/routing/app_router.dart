@@ -16,6 +16,8 @@ import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stopwatch/presentation/stopwatch_screen.dart';
+import '../../features/timer/domain/saved_timer.dart';
+import '../../features/timer/presentation/saved_timer_editor_screen.dart';
 import '../../features/timer/presentation/timer_screen.dart';
 import '../../features/todos/presentation/todos_screen.dart';
 import '../settings/settings_controller.dart';
@@ -26,6 +28,7 @@ abstract final class Routes {
   static const focus = '/focus';
   static const focusSession = '/focus-session';
   static const timer = '/timer';
+  static const savedTimerEditor = '/timer/saved-edit';
   static const alarm = '/alarm';
   static const alarmRinging = '/alarm-ringing';
   static const alarmEditor = '/alarm-edit';
@@ -117,6 +120,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.eyeCareBreak,
         builder: (context, state) => const BreakScreen(),
+      ),
+      GoRoute(
+        path: Routes.savedTimerEditor,
+        builder: (context, state) =>
+            SavedTimerEditorScreen(existing: state.extra as SavedTimer?),
       ),
       GoRoute(
         path: Routes.account,
