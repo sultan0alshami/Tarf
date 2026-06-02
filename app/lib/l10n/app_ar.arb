@@ -192,6 +192,8 @@
   "syncStatusError": "خطأ في المزامنة — ستتم إعادة المحاولة",
   "accountSignedInAs": "مسجّل الدخول باسم {name}",
   "signInErrorGeneric": "تعذّر تسجيل الدخول. حاول مرة أخرى.",
+  "emailLabel": "البريد الإلكتروني",
+  "passwordLabel": "كلمة المرور",
 
   "eyeCareSettingsTitle": "إعدادات العناية بالعين",
   "coreBreakGroupLabel": "التذكير والراحة",

@@ -194,6 +194,8 @@
   "accountSignedInAs": "Signed in as {name}",
   "@accountSignedInAs": { "placeholders": { "name": {} } },
   "signInErrorGeneric": "Couldn't sign in. Please try again.",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
 
   "eyeCareSettingsTitle": "Eye-care settings",
   "coreBreakGroupLabel": "Reminder & rest",

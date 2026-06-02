@@ -495,6 +495,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInErrorGeneric => 'تعذّر تسجيل الدخول. حاول مرة أخرى.';
 
   @override
+  String get emailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get passwordLabel => 'كلمة المرور';
+
+  @override
   String get eyeCareSettingsTitle => 'إعدادات العناية بالعين';
 
   @override

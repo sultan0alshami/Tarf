@@ -1010,6 +1010,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t sign in. Please try again.'**
   String get signInErrorGeneric;
 
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
   /// No description provided for @eyeCareSettingsTitle.
   ///
   /// In en, this message translates to:

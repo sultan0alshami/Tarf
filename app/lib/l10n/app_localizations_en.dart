@@ -495,6 +495,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInErrorGeneric => 'Couldn\'t sign in. Please try again.';
 
   @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
   String get eyeCareSettingsTitle => 'Eye-care settings';
 
   @override
