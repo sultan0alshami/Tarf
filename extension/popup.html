@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,36 +12,44 @@
         <span class="ar">طَرْف</span>
         <span class="en">Tarf · Eye care &amp; dhikr</span>
       </div>
-      <label class="switch" title="Enable eye-care reminders">
+      <button class="lang" id="lang" aria-label="EN">EN</button>
+      <label class="switch" title="تذكيرات راحة العين">
         <input type="checkbox" id="enabled" />
         <span class="slider"></span>
       </label>
     </header>
 
-    <section class="status" id="status">Loading…</section>
+    <p class="dhikr-ar" id="dhikr" dir="rtl"></p>
+
+    <section class="status" id="status">…</section>
 
     <section class="row">
-      <label for="interval">Every</label>
+      <label for="interval" data-i18n="every">كل</label>
       <select id="interval">
-        <option value="10">10 min</option>
-        <option value="20" selected>20 min</option>
-        <option value="30">30 min</option>
-        <option value="45">45 min</option>
-        <option value="60">60 min</option>
+        <option value="10">10</option>
+        <option value="20" selected>20</option>
+        <option value="30">30</option>
+        <option value="45">45</option>
+        <option value="60">60</option>
       </select>
     </section>
 
-    <button class="primary" id="breakNow">Take a break now</button>
+    <button class="primary" id="breakNow" data-i18n="breakNow">خذ راحة الآن</button>
 
     <section class="snooze">
-      <span>Snooze</span>
+      <span data-i18n="snooze">تأجيل</span>
       <button data-min="5">5m</button>
       <button data-min="15">15m</button>
       <button data-min="60">1h</button>
     </section>
 
-    <footer>20 · 20 · 20 — look ~6 m away for 20 s, every 20 min.</footer>
+    <nav class="links">
+      <a id="lnk-download" href="https://tarf.app/download" target="_blank" rel="noopener" data-i18n="link.download">التطبيق الكامل</a>
+    </nav>
 
+    <footer id="limit" data-i18n="limit">يعمل فقط أثناء فتح Chrome.</footer>
+
+    <script src="i18n.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

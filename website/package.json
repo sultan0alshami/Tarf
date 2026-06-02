@@ -1,0 +1,13 @@
+{
+  "name": "tarf-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tarf (طَرْف) — download + Support/Donate static site with serverless donation + webhook.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test test/*.mjs",
+    "lint": "node --check api/donate.js && node --check api/webhook.js && node --check api/_lib/gateways.js && node --check api/_lib/validate.js",
+    "build": "node -e \"console.log('static site — no build step; pages are served as-is')\""
+  },
+  "engines": { "node": ">=20" }
+}

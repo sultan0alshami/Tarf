@@ -3,16 +3,12 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/api/donate", "destination": "/api/donate.js" }
+    { "source": "/api/donate", "destination": "/api/donate.js" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" }
   ],
   "headers": [
-    {
-      "source": "/api/donate",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
-    },
-    {
-      "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
-    }
+    { "source": "/api/donate", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/api/webhook", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }
   ]
 }

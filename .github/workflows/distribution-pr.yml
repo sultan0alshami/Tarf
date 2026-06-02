@@ -1,0 +1,53 @@
+name: Distribution PR checks
+
+on:
+  pull_request:
+    branches: ["**"]
+    paths:
+      - "website/**"
+      - "extension/**"
+      - ".github/workflows/distribution-pr.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: dist-pr-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  website:
+    name: Website tests (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Test website
+        working-directory: ./website
+        run: |
+          test -f package.json || { echo "no website package — skip"; exit 0; }
+          npm ci || npm install
+          npm run lint
+          npm test
+
+  extension:
+    name: Extension tests (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Test & package extension
+        working-directory: ./extension
+        run: |
+          test -f package.json || { echo "no extension package — skip"; exit 0; }
+          npm ci || npm install
+          npm run lint
+          npm test
+          npm run package
+      - name: Upload extension zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarf-extension-zip-pr
+          path: extension/tarf-extension.zip
+          if-no-files-found: warn
+          retention-days: 7
