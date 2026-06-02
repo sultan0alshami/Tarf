@@ -2,10 +2,11 @@
 
     <!-- Phase 2 background delivery (flutter_local_notifications only) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <!-- Tarf's core function includes Alarm + Timer, so USE_EXACT_ALARM is
-         justified (owner completes Play "exact alarm" declaration); keep
-         SCHEDULE_EXACT_ALARM as the user-revocable fallback. -->
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+    <!-- User-revocable exact-alarm model: SCHEDULE_EXACT_ALARM is granted via the
+         in-app consent path and can be revoked by the user in system settings.
+         We deliberately do NOT declare USE_EXACT_ALARM (which asserts an
+         always-on entitlement Tarf does not need and cannot honestly justify
+         for every install). -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
