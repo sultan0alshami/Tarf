@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../settings/settings_controller.dart';
 
 /// Collapses the foreground (AlarmHost/EyeCareHost) and background (OS
 /// notification) firing paths into a single logical fire per alarm-minute.
@@ -41,3 +44,9 @@ class DoubleFireGuard {
     return !already;
   }
 }
+
+/// The shared guard, backed by the app's SharedPreferences. Consulted by both
+/// the foreground hosts (AlarmHost/EyeCareHost) and the OS-notification path.
+final doubleFireGuardProvider = Provider<DoubleFireGuard>(
+  (ref) => DoubleFireGuard(ref.watch(sharedPreferencesProvider)),
+);

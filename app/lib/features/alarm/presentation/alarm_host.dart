@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/audio/audio_providers.dart';
+import '../../../core/notifications/double_fire_guard.dart';
+import '../../../core/notifications/scheduled_item.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../eyecare/core/prayer_service.dart';
@@ -117,6 +119,26 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
 
   Future<void> _ring(AlarmItem item, DateTime now) async {
     if (_ringing || !mounted) return;
+
+    // Double-fire guard: if the OS notification path already claimed this
+    // alarm-minute (app was woken/opened around delivery), do not also ring.
+    final kind = item.id.startsWith('prayer_')
+        ? ScheduledKind.prayerAlarm
+        : ScheduledKind.standardAlarm;
+    final guardId = item.id.startsWith('prayer_')
+        ? item.id.substring('prayer_'.length)
+        : item.id;
+    final key = ScheduledItem(
+      kind: kind,
+      id: guardId,
+      title: item.label,
+      body: '',
+      soundId: item.sound,
+    ).guardKeyFor(DateTime(now.year, now.month, now.day, now.hour, now.minute));
+    if (!ref.read(doubleFireGuardProvider).claim(key, now)) {
+      return; // already fired via the OS path this minute
+    }
+
     _ringing = true;
     final navigator = Navigator.of(context, rootNavigator: true);
 
