@@ -1,15 +1,30 @@
 # Tarf (طَرْف) — Terms of Service (Draft)
 
-> **STATUS:** DRAFT for owner/legal review before publishing. Replace every `[[PLACEHOLDER]]`.
-> Host at a stable URL (e.g. `https://tarf.app/terms`), with an Arabic version at `https://tarf.app/ar/terms`.
-> These terms are general; have them reviewed by a KSA-qualified lawyer before relying on them.
+> **STATUS:** DRAFT — ready for owner review and KSA-qualified legal review before publishing.
+>
+> **Owner must fill:**
+> - `[[LEGAL_NAME / TRADE NAME]]` — your registered/trade name
+> - `[[EFFECTIVE_DATE]]` and `[[LAST_UPDATED_DATE]]` — set on publication day
+> - `[[16 — digital consent age]]` — confirm the applicable digital-consent age for your primary markets
+> - `[[Moyasar / Tap / Stripe]]` — confirm primary payment gateway
+> - `[[the amount you donated / USD 50 / SAR 200]]` — liability cap in §12; adjust after legal advice
+> - `[[Riyadh / your city, KSA]]` — governing-law jurisdiction city in §15
+> - `[[support@tarf.app]]` and `[[POSTAL ADDRESS, KSA]]` — contact details
+>
+> **Already resolved for v1:**
+> - No paid features, no in-app purchases, no subscriptions — §4 confirmed.
+> - iOS app has no payment link — §4 confirmed; donations website-only on non-iOS platforms.
+> - Arabic version is primary — consistent with Arabic-first product.
+>
+> Host at `https://tarf.app/terms` and `https://tarf.app/ar/terms`. Link from every store listing and
+> from the in-app Settings → About screen.
 
 - **Effective date:** [[EFFECTIVE_DATE]]
 - **Last updated:** [[LAST_UPDATED_DATE]]
 - **Provider:** [[LEGAL_NAME / TRADE NAME]], an individual / sole-proprietor developer in the Kingdom of
   Saudi Arabia ("**we**", "**us**", "**Tarf**").
 - **Languages:** Published in Arabic (primary) and English (secondary); if they conflict, the
-  **[[Arabic / English]]** version prevails.
+  **Arabic** version prevails.
 
 ---
 

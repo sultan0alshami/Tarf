@@ -1,18 +1,34 @@
 # Tarf (طَرْف) — Privacy Policy (Draft)
 
-> **STATUS:** DRAFT for owner/legal review before publishing. Replace every `[[PLACEHOLDER]]`.
-> This document must be hosted at a stable public URL (e.g. `https://tarf.app/privacy`) and that
-> URL pasted into App Store Connect, Google Play Console, Microsoft Partner Center, and the Chrome
-> Web Store listing. Keep an Arabic translation hosted at `https://tarf.app/ar/privacy`.
+> **STATUS:** DRAFT — ready for owner review and legal sign-off before publishing.
+>
+> **Owner must fill:**
+> - `[[LEGAL_NAME / TRADE NAME]]` — your registered name or trade name as it appears in store accounts
+> - `[[EFFECTIVE_DATE]]` and `[[LAST_UPDATED_DATE]]` — set on publication day (e.g. 2026-06-15)
+> - `[[Arabic / English — pick one]]` — choose which language version governs in case of conflict
+> - `[[postal address, KSA]]` — your public contact postal address in Saudi Arabia
+> - `[[Firestore location]]` — the Firebase project region (e.g. `us-central1 (nam5)` or `europe-west3 (eur3)`)
+> - `[[Moyasar / Tap / Stripe]]` — confirm primary payment gateway for the website donations
+> - `[[30]]` / `[[90]]` day deletion/backup retention — confirm these periods with your Firebase plan
+> - `[[Riyadh / your city, KSA]]` — jurisdiction city in §15 of the Terms of Service
+>
+> **Already resolved for v1 (do not change):**
+> - No analytics / crash SDK shipped in v1 — §6 and the App Privacy label answer "No" for crash data.
+> - No payment flow in the iOS app — confirmed in §3.3 and Terms §4.
+> - Location stays on-device — confirmed in §4 and store data-safety forms.
+> - Arabic version is primary — consistent with Arabic-first product stance.
+>
+> Host at `https://tarf.app/privacy` and `https://tarf.app/ar/privacy`; paste URL in App Store Connect,
+> Play Console, Partner Center, and Chrome Web Store before any store submission.
 
 - **Effective date:** [[EFFECTIVE_DATE — e.g. 2026-06-15]]
 - **Last updated:** [[LAST_UPDATED_DATE]]
 - **App / service:** Tarf (طَرْف) — a free, donation-funded eye-care + dhikr wellness app.
 - **Data controller:** [[LEGAL_NAME / TRADE NAME]], an individual developer / sole proprietor based in
   the Kingdom of Saudi Arabia.
-- **Contact:** [[privacy@tarf.app]] · [[postal address, KSA]]
+- **Contact:** privacy@tarf.app · [[postal address, KSA]]
 - **Languages:** This policy is published in Arabic (primary) and English (secondary). If the two
-  versions conflict, the **[[Arabic / English — pick one]]** version prevails.
+  versions conflict, the **Arabic** version prevails.
 
 ---
 
@@ -125,9 +141,9 @@ we will delete the account and its data. Children may use **Guest mode**, which 
 - **No advertising. No ad SDKs. No ad identifiers. No cross-app/website tracking.** We do **not** use the
   iOS App Tracking Transparency tracking mechanisms because we do not track you across other companies'
   apps or sites.
-- Any diagnostics are **privacy-respecting, opt-in, and never tied to sacred content.** [[Specify whether
-  you ship crash reporting in v1. If you DO NOT ship any analytics/crash SDK, state plainly:
-  "Tarf v1 ships with no analytics or crash-reporting SDK."]]
+- **Tarf v1 ships with no analytics or crash-reporting SDK.** No usage telemetry, no crash logs, and no
+  performance data leave your device automatically. If a future version adds opt-in diagnostics, we will
+  update this policy and ask for your consent before enabling them.
 - Firebase **App Check** sends an attestation token to protect the backend; it is an anti-abuse signal,
   not behavioral tracking.
 

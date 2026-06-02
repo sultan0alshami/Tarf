@@ -187,6 +187,18 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+
+          // ---- About ----
+          TarfGroup(
+            children: [
+              TarfListRow(
+                icon: Icons.info_outline,
+                title: l10n.settingsLicenses,
+                trailing: chevron,
+                onTap: () => context.push(Routes.licenses),
+              ),
+            ],
+          ),
         ],
       ),
     );

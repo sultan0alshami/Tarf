@@ -680,4 +680,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String tasbihProgress(String value) {
     return '$value';
   }
+
+  @override
+  String get settingsLicenses => 'Licenses & Credits';
+
+  @override
+  String get licensesTitle => 'Licenses & Credits';
+
+  @override
+  String get licensesSubtitleFonts => 'Fonts';
+
+  @override
+  String get licensesSubtitleContent => 'Content';
+
+  @override
+  String get licensesSubtitleAudio => 'Audio';
+
+  @override
+  String get licensesSubtitlePackages => 'Open-source packages';
+
+  @override
+  String get licensesSilOfl => 'SIL Open Font License 1.1';
+
+  @override
+  String get licensesMit => 'MIT License';
+
+  @override
+  String get licensesBsd3 => 'BSD 3-Clause License';
+
+  @override
+  String get licensesApache2 => 'Apache 2.0 License';
+
+  @override
+  String get licensesViewAll => 'View all Flutter package licenses';
+
+  @override
+  String get licensesDhikrNote =>
+      'Dhikr texts are sourced from authenticated hadith collections (Sahih al-Bukhari, Sahih Muslim, Hisn al-Muslim). References are included with each phrase in the app.';
+
+  @override
+  String get licensesAudioNote =>
+      'Audio assets are sourced under free-use licenses (CC0 / Pixabay) or commissioned. Full provenance records are maintained in the project ledger.';
+
+  @override
+  String licensesVersion(String version) {
+    return 'Version $version';
+  }
 }

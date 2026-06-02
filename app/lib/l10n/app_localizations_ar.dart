@@ -679,4 +679,50 @@ class AppLocalizationsAr extends AppLocalizations {
   String tasbihProgress(String value) {
     return '$value';
   }
+
+  @override
+  String get settingsLicenses => 'التراخيص والمصادر';
+
+  @override
+  String get licensesTitle => 'التراخيص والمصادر';
+
+  @override
+  String get licensesSubtitleFonts => 'الخطوط';
+
+  @override
+  String get licensesSubtitleContent => 'المحتوى';
+
+  @override
+  String get licensesSubtitleAudio => 'الصوت';
+
+  @override
+  String get licensesSubtitlePackages => 'المكتبات مفتوحة المصدر';
+
+  @override
+  String get licensesSilOfl => 'رخصة SIL للخطوط المفتوحة 1.1';
+
+  @override
+  String get licensesMit => 'رخصة MIT';
+
+  @override
+  String get licensesBsd3 => 'رخصة BSD ثلاثية البنود';
+
+  @override
+  String get licensesApache2 => 'رخصة Apache 2.0';
+
+  @override
+  String get licensesViewAll => 'عرض جميع تراخيص مكتبات Flutter';
+
+  @override
+  String get licensesDhikrNote =>
+      'نصوص الأذكار مأخوذة من الأحاديث الصحيحة (صحيح البخاري، صحيح مسلم، حصن المسلم). المراجع مذكورة مع كل ذكر في التطبيق.';
+
+  @override
+  String get licensesAudioNote =>
+      'الملفات الصوتية مصدرها رخص استخدام حرة (CC0 / Pixabay) أو مُعدّة بتوكيل. سجلات المصدر الكاملة محفوظة في ملفات المشروع.';
+
+  @override
+  String licensesVersion(String version) {
+    return 'الإصدار $version';
+  }
 }

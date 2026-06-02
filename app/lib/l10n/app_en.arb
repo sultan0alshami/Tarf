@@ -258,5 +258,24 @@
   "tasbihTapHint": "Tap to count",
   "tasbihReset": "Reset count",
   "tasbihProgress": "{value}",
-  "@tasbihProgress": { "description": "Tasbih cycle progress 'count / target'; value is pre-formatted with the active numeral system so it matches the toggle-aware count circle above it.", "placeholders": { "value": { "type": "String" } } }
+  "@tasbihProgress": { "description": "Tasbih cycle progress 'count / target'; value is pre-formatted with the active numeral system so it matches the toggle-aware count circle above it.", "placeholders": { "value": { "type": "String" } } },
+  "settingsLicenses": "Licenses & Credits",
+  "licensesTitle": "Licenses & Credits",
+  "licensesSubtitleFonts": "Fonts",
+  "licensesSubtitleContent": "Content",
+  "licensesSubtitleAudio": "Audio",
+  "licensesSubtitlePackages": "Open-source packages",
+  "licensesSilOfl": "SIL Open Font License 1.1",
+  "licensesMit": "MIT License",
+  "licensesBsd3": "BSD 3-Clause License",
+  "licensesApache2": "Apache 2.0 License",
+  "licensesViewAll": "View all Flutter package licenses",
+  "licensesDhikrNote": "Dhikr texts are sourced from authenticated hadith collections (Sahih al-Bukhari, Sahih Muslim, Hisn al-Muslim). References are included with each phrase in the app.",
+  "licensesAudioNote": "Audio assets are sourced under free-use licenses (CC0 / Pixabay) or commissioned. Full provenance records are maintained in the project ledger.",
+  "licensesVersion": "Version {version}",
+  "@licensesVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  }
 }

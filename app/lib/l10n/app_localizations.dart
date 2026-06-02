@@ -1369,6 +1369,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{value}'**
   String tasbihProgress(String value);
+
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses & Credits'**
+  String get settingsLicenses;
+
+  /// No description provided for @licensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses & Credits'**
+  String get licensesTitle;
+
+  /// No description provided for @licensesSubtitleFonts.
+  ///
+  /// In en, this message translates to:
+  /// **'Fonts'**
+  String get licensesSubtitleFonts;
+
+  /// No description provided for @licensesSubtitleContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get licensesSubtitleContent;
+
+  /// No description provided for @licensesSubtitleAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get licensesSubtitleAudio;
+
+  /// No description provided for @licensesSubtitlePackages.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source packages'**
+  String get licensesSubtitlePackages;
+
+  /// No description provided for @licensesSilOfl.
+  ///
+  /// In en, this message translates to:
+  /// **'SIL Open Font License 1.1'**
+  String get licensesSilOfl;
+
+  /// No description provided for @licensesMit.
+  ///
+  /// In en, this message translates to:
+  /// **'MIT License'**
+  String get licensesMit;
+
+  /// No description provided for @licensesBsd3.
+  ///
+  /// In en, this message translates to:
+  /// **'BSD 3-Clause License'**
+  String get licensesBsd3;
+
+  /// No description provided for @licensesApache2.
+  ///
+  /// In en, this message translates to:
+  /// **'Apache 2.0 License'**
+  String get licensesApache2;
+
+  /// No description provided for @licensesViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all Flutter package licenses'**
+  String get licensesViewAll;
+
+  /// No description provided for @licensesDhikrNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr texts are sourced from authenticated hadith collections (Sahih al-Bukhari, Sahih Muslim, Hisn al-Muslim). References are included with each phrase in the app.'**
+  String get licensesDhikrNote;
+
+  /// No description provided for @licensesAudioNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio assets are sourced under free-use licenses (CC0 / Pixabay) or commissioned. Full provenance records are maintained in the project ledger.'**
+  String get licensesAudioNote;
+
+  /// No description provided for @licensesVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String licensesVersion(String version);
 }
 
 class _AppLocalizationsDelegate

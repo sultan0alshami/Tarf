@@ -83,10 +83,11 @@ Unless noted, **Shared = No**, **Ephemeral = No**, and the purpose is **App func
 ## 4. Consistency / rejection-avoidance checklist
 - [ ] Data Safety answers match the **Privacy Policy** and the **Apple App Privacy** label (Google cross-checks).
 - [ ] Every declared **manifest permission** has a coherent reason and, where required, a **Play Console
-  declaration** (POST_NOTIFICATIONS, exact alarms `USE_EXACT_ALARM`, foreground-service type, full-screen
-  intent). See `permissions-matrix.md`.
-- [ ] **Foreground-service type declaration** completed (mismatch = rejection).
-- [ ] **Exact-alarm declaration** completed and justified (Alarm/Timer is a core function).
+  declaration**: `POST_NOTIFICATIONS`, `SCHEDULE_EXACT_ALARM` (Alarms & reminders), `USE_FULL_SCREEN_INTENT`.
+  Normal permissions (`VIBRATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`) need no special declaration form.
+  See `permissions-matrix.md` for the complete set.
+- [ ] **Exact-alarm declaration** completed and justified (`SCHEDULE_EXACT_ALARM`; Alarm/Timer + precise break timing is a core function). If `USE_EXACT_ALARM` is added later, update the Play declaration to match.
+- [ ] **Foreground-service declaration** — only required if Phase 4 adds a foreground service; if not present in the v1 manifest, no declaration is needed. Verify before submission.
 - [ ] Location declared as **on-device only / not collected**; if any SDK ever receives it, update this form.
 - [ ] No advertising ID, no ad SDK — confirm in the linked SDKs report.
 - [ ] Re-confirm with the `app/` developer that no extra data leaves the device beyond what is listed here.

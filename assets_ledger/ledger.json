@@ -1,0 +1,165 @@
+{
+  "_meta": {
+    "project": "Tarf (طَرْف)",
+    "version": "1.0.0",
+    "generated": "2026-06-02",
+    "purpose": "Provenance record for every bundled third-party asset (fonts, audio, dhikr content). Required by the release checklist before any store submission. See docs/store/release-checklist.md §B.",
+    "ownerActions": [
+      "Fill dhikr-signoff: obtain a named scholar/editor sign-off for the Arabic text, tashkil, transliteration, and source references. Record the signer name, date, and scope in dhikr-signoff.md.",
+      "Fill audio entries when break-audio clips are commissioned or sourced — add source_url, license, license_url, author, and required_attribution for each clip.",
+      "Confirm font download dates and OFL license snapshot paths are current."
+    ]
+  },
+  "assets": [
+    {
+      "id": "font-amiri-regular",
+      "type": "font",
+      "file": "app/assets/fonts/Amiri-Regular.ttf",
+      "name": "Amiri Regular",
+      "author": "Khaled Hosny",
+      "source_url": "https://github.com/aliftype/amiri",
+      "license": "SIL Open Font License 1.1",
+      "license_url": "https://scripts.sil.org/OFL",
+      "required_attribution": "Amiri font by Khaled Hosny, licensed under SIL OFL 1.1.",
+      "download_date": "[[FILL — date fonts were added to the project]]",
+      "notes": "Primary Arabic typeface for the dhikr break overlay and all Arabic UI text."
+    },
+    {
+      "id": "font-amiri-bold",
+      "type": "font",
+      "file": "app/assets/fonts/Amiri-Bold.ttf",
+      "name": "Amiri Bold",
+      "author": "Khaled Hosny",
+      "source_url": "https://github.com/aliftype/amiri",
+      "license": "SIL Open Font License 1.1",
+      "license_url": "https://scripts.sil.org/OFL",
+      "required_attribution": "Amiri font by Khaled Hosny, licensed under SIL OFL 1.1.",
+      "download_date": "[[FILL]]",
+      "notes": "Bold weight used for headings and emphasis in Arabic text."
+    },
+    {
+      "id": "font-inter-variable",
+      "type": "font",
+      "file": "app/assets/fonts/Inter-Variable.ttf",
+      "name": "Inter Variable",
+      "author": "Rasmus Andersson",
+      "source_url": "https://github.com/rsms/inter",
+      "license": "SIL Open Font License 1.1",
+      "license_url": "https://scripts.sil.org/OFL",
+      "required_attribution": "Inter font by Rasmus Andersson, licensed under SIL OFL 1.1.",
+      "download_date": "[[FILL]]",
+      "notes": "Primary Latin/numeral typeface for English UI, numerals, and timers."
+    },
+    {
+      "id": "dhikr-content-bundle",
+      "type": "content",
+      "file": "app/assets/dhikr/dhikr.json",
+      "name": "Dhikr content bundle (9 adhkar)",
+      "author": "Compiled by Tarf team from Hisn al-Muslim and Sahih hadith collections",
+      "source_url": "https://sunnah.com",
+      "license": "Original compilation — see scholarly sign-off",
+      "license_url": null,
+      "required_attribution": "Dhikr texts sourced from authenticated hadith collections (Sahih al-Bukhari, Sahih Muslim, Hisn al-Muslim). References included in each entry.",
+      "signoff_status": "PENDING — owner must obtain and record the dhikr sign-off before release",
+      "signoff_file": "assets_ledger/dhikr-signoff.md",
+      "download_date": null,
+      "notes": "9 universally-agreed, non-sectarian adhkar with full tashkil (diacritics), transliteration, English translation, and hadith references. Arabic text is immutable. Scholarly sign-off is a BLOCKING gate per the release checklist.",
+      "entries": [
+        "subhanallah",
+        "alhamdulillah",
+        "la-ilaha-illallah",
+        "allahu-akbar",
+        "subhanallah-wa-bihamdihi",
+        "subhanallah-azim",
+        "astaghfirullah",
+        "la-hawla",
+        "salawat"
+      ]
+    },
+    {
+      "id": "audio-break-chime-start",
+      "type": "audio",
+      "file": "[[app/assets/audio/chime_start.mp3 — ADD WHEN SOURCED]]",
+      "name": "Break start chime",
+      "author": "[[FILL — commissioned reciter or CC0 source]]",
+      "source_url": "[[FILL]]",
+      "license": "[[FILL — CC0 / Pixabay license / commissioned]]",
+      "license_url": "[[FILL]]",
+      "required_attribution": "[[FILL — if CC0/Pixabay: attribution optional but recommended; if commissioned: per agreement]]",
+      "download_date": "[[FILL]]",
+      "notes": "Gentle chime played at the start of the 20-second break. Must be CC0, Pixabay license, or commissioned with written agreement stored at assets_ledger/audio-agreements/."
+    },
+    {
+      "id": "audio-break-chime-end",
+      "type": "audio",
+      "file": "[[app/assets/audio/chime_end.mp3 — ADD WHEN SOURCED]]",
+      "name": "Break end chime",
+      "author": "[[FILL]]",
+      "source_url": "[[FILL]]",
+      "license": "[[FILL]]",
+      "license_url": "[[FILL]]",
+      "required_attribution": "[[FILL]]",
+      "download_date": "[[FILL]]",
+      "notes": "Gentle chime played at the end of the 20-second break (break-complete cue)."
+    },
+    {
+      "id": "audio-dhikr-clip-placeholder",
+      "type": "audio",
+      "file": "[[app/assets/audio/dhikr_*.mp3 — ADD FOR EACH DHIKR ENTRY WHEN SOURCED]]",
+      "name": "Dhikr audio clips (one per entry)",
+      "author": "[[FILL — commissioned reciter]]",
+      "source_url": "[[FILL]]",
+      "license": "[[FILL — commissioned: written agreement required]]",
+      "license_url": "[[FILL]]",
+      "required_attribution": "[[FILL]]",
+      "download_date": "[[FILL]]",
+      "notes": "One audio clip per dhikr entry in dhikr.json. If commissioned, the signed agreement must be stored at assets_ledger/audio-agreements/<id>.pdf. Arabic TTS fallback (flutter_tts gated on isLanguageInstalled('ar-SA')) may be used as an interim substitute."
+    }
+  ],
+  "thirdPartyLibraries": {
+    "note": "Dart/Flutter package licenses are enumerated at runtime via the LicenseRegistry and rendered in the in-app Licenses screen. The packages below are the key ones users are most likely to ask about.",
+    "packages": [
+      {
+        "name": "flutter",
+        "version": "3.44.0",
+        "license": "BSD 3-Clause",
+        "url": "https://github.com/flutter/flutter/blob/master/LICENSE"
+      },
+      {
+        "name": "flutter_riverpod",
+        "license": "MIT",
+        "url": "https://github.com/rrousselGit/riverpod/blob/master/LICENSE"
+      },
+      {
+        "name": "go_router",
+        "license": "BSD 3-Clause",
+        "url": "https://github.com/flutter/packages/blob/main/packages/go_router/LICENSE"
+      },
+      {
+        "name": "drift",
+        "license": "MIT",
+        "url": "https://github.com/simolus3/drift/blob/develop/drift/LICENSE"
+      },
+      {
+        "name": "just_audio",
+        "license": "Apache 2.0",
+        "url": "https://github.com/ryanheise/just_audio/blob/master/just_audio/LICENSE"
+      },
+      {
+        "name": "adhan",
+        "license": "MIT",
+        "url": "https://github.com/batoulapps/adhan-dart/blob/main/LICENSE"
+      },
+      {
+        "name": "intl",
+        "license": "BSD 3-Clause",
+        "url": "https://github.com/dart-lang/i18n/blob/main/pkgs/intl/LICENSE"
+      },
+      {
+        "name": "shared_preferences",
+        "license": "BSD 3-Clause",
+        "url": "https://github.com/flutter/packages/blob/main/packages/shared_preferences/shared_preferences/LICENSE"
+      }
+    ]
+  }
+}

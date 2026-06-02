@@ -14,6 +14,7 @@ import '../../features/focus/presentation/focus_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/settings/presentation/licenses_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stopwatch/presentation/stopwatch_screen.dart';
 import '../../features/timer/domain/saved_timer.dart';
@@ -39,6 +40,7 @@ abstract final class Routes {
   static const locationPicker = '/settings/prayer-location';
   static const eyeCareBreak = '/eyecare/break';
   static const account = '/settings/account';
+  static const licenses = '/settings/licenses';
   static const tasks = '/tasks';
   static const onboarding = '/onboarding';
 }
@@ -129,6 +131,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.account,
         builder: (context, state) => const AccountScreen(),
+      ),
+      GoRoute(
+        path: Routes.licenses,
+        builder: (context, state) => const LicensesScreen(),
       ),
       GoRoute(
         path: Routes.tasks,

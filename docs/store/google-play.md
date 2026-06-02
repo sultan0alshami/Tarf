@@ -38,10 +38,11 @@ Complete **all** of these under **App content**:
   is not directed at children.
 - **News / COVID / Government / Financial-features:** No.
 - **Permissions declarations (Sensitive/Restricted) — critical for Tarf:**
-  - **Exact alarm** (`USE_EXACT_ALARM`/`SCHEDULE_EXACT_ALARM`): complete the **Alarms & reminders** declaration;
-    justify that alarms/timers + precise break timing are a **core function**.
-  - **Foreground service**: declare the **FGS type** matching the manifest; justify the background break-timing /
-    audio service. Mismatch or weak justification = rejection.
+  - **Exact alarm** (`SCHEDULE_EXACT_ALARM`): complete the **Alarms & reminders** Play Console declaration;
+    justify that Alarm + Timer + precise eye-break timing are **core functions** of Tarf. (v1 declares
+    `SCHEDULE_EXACT_ALARM`; `USE_EXACT_ALARM` is not declared — see `compliance/permissions-matrix.md`.)
+  - **Foreground service**: NOT declared in v1. If Phase 4 adds a persistent background audio FGS, declare
+    the FGS type in Play Console before that build is submitted. Mismatch or weak justification = rejection.
   - **Full-screen intent** (`USE_FULL_SCREEN_INTENT`): justify (Strict-mode full break screen).
   - **Notifications** (`POST_NOTIFICATIONS`): standard, no special form but must be runtime-requested (see
     `compliance/permissions-matrix.md`).

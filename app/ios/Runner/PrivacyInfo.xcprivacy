@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Tarf (طَرْف) — iOS/macOS Privacy Manifest
+  Required by Apple (WWDC 2023 / App Store requirement).
+  Spec source: docs/compliance/apple-privacy.md §2.
+
+  OWNER ACTION:
+  1. After `pod install`, grep ios/Pods/ for PrivacyInfo.xcprivacy to confirm
+     every bundled SDK (Firebase, GoogleSignIn, just_audio, etc.) ships its own.
+  2. Run Xcode: Product → Archive → Generate Privacy Report — resolve any
+     ITMS-91053 / ITMS-91065 warnings before upload.
+  3. If any future dependency reads SystemBootTime (e.g. streak monotonic clock)
+     or DiskSpace (cache sizing), add the relevant entry below.
+-->
+<plist version="1.0">
+<dict>
+
+  <!-- ── Tracking ──────────────────────────────────────────────────────────── -->
+  <!-- Tarf shows no ads, uses no ad SDKs, and performs no cross-app/website
+       tracking. ATT prompt is NOT required. -->
+  <key>NSPrivacyTracking</key>
+  <false/>
+
+  <!-- No tracking domains (no pixels, beacons, or cross-site scripts). -->
+  <key>NSPrivacyTrackingDomains</key>
+  <array/>
+
+  <!-- ── Collected data types (app-level; SDKs declare their own) ─────────── -->
+  <!-- Reflects worst-case signed-in mode per docs/compliance/apple-privacy.md §1 -->
+  <key>NSPrivacyCollectedDataTypes</key>
+  <array>
+
+    <!-- Email address — account creation, auth, sync -->
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeEmailAddress</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array>
+        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+      </array>
+    </dict>
+
+    <!-- User ID — Firebase UID ties synced data to the account -->
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeUserID</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array>
+        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+      </array>
+    </dict>
+
+    <!-- Product interaction — focus minutes, sessions, breaks taken/skipped,
+         daily-goal %, used for Insights and cloud sync -->
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeProductInteraction</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array>
+        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+      </array>
+    </dict>
+
+    <!-- Other user content — to-do titles and reflection notes the user types -->
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeOtherUserContent</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array>
+        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+      </array>
+    </dict>
+
+    <!--
+      OWNER ACTION — crash/analytics SDK:
+      If v1 ships a crash-reporting or analytics SDK, add a CrashData entry here:
+      <dict>
+        <key>NSPrivacyCollectedDataType</key>
+        <string>NSPrivacyCollectedDataTypeCrashData</string>
+        <key>NSPrivacyCollectedDataTypeLinked</key>
+        <false/>
+        <key>NSPrivacyCollectedDataTypeTracking</key>
+        <false/>
+        <key>NSPrivacyCollectedDataTypePurposes</key>
+        <array>
+          <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+          <string>NSPrivacyCollectedDataTypePurposeAnalytics</string>
+        </array>
+      </dict>
+      If v1 ships NO analytics/crash SDK, leave this commented out and
+      answer "No" for crash data on the App Store Connect nutrition label.
+    -->
+
+  </array>
+
+  <!-- ── Required-reason APIs used by the Runner itself ───────────────────── -->
+  <!-- Do NOT declare reasons you do not use; do NOT omit ones you do use.
+       Apple sends ITMS-91053 warnings and may reject if mismatched.
+       See docs/compliance/apple-privacy.md §2 for verification notes. -->
+  <key>NSPrivacyAccessedAPITypes</key>
+  <array>
+
+    <!-- UserDefaults — used by shared_preferences (app settings storage) and
+         flutter_local_notifications. Reason CA92.1: "access information only
+         accessible to the app itself." -->
+    <dict>
+      <key>NSPrivacyAccessedAPIType</key>
+      <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+      <key>NSPrivacyAccessedAPITypeReasons</key>
+      <array>
+        <string>CA92.1</string>
+      </array>
+    </dict>
+
+    <!-- File timestamp APIs — used by Drift/SQLite (path_provider) for local
+         DB operations. Reason C617.1: "read or write file timestamps of files
+         inside the app container." -->
+    <dict>
+      <key>NSPrivacyAccessedAPIType</key>
+      <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+      <key>NSPrivacyAccessedAPITypeReasons</key>
+      <array>
+        <string>C617.1</string>
+      </array>
+    </dict>
+
+    <!--
+      OWNER ACTION — additional APIs (verify against actual dependency tree):
+
+      If the streak-integrity / monotonic-clock logic reads systemUptime or boot
+      time, add:
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array><string>35F9.1</string></array>
+      </dict>
+
+      If any cache-sizing code reads free disk space, add:
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array><string>E174.1</string></array>
+      </dict>
+    -->
+
+  </array>
+
+</dict>
+</plist>

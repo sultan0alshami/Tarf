@@ -257,5 +257,24 @@
   "tasbihTapHint": "انقر للعدّ",
   "tasbihReset": "تصفير العدّ",
   "tasbihProgress": "{value}",
-  "@tasbihProgress": { "description": "تقدم دورة التسبيح 'العدّ / الهدف'؛ القيمة منسّقة مسبقًا بنظام الأرقام الفعّال لتطابق دائرة العدّ أعلاه.", "placeholders": { "value": { "type": "String" } } }
+  "@tasbihProgress": { "description": "تقدم دورة التسبيح 'العدّ / الهدف'؛ القيمة منسّقة مسبقًا بنظام الأرقام الفعّال لتطابق دائرة العدّ أعلاه.", "placeholders": { "value": { "type": "String" } } },
+  "settingsLicenses": "التراخيص والمصادر",
+  "licensesTitle": "التراخيص والمصادر",
+  "licensesSubtitleFonts": "الخطوط",
+  "licensesSubtitleContent": "المحتوى",
+  "licensesSubtitleAudio": "الصوت",
+  "licensesSubtitlePackages": "المكتبات مفتوحة المصدر",
+  "licensesSilOfl": "رخصة SIL للخطوط المفتوحة 1.1",
+  "licensesMit": "رخصة MIT",
+  "licensesBsd3": "رخصة BSD ثلاثية البنود",
+  "licensesApache2": "رخصة Apache 2.0",
+  "licensesViewAll": "عرض جميع تراخيص مكتبات Flutter",
+  "licensesDhikrNote": "نصوص الأذكار مأخوذة من الأحاديث الصحيحة (صحيح البخاري، صحيح مسلم، حصن المسلم). المراجع مذكورة مع كل ذكر في التطبيق.",
+  "licensesAudioNote": "الملفات الصوتية مصدرها رخص استخدام حرة (CC0 / Pixabay) أو مُعدّة بتوكيل. سجلات المصدر الكاملة محفوظة في ملفات المشروع.",
+  "licensesVersion": "الإصدار {version}",
+  "@licensesVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  }
 }

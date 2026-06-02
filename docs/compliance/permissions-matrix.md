@@ -77,18 +77,20 @@ Legend: **JIT** = just-in-time trigger. **Deep-link** = open the exact OS settin
 | Denied (1st/2nd) | Foreground overlay still works; show "background reminders off" chip. On next contextual moment, re-show OUR priming, then the system dialog (the OS allows a limited number of prompts) |
 | Permanently denied | After the OS stops showing the dialog (`shouldShowRequestPermissionRationale` false), switch to **deep-link**: `Settings.ACTION_APP_NOTIFICATION_SETTINGS` with `EXTRA_APP_PACKAGE`; show an illustrated how-to; persist degraded mode |
 
-### 4) Android 12+ — `SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM`
+### 4) Android 12+ — `SCHEDULE_EXACT_ALARM`
 | Field | Detail |
 |---|---|
-| OS API | Manifest: `USE_EXACT_ALARM` (allowed only for true alarm/clock apps) **or** `SCHEDULE_EXACT_ALARM` (revocable on 13+; user grant via `ACTION_REQUEST_SCHEDULE_EXACT_ALARM`). Check `AlarmManager.canScheduleExactAlarms()` |
-| Why | The **Alarm** feature and precise eye-break timing need exact alarms (AlarmManager `setExactAndAllowWhileIdle`) to fire on time under Doze |
-| Policy note | Google Play restricts `USE_EXACT_ALARM` to apps whose **core function is alarms/timers**. Tarf ships Alarm + Timer + exact break timing, so we **declare `USE_EXACT_ALARM`** and justify it in Play Console; keep `SCHEDULE_EXACT_ALARM` as the user-revocable fallback path. **Owner must complete the Play "exact alarm" declaration.** |
+| OS API | Manifest: `SCHEDULE_EXACT_ALARM` (revocable on Android 13+; user grant via `ACTION_REQUEST_SCHEDULE_EXACT_ALARM`). Check `AlarmManager.canScheduleExactAlarms()` at runtime. |
+| Why | The **Alarm** feature and precise eye-break timing need exact alarms (`AlarmManager.setExactAndAllowWhileIdle`) to fire on time under Doze |
+| Policy note | Tarf ships Alarm + Timer + precise break timing, making exact scheduling a **core function**. We declare `SCHEDULE_EXACT_ALARM` (the user-revocable, general-purpose path). If Play policy later allows `USE_EXACT_ALARM` for our profile, that switch is a one-line manifest change — for now `SCHEDULE_EXACT_ALARM` is the shipped permission. **Owner must complete the Play "Alarms & reminders" declaration and justification.** |
 | When (JIT) | When the user creates the first **Alarm**, or enables exact-timing for eye breaks |
-| Priming — AR | «لكي يرنّ المنبّه/تذكير الراحة في وقته بالضبط، يحتاج طَرْف إذن \"التنبيهات الدقيقة\".» [السماح] [استخدام تنبيه تقريبي] |
+| Priming — AR | «لكي يرنّ المنبّه/تذكير الراحة في وقته بالضبط، يحتاج طَرْف إذن التنبيهات الدقيقة.» [السماح] [استخدام تنبيه تقريبي] |
 | Priming — EN | "So your alarm / break reminder rings at the exact time, Tarf needs the 'exact alarms' permission." [Allow] [Use inexact instead] |
-| Granted | Use exact alarms |
+| Granted | Use exact alarms; `AlarmManager.canScheduleExactAlarms()` returns true |
 | Denied | Fall back to **inexact** alarms (`setAndAllowWhileIdle`) + WorkManager catch-up; warn that timing may drift by minutes under battery saver; offer deep-link |
-| Permanently denied | Deep-link to `Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM` (per-app "Alarms & reminders") page; keep inexact fallback running so the feature still works |
+| Permanently denied | Deep-link to `Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM` (per-app "Alarms & reminders"); keep inexact fallback so the feature still works |
+
+> **Note:** `VIBRATE` and `WAKE_LOCK` are normal permissions (no runtime grant dialog) declared in the manifest to support notification vibration and keep the CPU alive during a break. `RECEIVE_BOOT_COMPLETED` reschedules alarms after device reboot — also normal, no dialog.
 
 ### 5) Android — `USE_FULL_SCREEN_INTENT`
 | Field | Detail |
@@ -114,17 +116,16 @@ Legend: **JIT** = just-in-time trigger. **Deep-link** = open the exact OS settin
 | Denied | Keep best-effort delivery (FGS + exact/inexact alarms + WorkManager); be honest that some OEMs may still delay reminders |
 | Permanently denied | Deep-link to battery-optimization settings + a short OEM-specific help link (e.g. dontkillmyapp.com guidance); never block the app |
 
-### 7) Android — Foreground service (`FOREGROUND_SERVICE` + typed permission)
-| Field | Detail |
+### 7) Android — `VIBRATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED` (normal permissions)
+| Permission | Purpose |
 |---|---|
-| OS API | Manifest `FOREGROUND_SERVICE` + the **typed** permission for the declared FGS type. Tarf's break-timing service is a special-use / [[confirm correct `foregroundServiceType` — likely `specialUse` or `mediaPlayback` for the 20s audio]] service with `FOREGROUND_SERVICE_<TYPE>` permission (Android 14+ requires a declared type + Play justification) |
-| Why | Keep the eye-care timer + 20s break audio alive while backgrounded; show the mandatory persistent FGS notification |
-| When (JIT) | Automatically when background reminders are enabled and a session is active; the persistent FGS notification is itself the disclosure |
-| Priming — AR | «يعمل طَرْف في الخلفية ليذكّرك في وقته؛ سيظهر إشعار دائم صغير يوضّح ذلك.» (يظهر ضمن شرح تفعيل تذكيرات الخلفية) |
-| Priming — EN | "Tarf runs in the background to remind you on time; a small persistent notification shows this is happening." (shown within the background-reminders explainer) |
-| Granted (implicit via type) | Run FGS; the persistent notification uses a separate low-importance channel so it is unobtrusive |
-| Denied path | If `POST_NOTIFICATIONS` is denied, the FGS notification cannot show → fall back to foreground-only mode + chip (see §A) |
-| Play declaration | **Owner must declare the foreground-service type + justification in Play Console** and ensure `foregroundServiceType` matches actual use; mismatch is a rejection cause |
+| `VIBRATE` | Vibrate the device when a break notification is posted (accompanies sound) |
+| `WAKE_LOCK` | Briefly hold a partial wake lock during exact-alarm delivery to ensure the break fires even under Doze; released immediately after the notification is posted |
+| `RECEIVE_BOOT_COMPLETED` | Reschedule exact alarms after device reboot (Android cancels all `AlarmManager` alarms on reboot) |
+
+These are **normal** permissions (no runtime dialog, no priming screen needed). They are declared in `AndroidManifest.xml` and require no Play Console declaration beyond what is already covered by the scheduling permission (§4).
+
+> **Phase 4 note — Foreground Service:** If a foreground service (FGS) is added in Phase 4 for background audio playback during a break, you must add `FOREGROUND_SERVICE` + the appropriate typed permission (e.g. `FOREGROUND_SERVICE_MEDIA_PLAYBACK`) and complete the FGS Play Console declaration. That decision belongs to Phase 4. For v1 as shipped, Tarf uses `WorkManager` + exact alarms + `SCHEDULE_EXACT_ALARM` without a persistent FGS.
 
 ### 8) macOS — Notifications
 | Field | Detail |
@@ -161,10 +162,17 @@ Legend: **JIT** = just-in-time trigger. **Deep-link** = open the exact OS settin
 - **iOS `Info.plist`:** `NSLocationWhenInUseUsageDescription` (AR + EN via `InfoPlist.strings`), notification
   capability, and (if/when loud-through-silence ships fully) audio background mode justification. **No**
   `NSLocationAlwaysUsageDescription` (we never request background location).
-- **Android `AndroidManifest.xml`:** `POST_NOTIFICATIONS`, `USE_EXACT_ALARM` (+ `SCHEDULE_EXACT_ALARM`),
-  `USE_FULL_SCREEN_INTENT`, `FOREGROUND_SERVICE` + the typed `FOREGROUND_SERVICE_*`, `ACCESS_COARSE_LOCATION`,
-  optionally `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED` (reschedule after reboot),
-  `VIBRATE`. Each manifest-declared sensitive permission must have a matching Play Console declaration/justification.
+- **Android `AndroidManifest.xml` — final declared set:**
+  - `POST_NOTIFICATIONS` — runtime permission (Android 13+); Play declaration needed
+  - `SCHEDULE_EXACT_ALARM` — runtime permission (Android 12+); Play "Alarms & reminders" declaration + justification needed
+  - `USE_FULL_SCREEN_INTENT` — manifest permission; Play declaration needed for Strict mode full-screen break overlay
+  - `RECEIVE_BOOT_COMPLETED` — normal permission; reschedules alarms after reboot
+  - `VIBRATE` — normal permission; notification vibration
+  - `WAKE_LOCK` — normal permission; momentary hold during exact-alarm delivery
+  - `ACCESS_COARSE_LOCATION` — runtime permission; **only** if the prayer-times feature is shipped; Play data-safety: on-device only, not collected
+  - `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` — **optional, policy-sensitive**; add only if the battery-reliability opt-in feature is built; justify in Play Console
+  - **NOT declared:** `USE_EXACT_ALARM` (reserved for apps whose primary function is alarms; may be added post-launch if Play approves), `FOREGROUND_SERVICE` (not used in v1; add in Phase 4 if a persistent background audio service is built).
+  - Each runtime permission requires a matching **Play Console declaration/justification** and our JIT priming UX.
 - **macOS entitlements:** notifications; App Sandbox; (location entitlement only if the prayer feature is built
   for macOS).
 - **Localized permission strings:** every usage-description string is provided in **Arabic and English** and
