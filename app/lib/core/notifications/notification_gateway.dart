@@ -1,9 +1,9 @@
 import 'permission_state.dart';
 import 'scheduled_item.dart';
 
-/// The ONLY impure surface in Phase 2. Wraps flutter_local_notifications +
-/// android_alarm_manager_plus + permission plugins so all scheduling logic is
-/// unit-testable against [FakeNotificationGateway].
+/// The ONLY impure surface in Phase 2. Wraps flutter_local_notifications
+/// (zoned scheduling + exact-alarm/notification permission requests) so all
+/// scheduling logic is unit-testable against [FakeNotificationGateway].
 abstract interface class NotificationGateway {
   /// Create channels (Android), set up tz, register tap handlers. Idempotent.
   Future<void> init();
