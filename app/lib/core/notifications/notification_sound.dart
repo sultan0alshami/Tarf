@@ -38,9 +38,15 @@ abstract final class NotificationSound {
     return soundId; // bell|chime|calm -> res/raw/{bell,chime,calm}.wav
   }
 
-  /// iOS/macOS bundled sound file (with extension), or null for default.
-  static String? appleSoundFile(String soundId) {
-    if (!_known(soundId) || soundId == 'default') return null;
-    return '$soundId.caf';
-  }
+  /// iOS/macOS bundled sound file (with extension), or null for the audible
+  /// system default sound.
+  ///
+  /// OWNER DROP-IN: this returns null for *every* id today because no
+  /// `bell.caf`/`chime.caf`/`calm.caf` are bundled in the iOS/macOS Runner
+  /// targets. Naming a missing file makes the OS fall back to *silence* (a
+  /// silent lie), so until the owner adds real `.caf` assets — the same pattern
+  /// as the reserved recitation path (`assets/audio/recitation/`) — we use the
+  /// system default sound. Once the `.caf` files ship, map `bell|chime|calm` to
+  /// `'$soundId.caf'` here (this is the single adapter point).
+  static String? appleSoundFile(String soundId) => null;
 }

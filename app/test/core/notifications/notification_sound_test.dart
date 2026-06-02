@@ -27,9 +27,15 @@ void main() {
       expect(NotificationSound.androidRawResource('calm'), 'calm');
     });
 
-    test('iOS sound file name carries the .caf/.aiff extension or null', () {
-      expect(NotificationSound.appleSoundFile('default'), isNull); // default
-      expect(NotificationSound.appleSoundFile('bell'), 'bell.caf');
+    test('Apple sound file is null until real .caf assets ship (no silent lie)',
+        () {
+      // No bell.caf/chime.caf/calm.caf are bundled yet, so naming them would
+      // make iOS/macOS fall back to silence. Until the owner drops the .caf
+      // files in, every id resolves to the audible system default sound (null).
+      expect(NotificationSound.appleSoundFile('default'), isNull);
+      expect(NotificationSound.appleSoundFile('bell'), isNull);
+      expect(NotificationSound.appleSoundFile('chime'), isNull);
+      expect(NotificationSound.appleSoundFile('calm'), isNull);
     });
 
     test('channelName is human-readable per id', () {
