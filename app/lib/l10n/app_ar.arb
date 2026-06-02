@@ -228,7 +228,6 @@
   "prayerLatitude": "خط العرض",
   "prayerLongitude": "خط الطول",
   "useMyLocation": "استخدم موقعي",
-  "locationUnavailable": "موقع الجهاز غير متاح — أدخله يدويًا أدناه.",
   "locationDenied": "تم رفض إذن الموقع — يمكنك إدخاله يدويًا.",
   "prayerMethodGroup": "طريقة الحساب",
   "prayerMadhabGroup": "طريقة العصر (المذهب)",
@@ -243,7 +242,6 @@
   "prayerMethodTurkey": "تركيا (ديانت)",
   "madhabShafi": "شافعي ومالكي وحنبلي",
   "madhabHanafi": "حنفي",
-  "locationSaved": "تم تحديث الموقع",
   "timerSavedTitle": "المؤقتات المحفوظة",
   "timerAddSaved": "مؤقّت جديد",
   "timerEditSaved": "تعديل المؤقّت",
@@ -258,8 +256,6 @@
   "tasbihHide": "إخفاء العدّاد",
   "tasbihTapHint": "انقر للعدّ",
   "tasbihReset": "تصفير العدّ",
-  "tasbihCompleted": "أتممت {n}",
-  "@tasbihCompleted": { "placeholders": { "n": { "type": "int" } } },
   "tasbihProgress": "{count} / {target}",
   "@tasbihProgress": { "placeholders": { "count": { "type": "int" }, "target": { "type": "int" } } }
 }

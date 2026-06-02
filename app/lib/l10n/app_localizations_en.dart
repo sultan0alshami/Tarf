@@ -592,10 +592,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get useMyLocation => 'Use my location';
 
   @override
-  String get locationUnavailable =>
-      'Device location isn\'t available — enter it manually below.';
-
-  @override
   String get locationDenied =>
       'Location permission was declined — you can enter it manually.';
 
@@ -639,9 +635,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get madhabHanafi => 'Hanafi';
 
   @override
-  String get locationSaved => 'Location updated';
-
-  @override
   String get timerSavedTitle => 'Saved timers';
 
   @override
@@ -682,11 +675,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tasbihReset => 'Reset count';
-
-  @override
-  String tasbihCompleted(int n) {
-    return 'Completed $n';
-  }
 
   @override
   String tasbihProgress(int count, int target) {

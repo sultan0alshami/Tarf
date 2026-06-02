@@ -592,10 +592,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get useMyLocation => 'استخدم موقعي';
 
   @override
-  String get locationUnavailable =>
-      'موقع الجهاز غير متاح — أدخله يدويًا أدناه.';
-
-  @override
   String get locationDenied => 'تم رفض إذن الموقع — يمكنك إدخاله يدويًا.';
 
   @override
@@ -638,9 +634,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get madhabHanafi => 'حنفي';
 
   @override
-  String get locationSaved => 'تم تحديث الموقع';
-
-  @override
   String get timerSavedTitle => 'المؤقتات المحفوظة';
 
   @override
@@ -681,11 +674,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tasbihReset => 'تصفير العدّ';
-
-  @override
-  String tasbihCompleted(int n) {
-    return 'أتممت $n';
-  }
 
   @override
   String tasbihProgress(int count, int target) {

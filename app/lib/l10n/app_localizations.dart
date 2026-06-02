@@ -1196,12 +1196,6 @@ abstract class AppLocalizations {
   /// **'Use my location'**
   String get useMyLocation;
 
-  /// No description provided for @locationUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Device location isn\'t available — enter it manually below.'**
-  String get locationUnavailable;
-
   /// No description provided for @locationDenied.
   ///
   /// In en, this message translates to:
@@ -1286,12 +1280,6 @@ abstract class AppLocalizations {
   /// **'Hanafi'**
   String get madhabHanafi;
 
-  /// No description provided for @locationSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Location updated'**
-  String get locationSaved;
-
   /// No description provided for @timerSavedTitle.
   ///
   /// In en, this message translates to:
@@ -1375,12 +1363,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset count'**
   String get tasbihReset;
-
-  /// No description provided for @tasbihCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Completed {n}'**
-  String tasbihCompleted(int n);
 
   /// No description provided for @tasbihProgress.
   ///

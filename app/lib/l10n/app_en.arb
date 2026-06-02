@@ -229,7 +229,6 @@
   "prayerLatitude": "Latitude",
   "prayerLongitude": "Longitude",
   "useMyLocation": "Use my location",
-  "locationUnavailable": "Device location isn't available — enter it manually below.",
   "locationDenied": "Location permission was declined — you can enter it manually.",
   "prayerMethodGroup": "Calculation method",
   "prayerMadhabGroup": "Asr method (madhab)",
@@ -244,7 +243,6 @@
   "prayerMethodTurkey": "Türkiye (Diyanet)",
   "madhabShafi": "Shafi, Maliki, Hanbali",
   "madhabHanafi": "Hanafi",
-  "locationSaved": "Location updated",
   "timerSavedTitle": "Saved timers",
   "timerAddSaved": "New timer",
   "timerEditSaved": "Edit timer",
@@ -259,8 +257,6 @@
   "tasbihHide": "Hide counter",
   "tasbihTapHint": "Tap to count",
   "tasbihReset": "Reset count",
-  "tasbihCompleted": "Completed {n}",
-  "@tasbihCompleted": { "placeholders": { "n": { "type": "int" } } },
   "tasbihProgress": "{count} / {target}",
   "@tasbihProgress": { "placeholders": { "count": { "type": "int" }, "target": { "type": "int" } } }
 }
