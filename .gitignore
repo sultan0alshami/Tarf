@@ -74,3 +74,6 @@ _setup/android.DONE
 _setup/android_fix.DONE
 _setup/shots/
 _setup/chromeprofile/
+
+# Agent worktrees (git-managed; never track)
+.claude/worktrees/
