@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tarf/core/audio/audio_haptics.dart';
 import 'package:tarf/core/format/numerals.dart';
@@ -16,17 +17,21 @@ const _dhikr = Dhikr(
   reference: 'Sahih al-Bukhari 6406',
 );
 
-Widget _host(Widget child, {Locale locale = const Locale('ar')}) => MaterialApp(
-      locale: locale,
-      theme: TarfTheme.dark(),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: child,
+Widget _host(Widget child, {Locale locale = const Locale('ar')}) =>
+    ProviderScope(
+      child: MaterialApp(
+        locale: locale,
+        theme: TarfTheme.dark(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: child,
+      ),
     );
 
 void main() {
-  testWidgets('renders the dhikr and starts break audio for the duration',
-      (tester) async {
+  testWidgets('renders the dhikr and starts break audio for the duration', (
+    tester,
+  ) async {
     final audio = FakeBreakAudio();
     var finished = false;
 
@@ -82,8 +87,9 @@ void main() {
     expect(find.text('Snooze'), findsNothing);
   });
 
-  testWidgets('fires an equal breakEnd haptic when the countdown completes',
-      (tester) async {
+  testWidgets('fires an equal breakEnd haptic when the countdown completes', (
+    tester,
+  ) async {
     final audio = FakeBreakAudio();
     final sink = RecordingHapticSink();
 
@@ -106,8 +112,9 @@ void main() {
     expect(sink.events, contains(HapticKind.breakEnd));
   });
 
-  testWidgets('no haptic at completion when hapticEnabled is false',
-      (tester) async {
+  testWidgets('no haptic at completion when hapticEnabled is false', (
+    tester,
+  ) async {
     final sink = RecordingHapticSink();
     await tester.pumpWidget(
       _host(

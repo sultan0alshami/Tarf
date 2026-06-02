@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/audio/audio_haptics.dart';
 import '../../../core/format/numerals.dart';
+import '../../../core/overlay/reverent_overlay.dart';
 import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
@@ -19,7 +20,7 @@ import '../domain/dhikr.dart';
 /// recite from memory, not to read closely. A soft focal dot gently recedes at
 /// the ring's center. The visual end cue (ring to zero + bloom) is authoritative;
 /// the chime/haptic are equal cues.
-class BreakOverlay extends StatefulWidget {
+class BreakOverlay extends ConsumerStatefulWidget {
   const BreakOverlay({
     super.key,
     required this.dhikr,
@@ -61,14 +62,18 @@ class BreakOverlay extends StatefulWidget {
   final AudioHaptics haptics;
 
   @override
-  State<BreakOverlay> createState() => _BreakOverlayState();
+  ConsumerState<BreakOverlay> createState() => _BreakOverlayState();
 }
 
-class _BreakOverlayState extends State<BreakOverlay>
+class _BreakOverlayState extends ConsumerState<BreakOverlay>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
   late final AnimationController _breathe;
   bool _finished = false;
+  bool _enteredOverlay = false;
+  // Captured in initState so dispose() can safely call leave() without touching
+  // `ref` after the widget is unmounted (Riverpod forbids that).
+  ReverentOverlay? _overlay;
   late bool _showTranslit;
   late bool _showTasbih;
 
@@ -77,6 +82,15 @@ class _BreakOverlayState extends State<BreakOverlay>
     super.initState();
     _showTranslit = widget.showTransliteration;
     _showTasbih = widget.showTasbih;
+    _overlay = ref.read(reverentOverlayProvider.notifier);
+    // Mark a reverent overlay as on-screen so incidental chrome (e.g. the web
+    // tap-to-enable-sound banner) hides itself. Deferred a frame so we never
+    // mutate the provider while the banner above us is mid-build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _enteredOverlay = true;
+      _overlay?.enter();
+    });
     _controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((s) {
         if (s == AnimationStatus.completed && mounted) {
@@ -104,6 +118,14 @@ class _BreakOverlayState extends State<BreakOverlay>
 
   @override
   void dispose() {
+    // Release the reverent-overlay flag AFTER teardown: mutating a provider
+    // during dispose() is disallowed (it runs while the tree is being
+    // finalized). The captured notifier outlives this widget, so a microtask
+    // is safe. Banner reappears on the next frame.
+    if (_enteredOverlay) {
+      final overlay = _overlay;
+      Future.microtask(() => overlay?.leave());
+    }
     _controller.dispose();
     _breathe.dispose();
     super.dispose();
