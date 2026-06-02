@@ -54,8 +54,27 @@ dependencies:
   timezone: ^0.10.0
   flutter_timezone: ^4.0.0
 
+  # Optional cloud sync + sign-in. Guest mode never depends on these: cloud is
+  # gated behind FirebaseFlags (TARF_CLOUD compile flag + present config). All
+  # logic is testable without a live project via the Local Emulator Suite +
+  # fake_cloud_firestore / firebase_auth_mocks.
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.0
+  cloud_firestore: ^6.0.0
+  firebase_app_check: ^0.4.0
+  google_sign_in: ^7.0.0
+  sign_in_with_apple: ^7.0.0
+
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+
+  # Firebase fakes for fast unit tests (no emulator needed).
+  fake_cloud_firestore: ^4.0.0
+  firebase_auth_mocks: ^0.15.0
+
+  # Drives the emulator-based end-to-end tests under integration_test/.
+  integration_test:
     sdk: flutter
 
   # Deterministic virtual time for timer/ticker tests (alarm haptic cadence,
