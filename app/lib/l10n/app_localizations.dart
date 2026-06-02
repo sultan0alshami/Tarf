@@ -1153,6 +1153,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap reset to dismiss'**
   String get timerDoneTapToDismiss;
+
+  /// No description provided for @locationPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location & method'**
+  String get locationPickerTitle;
+
+  /// No description provided for @prayerLocationGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get prayerLocationGroup;
+
+  /// No description provided for @prayerCityLabelField.
+  ///
+  /// In en, this message translates to:
+  /// **'City or place'**
+  String get prayerCityLabelField;
+
+  /// No description provided for @prayerCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Riyadh'**
+  String get prayerCityHint;
+
+  /// No description provided for @prayerLatitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get prayerLatitude;
+
+  /// No description provided for @prayerLongitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get prayerLongitude;
+
+  /// No description provided for @useMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get useMyLocation;
+
+  /// No description provided for @locationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Device location isn\'t available — enter it manually below.'**
+  String get locationUnavailable;
+
+  /// No description provided for @locationDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission was declined — you can enter it manually.'**
+  String get locationDenied;
+
+  /// No description provided for @prayerMethodGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation method'**
+  String get prayerMethodGroup;
+
+  /// No description provided for @prayerMadhabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr method (madhab)'**
+  String get prayerMadhabGroup;
+
+  /// No description provided for @prayerMethodUmmAlQura.
+  ///
+  /// In en, this message translates to:
+  /// **'Umm al-Qura (Makkah)'**
+  String get prayerMethodUmmAlQura;
+
+  /// No description provided for @prayerMethodMwl.
+  ///
+  /// In en, this message translates to:
+  /// **'Muslim World League'**
+  String get prayerMethodMwl;
+
+  /// No description provided for @prayerMethodEgyptian.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian General Authority'**
+  String get prayerMethodEgyptian;
+
+  /// No description provided for @prayerMethodKarachi.
+  ///
+  /// In en, this message translates to:
+  /// **'University of Karachi'**
+  String get prayerMethodKarachi;
+
+  /// No description provided for @prayerMethodDubai.
+  ///
+  /// In en, this message translates to:
+  /// **'Dubai'**
+  String get prayerMethodDubai;
+
+  /// No description provided for @prayerMethodQatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Qatar'**
+  String get prayerMethodQatar;
+
+  /// No description provided for @prayerMethodKuwait.
+  ///
+  /// In en, this message translates to:
+  /// **'Kuwait'**
+  String get prayerMethodKuwait;
+
+  /// No description provided for @prayerMethodNorthAmerica.
+  ///
+  /// In en, this message translates to:
+  /// **'North America (ISNA)'**
+  String get prayerMethodNorthAmerica;
+
+  /// No description provided for @prayerMethodTurkey.
+  ///
+  /// In en, this message translates to:
+  /// **'Türkiye (Diyanet)'**
+  String get prayerMethodTurkey;
+
+  /// No description provided for @madhabShafi.
+  ///
+  /// In en, this message translates to:
+  /// **'Shafi, Maliki, Hanbali'**
+  String get madhabShafi;
+
+  /// No description provided for @madhabHanafi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hanafi'**
+  String get madhabHanafi;
+
+  /// No description provided for @locationSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Location updated'**
+  String get locationSaved;
 }
 
 class _AppLocalizationsDelegate

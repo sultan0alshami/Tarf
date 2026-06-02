@@ -569,4 +569,74 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get timerDoneTapToDismiss => 'اضغط إعادة للإغلاق';
+
+  @override
+  String get locationPickerTitle => 'الموقع والطريقة';
+
+  @override
+  String get prayerLocationGroup => 'الموقع';
+
+  @override
+  String get prayerCityLabelField => 'المدينة أو المكان';
+
+  @override
+  String get prayerCityHint => 'مثال: الرياض';
+
+  @override
+  String get prayerLatitude => 'خط العرض';
+
+  @override
+  String get prayerLongitude => 'خط الطول';
+
+  @override
+  String get useMyLocation => 'استخدم موقعي';
+
+  @override
+  String get locationUnavailable =>
+      'موقع الجهاز غير متاح — أدخله يدويًا أدناه.';
+
+  @override
+  String get locationDenied => 'تم رفض إذن الموقع — يمكنك إدخاله يدويًا.';
+
+  @override
+  String get prayerMethodGroup => 'طريقة الحساب';
+
+  @override
+  String get prayerMadhabGroup => 'طريقة العصر (المذهب)';
+
+  @override
+  String get prayerMethodUmmAlQura => 'أم القرى (مكة)';
+
+  @override
+  String get prayerMethodMwl => 'رابطة العالم الإسلامي';
+
+  @override
+  String get prayerMethodEgyptian => 'الهيئة المصرية العامة';
+
+  @override
+  String get prayerMethodKarachi => 'جامعة كراتشي';
+
+  @override
+  String get prayerMethodDubai => 'دبي';
+
+  @override
+  String get prayerMethodQatar => 'قطر';
+
+  @override
+  String get prayerMethodKuwait => 'الكويت';
+
+  @override
+  String get prayerMethodNorthAmerica => 'أمريكا الشمالية (ISNA)';
+
+  @override
+  String get prayerMethodTurkey => 'تركيا (ديانت)';
+
+  @override
+  String get madhabShafi => 'شافعي ومالكي وحنبلي';
+
+  @override
+  String get madhabHanafi => 'حنفي';
+
+  @override
+  String get locationSaved => 'تم تحديث الموقع';
 }

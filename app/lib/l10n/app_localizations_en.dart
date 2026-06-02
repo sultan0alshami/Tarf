@@ -569,4 +569,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timerDoneTapToDismiss => 'Tap reset to dismiss';
+
+  @override
+  String get locationPickerTitle => 'Location & method';
+
+  @override
+  String get prayerLocationGroup => 'Location';
+
+  @override
+  String get prayerCityLabelField => 'City or place';
+
+  @override
+  String get prayerCityHint => 'e.g. Riyadh';
+
+  @override
+  String get prayerLatitude => 'Latitude';
+
+  @override
+  String get prayerLongitude => 'Longitude';
+
+  @override
+  String get useMyLocation => 'Use my location';
+
+  @override
+  String get locationUnavailable =>
+      'Device location isn\'t available — enter it manually below.';
+
+  @override
+  String get locationDenied =>
+      'Location permission was declined — you can enter it manually.';
+
+  @override
+  String get prayerMethodGroup => 'Calculation method';
+
+  @override
+  String get prayerMadhabGroup => 'Asr method (madhab)';
+
+  @override
+  String get prayerMethodUmmAlQura => 'Umm al-Qura (Makkah)';
+
+  @override
+  String get prayerMethodMwl => 'Muslim World League';
+
+  @override
+  String get prayerMethodEgyptian => 'Egyptian General Authority';
+
+  @override
+  String get prayerMethodKarachi => 'University of Karachi';
+
+  @override
+  String get prayerMethodDubai => 'Dubai';
+
+  @override
+  String get prayerMethodQatar => 'Qatar';
+
+  @override
+  String get prayerMethodKuwait => 'Kuwait';
+
+  @override
+  String get prayerMethodNorthAmerica => 'North America (ISNA)';
+
+  @override
+  String get prayerMethodTurkey => 'Türkiye (Diyanet)';
+
+  @override
+  String get madhabShafi => 'Shafi, Maliki, Hanbali';
+
+  @override
+  String get madhabHanafi => 'Hanafi';
+
+  @override
+  String get locationSaved => 'Location updated';
 }
