@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'tarf_repository.dart';
+
 /// Exports and deletes all locally-stored Tarf data. Backs the in-app
 /// data-export and account/data-deletion flows required by the app stores.
 /// (Cloud deletion of the Firestore subtree is handled by the sync layer once
@@ -39,3 +41,10 @@ abstract final class LocalDataManager {
     }
   }
 }
+
+// --- Phase 4 additions (repository-aware; legacy static API kept above) ---
+
+/// Repository-based export (identical output to the legacy prefs export). The
+/// repository is the single persistence seam after Task 9, so screens read the
+/// export through it without touching SharedPreferences directly.
+String exportJsonFromRepo(TarfRepository repo) => repo.exportJson();
