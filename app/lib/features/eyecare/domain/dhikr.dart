@@ -30,6 +30,19 @@ class Dhikr {
   /// Bundled recitation asset path, or null to fall back to TTS.
   final String? audio;
 
+  /// Returns a copy with [audio] replaced. Only the recitation pointer is ever
+  /// rewritten (by the asset-manifest drop-in resolver); the sacred text fields
+  /// are never altered, so no other field is exposed here.
+  Dhikr withAudio(String? audio) => Dhikr(
+        id: id,
+        arabic: arabic,
+        transliteration: transliteration,
+        english: english,
+        reference: reference,
+        virtue: virtue,
+        audio: audio,
+      );
+
   factory Dhikr.fromJson(Map<String, Object?> json) => Dhikr(
         id: json['id']! as String,
         arabic: json['arabic']! as String,
