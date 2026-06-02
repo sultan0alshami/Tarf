@@ -272,7 +272,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
               shape: const StadiumBorder(),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
-                onTap: () => context.push(Routes.eyeCareSettings),
+                onTap: () => context.push(Routes.locationPicker),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: TarfTokens.space5,

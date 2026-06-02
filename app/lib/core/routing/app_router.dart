@@ -8,6 +8,7 @@ import '../../features/alarm/presentation/alarm_ringing_screen.dart';
 import '../../features/alarm/presentation/alarm_screen.dart';
 import '../../features/eyecare/presentation/break_screen.dart';
 import '../../features/eyecare/presentation/eyecare_settings_screen.dart';
+import '../../features/eyecare/presentation/location_picker_screen.dart';
 import '../../features/focus/presentation/active_session_shelf.dart';
 import '../../features/focus/presentation/focus_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
@@ -32,6 +33,7 @@ abstract final class Routes {
   static const insights = '/insights';
   static const settings = '/settings';
   static const eyeCareSettings = '/settings/eyecare';
+  static const locationPicker = '/settings/prayer-location';
   static const eyeCareBreak = '/eyecare/break';
   static const account = '/settings/account';
   static const tasks = '/tasks';
@@ -107,6 +109,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.eyeCareSettings,
         builder: (context, state) => const EyeCareSettingsScreen(),
+      ),
+      GoRoute(
+        path: Routes.locationPicker,
+        builder: (context, state) => const LocationPickerScreen(),
       ),
       GoRoute(
         path: Routes.eyeCareBreak,
