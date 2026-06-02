@@ -11,6 +11,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../permissions/application/notification_priming.dart';
+import '../../permissions/presentation/degraded_permission_banner.dart';
 import '../application/alarm_derived.dart';
 import '../application/alarms_controller.dart';
 import '../domain/alarm_item.dart';
@@ -89,6 +90,9 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
       body: ListView(
         padding: const EdgeInsets.all(TarfTokens.space3),
         children: [
+          // Honest, calm notice when background delivery is degraded (zero-size
+          // when reliable, so no layout shift). Shows in both Standard & Prayer.
+          const DegradedPermissionBanner(),
           if (_mode == AlarmMode.prayer) ...[
             const _PrayerBanner(),
             const SizedBox(height: TarfTokens.space3),

@@ -14,6 +14,7 @@ import '../../eyecare/application/eyecare_live.dart';
 import '../../focus/application/focus_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../../insights/domain/daily_progress.dart';
+import '../../permissions/presentation/degraded_permission_banner.dart';
 import '../../todos/application/todos_controller.dart';
 
 /// The eye-care-led Home (Calm Sanctuary). The 20-20-20 engine is the hero;
@@ -72,6 +73,9 @@ class HomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(TarfTokens.space3),
         children: [
+          // Honest, calm degraded-delivery notice above the eye-care card
+          // (zero-size when delivery is reliable, so no layout shift).
+          const DegradedPermissionBanner(),
           // ---- Eye-care hero (the dominant object; tap to rest now) ----
           Card(
             child: InkWell(
