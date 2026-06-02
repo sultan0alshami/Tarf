@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/alarm/application/alarms_controller.dart';
@@ -47,6 +48,7 @@ class PermissionStateController extends Notifier<PermissionState> {
       _persist(state.afterExactAlarmResult(r));
 
   /// Test seam (synchronous, no I/O wait needed in unit tests).
+  @visibleForTesting
   void setForTest(PermissionState s) => state = s;
 }
 
