@@ -20,6 +20,7 @@ import '../../eyecare/application/eyecare_config_controller.dart';
 import '../application/saved_timers_controller.dart';
 import '../application/timer_controller.dart';
 import '../domain/saved_timer.dart';
+import '../domain/timer_sound_catalog.dart';
 
 const _presetMinutes = [1, 5, 10, 20, 30, 40];
 
@@ -32,12 +33,18 @@ class TimerScreen extends ConsumerStatefulWidget {
 
 class _TimerScreenState extends ConsumerState<TimerScreen> {
   /// Fires the looped completion sound + haptic once when the timer hits zero.
+  /// A saved timer plays ITS chosen sound (retagged to the timerDone role); an
+  /// ad-hoc (wheel-set) countdown keeps the role default. Read the live running
+  /// state here, not [build]'s snapshot, so the sound matches what just finished.
   Future<void> _onFinished() async {
     final cfg = ref.read(eyeCareConfigProvider); // reuse global sound/haptic flags
+    final data = ref.read(timerControllerProvider);
     final audio = ref.read(tarfAudioServiceProvider);
-    final base = SoundCatalog.forRole(SoundRole.timerDone);
+    final spec = data.soundId == kDefaultTimerSoundId
+        ? SoundCatalog.forRole(SoundRole.timerDone)
+        : SoundCatalog.forId(data.soundId, role: SoundRole.timerDone);
     if (cfg.soundEnabled) {
-      await audio.play(base,
+      await audio.play(spec,
           channel: AudioChannel.timer,
           loop: true,
           playThroughSilent: cfg.loudThroughSilence);

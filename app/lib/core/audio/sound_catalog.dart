@@ -58,4 +58,16 @@ abstract final class SoundCatalog {
     return SoundSpec.synth(base.id, role: role, layers: base.layers,
         defaultDuration: base.defaultDuration, gain: base.gain);
   }
+
+  /// The spec for a user-picked [id], retagged to [role] so callers that route
+  /// by role (e.g. the timer's completion channel) keep their role semantics
+  /// while honoring the chosen sound. Used by per-timer sound: a saved timer
+  /// stores an id; at zero we play THAT id at the [SoundRole.timerDone] role.
+  /// Asset-backed specs are returned as-is (no layers to retag).
+  static SoundSpec forId(String id, {required SoundRole role}) {
+    final base = byId(id);
+    if (base.isAsset) return base;
+    return SoundSpec.synth(base.id, role: role, layers: base.layers,
+        defaultDuration: base.defaultDuration, gain: base.gain);
+  }
 }
