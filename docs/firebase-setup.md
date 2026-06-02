@@ -106,6 +106,65 @@ firebase emulators:exec --project=demo-tarf --only auth,firestore \
   App Check enforcement. Verify those manually on a real project before release;
   Email/Password is fully emulator-testable.
 
+## Harden before enabling cloud (owner-gated)
+
+These are deliberately **not implemented yet**. They only matter once cloud is
+switched on with your real Firebase project (most need your emulator/console to
+verify), so they were recorded here during the Phase 4 review rather than coded
+blind. Each is a small, additive change — do them as part of the
+`flutterfire configure` + `configPresent = true` cut-over, not before.
+
+### 1. Tighten `firestore.rules` `validEnvelope()` (size + exact-keys guard)
+
+`app/firebase/firestore.rules` currently checks only that a write `hasAll(['payload',
+'updatedAt'])` and that `updatedAt is int`. That permits **extra top-level keys**
+and an **unbounded payload**. Before enforcing in production, bound both:
+
+```
+function validEnvelope() {
+  return request.resource.data.keys().hasOnly(['payload', 'updatedAt'])
+    && request.resource.data.size() == 2          // exactly the two fields
+    && request.resource.data.updatedAt is int
+    && request.resource.data.payload.size() < 4000; // max-payload guard (tune)
+}
+```
+
+Notes:
+- `hasOnly([...])` + `size() == 2` rejects any unexpected top-level field; today's
+  `hasAll(...)` does not.
+- The `payload.size()` cap is a coarse abuse guard (it counts map entries, not
+  bytes — Firestore has no per-field byte function in rules; the hard limit is the
+  ~1 MiB document cap). Pick a ceiling above the largest legitimate blob: the
+  `progress` map grows ~1 entry/day, so size it for several years of daily use
+  (e.g. a few thousand) with headroom, or split `progress` into the fine-grained
+  `dailyProgress/{day}` collection (see Task 6 in the Phase 4 plan) so no single
+  doc grows unbounded.
+- **Verify with the emulator** (`app/firebase/rules-tests`, `npm test`), which
+  needs **JDK 21+** — see the Local Emulator Suite section above. Add rules-test
+  cases: reject a write with a 3rd top-level key; reject an oversized payload;
+  accept a normal envelope.
+
+### 2. Debounce `FirestoreCloudMirror.onChange` to coalesce rapid edits
+
+`app/lib/core/cloud/firestore_cloud_mirror.dart` currently `await`s
+`pushPending()` on **every** repository write. The `WriteQueue` already coalesces
+by key (latest wins), but a burst of edits (e.g. dragging a duration slider, or a
+focus tick crediting progress) still triggers one `pushPending` per write, and
+thus repeated Firestore round-trips / cost.
+
+Add a small **debounce** (e.g. 300–800 ms) before `pushPending` so a burst of
+writes flushes once:
+
+- Enqueue immediately (keeps the durable, coalescing queue authoritative), but
+  schedule the flush on a restartable `Timer`; each new `onChange` cancels and
+  reschedules it. A final `flush()` on sign-out / app-pause guarantees nothing is
+  left unsent.
+- This is purely a cost/efficiency optimization — correctness already holds via
+  the queue. Keep guest/offline behaviour unchanged (the mirror is only active
+  when signed in).
+- Cover with a fake-clock test: N rapid `onChange` calls within the window →
+  exactly one `pushPending`; a write after the window → a second flush.
+
 ## Data model (per user, `/users/{uid}`)
 
 Phase 4 ships a **blob-per-key** layout: each `StorageKey` JSON blob is mirrored
