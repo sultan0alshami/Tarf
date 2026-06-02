@@ -1,0 +1,13 @@
+{
+  "name": "tarf-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tarf (طَرْف) — MV3 eye-care + dhikr break extension.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test test/*.mjs",
+    "lint": "node --check background.js && node --check offscreen.js && node --check popup.js && node --check sidepanel.js && node --check i18n.js",
+    "package": "node package.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
