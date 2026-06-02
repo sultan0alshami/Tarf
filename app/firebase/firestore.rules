@@ -1,17 +1,32 @@
 rules_version = '2';
 
 // Tarf Firestore security rules.
-// Every document is private to its owner: only the authenticated user whose
-// uid matches the {uid} path segment may read or write anything under it.
+// Every document is private to its owner. State docs are LWW envelopes:
+// { payload: <json>, updatedAt: <int millis> }.
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /users/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
 
-      // settings, dailyProgress/{yyyy-MM-dd}, focusSessions/{id}, todos/{id}, ...
-      match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == uid;
+    function validEnvelope() {
+      return request.resource.data.keys().hasAll(['payload', 'updatedAt'])
+        && request.resource.data.updatedAt is int;
+    }
+
+    // The user profile doc itself (optional metadata) — owner only.
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // LWW state blobs: settings, eyecareConfig, focusConfig, progress,
+      // todos, alarms, timers — one doc each. Writes MUST be valid envelopes,
+      // so no broad catch-all is allowed under the user (it would bypass the
+      // shape check). New subcollections must be added here explicitly.
+      match /state/{key} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && validEnvelope();
+        allow delete: if isOwner(uid);
       }
     }
 
