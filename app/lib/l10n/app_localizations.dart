@@ -1291,6 +1291,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location updated'**
   String get locationSaved;
+
+  /// No description provided for @timerSavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved timers'**
+  String get timerSavedTitle;
+
+  /// No description provided for @timerAddSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'New timer'**
+  String get timerAddSaved;
+
+  /// No description provided for @timerEditSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit timer'**
+  String get timerEditSaved;
+
+  /// No description provided for @timerNoneSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved timers yet'**
+  String get timerNoneSaved;
+
+  /// No description provided for @timerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get timerLabel;
+
+  /// No description provided for @timerLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Tea, Wudu, Study'**
+  String get timerLabelHint;
+
+  /// No description provided for @timerDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer deleted'**
+  String get timerDeleted;
+
+  /// No description provided for @timerRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get timerRun;
+
+  /// No description provided for @timerUnnamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get timerUnnamed;
 }
 
 class _AppLocalizationsDelegate

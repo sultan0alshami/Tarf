@@ -639,4 +639,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get locationSaved => 'تم تحديث الموقع';
+
+  @override
+  String get timerSavedTitle => 'المؤقتات المحفوظة';
+
+  @override
+  String get timerAddSaved => 'مؤقّت جديد';
+
+  @override
+  String get timerEditSaved => 'تعديل المؤقّت';
+
+  @override
+  String get timerNoneSaved => 'لا توجد مؤقتات محفوظة بعد';
+
+  @override
+  String get timerLabel => 'التسمية';
+
+  @override
+  String get timerLabelHint => 'مثال: شاي، وضوء، مذاكرة';
+
+  @override
+  String get timerDeleted => 'تم حذف المؤقّت';
+
+  @override
+  String get timerRun => 'ابدأ';
+
+  @override
+  String get timerUnnamed => 'مؤقّت';
 }

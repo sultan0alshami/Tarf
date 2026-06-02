@@ -243,5 +243,14 @@
   "prayerMethodTurkey": "تركيا (ديانت)",
   "madhabShafi": "شافعي ومالكي وحنبلي",
   "madhabHanafi": "حنفي",
-  "locationSaved": "تم تحديث الموقع"
+  "locationSaved": "تم تحديث الموقع",
+  "timerSavedTitle": "المؤقتات المحفوظة",
+  "timerAddSaved": "مؤقّت جديد",
+  "timerEditSaved": "تعديل المؤقّت",
+  "timerNoneSaved": "لا توجد مؤقتات محفوظة بعد",
+  "timerLabel": "التسمية",
+  "timerLabelHint": "مثال: شاي، وضوء، مذاكرة",
+  "timerDeleted": "تم حذف المؤقّت",
+  "timerRun": "ابدأ",
+  "timerUnnamed": "مؤقّت"
 }

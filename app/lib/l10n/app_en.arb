@@ -244,5 +244,14 @@
   "prayerMethodTurkey": "Türkiye (Diyanet)",
   "madhabShafi": "Shafi, Maliki, Hanbali",
   "madhabHanafi": "Hanafi",
-  "locationSaved": "Location updated"
+  "locationSaved": "Location updated",
+  "timerSavedTitle": "Saved timers",
+  "timerAddSaved": "New timer",
+  "timerEditSaved": "Edit timer",
+  "timerNoneSaved": "No saved timers yet",
+  "timerLabel": "Label",
+  "timerLabelHint": "e.g. Tea, Wudu, Study",
+  "timerDeleted": "Timer deleted",
+  "timerRun": "Start",
+  "timerUnnamed": "Timer"
 }

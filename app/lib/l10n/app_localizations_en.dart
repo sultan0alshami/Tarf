@@ -640,4 +640,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationSaved => 'Location updated';
+
+  @override
+  String get timerSavedTitle => 'Saved timers';
+
+  @override
+  String get timerAddSaved => 'New timer';
+
+  @override
+  String get timerEditSaved => 'Edit timer';
+
+  @override
+  String get timerNoneSaved => 'No saved timers yet';
+
+  @override
+  String get timerLabel => 'Label';
+
+  @override
+  String get timerLabelHint => 'e.g. Tea, Wudu, Study';
+
+  @override
+  String get timerDeleted => 'Timer deleted';
+
+  @override
+  String get timerRun => 'Start';
+
+  @override
+  String get timerUnnamed => 'Timer';
 }
