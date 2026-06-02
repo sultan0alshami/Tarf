@@ -206,5 +206,7 @@
   "prayerTimeUpdated": "تحديث أوقات الصلاة: {date}",
   "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
   "locationAndMethod": "الموقع والطريقة",
-  "tapToEnableSound": "اضغط لتفعيل الصوت"
+  "tapToEnableSound": "اضغط لتفعيل الصوت",
+  "breakSoundLabel": "صوت الاستراحة",
+  "soundPreview": "استماع"
 }

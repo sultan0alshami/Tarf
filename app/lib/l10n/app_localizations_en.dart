@@ -525,4 +525,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tapToEnableSound => 'Tap to enable sound';
+
+  @override
+  String get breakSoundLabel => 'Break sound';
+
+  @override
+  String get soundPreview => 'Preview';
 }

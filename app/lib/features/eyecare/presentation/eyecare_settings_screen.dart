@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/audio/audio_providers.dart';
+import '../../../core/audio/sound_catalog.dart';
+import '../../../core/audio/sound_spec.dart';
+import '../../../core/audio/tarf_audio_service.dart';
 import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
@@ -126,6 +130,16 @@ class EyeCareSettingsScreen extends ConsumerWidget {
                 ),
               ),
               TarfListRow(
+                icon: Icons.library_music_outlined,
+                title: l10n.breakSoundLabel,
+                trailing: Text(
+                  _soundtrackLabel(l10n, cfg.breakSoundtrack),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                onTap: () =>
+                    _pickBreakSound(context, ref, cfg.breakSoundtrack),
+              ),
+              TarfListRow(
                 title: l10n.hapticsLabel,
                 trailing: Switch(
                   value: cfg.hapticEnabled,
@@ -154,4 +168,55 @@ class EyeCareSettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Localized display name for a break soundtrack id (the curated subset).
+String _soundtrackLabel(AppLocalizations l10n, String id) => switch (id) {
+      'chime' => l10n.soundChime,
+      _ => l10n.soundCalm,
+    };
+
+/// Bottom-sheet chooser for the dhikr-break soundtrack. Selecting an option
+/// persists it and previews the sound on the dedicated preview channel so the
+/// choice is audible immediately (the visual check is the equal non-audio cue).
+Future<void> _pickBreakSound(
+    BuildContext context, WidgetRef ref, String current) async {
+  final l10n = AppLocalizations.of(context);
+  final audio = ref.read(tarfAudioServiceProvider);
+  await showModalBottomSheet<void>(
+    context: context,
+    builder: (sheetCtx) {
+      final scheme = Theme.of(sheetCtx).colorScheme;
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final id in SoundCatalog.breakSoundtrackIds)
+              ListTile(
+                title: Text(_soundtrackLabel(l10n, id)),
+                trailing: id == current
+                    ? Icon(Icons.check, color: scheme.primary)
+                    : null,
+                onTap: () {
+                  final cfg = ref.read(eyeCareConfigProvider);
+                  ref
+                      .read(eyeCareConfigProvider.notifier)
+                      .update(cfg.copyWith(breakSoundtrack: id));
+                  final base = SoundCatalog.byId(id);
+                  audio.play(
+                    SoundSpec.synth(base.id,
+                        role: SoundRole.breakBed,
+                        layers: base.layers,
+                        defaultDuration: base.defaultDuration,
+                        gain: base.gain),
+                    channel: AudioChannel.preview,
+                  );
+                  Navigator.of(sheetCtx).pop();
+                },
+              ),
+          ],
+        ),
+      );
+    },
+  );
 }

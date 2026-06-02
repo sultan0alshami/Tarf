@@ -207,5 +207,7 @@
   "prayerTimeUpdated": "Prayer time updated: {date}",
   "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
   "locationAndMethod": "Location & method",
-  "tapToEnableSound": "Tap to enable sound"
+  "tapToEnableSound": "Tap to enable sound",
+  "breakSoundLabel": "Break sound",
+  "soundPreview": "Preview"
 }

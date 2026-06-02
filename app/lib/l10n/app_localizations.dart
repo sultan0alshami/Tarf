@@ -1075,6 +1075,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to enable sound'**
   String get tapToEnableSound;
+
+  /// No description provided for @breakSoundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Break sound'**
+  String get breakSoundLabel;
+
+  /// No description provided for @soundPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get soundPreview;
 }
 
 class _AppLocalizationsDelegate

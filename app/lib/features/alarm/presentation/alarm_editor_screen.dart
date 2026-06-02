@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
+import '../../../core/audio/audio_providers.dart';
+import '../../../core/audio/sound_catalog.dart';
+import '../../../core/audio/sound_spec.dart';
+import '../../../core/audio/tarf_audio_service.dart';
 import '../../../core/format/numerals.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/widgets/tarf_wheel_picker.dart';
@@ -136,6 +140,7 @@ class _AlarmEditorScreenState extends ConsumerState<AlarmEditorScreen> {
 
   Future<void> _editSound() async {
     final l10n = AppLocalizations.of(context);
+    final audio = ref.read(tarfAudioServiceProvider);
     await showModalBottomSheet<void>(
       context: context,
       builder: (sheetCtx) {
@@ -152,9 +157,32 @@ class _AlarmEditorScreenState extends ConsumerState<AlarmEditorScreen> {
                     'calm' => l10n.soundCalm,
                     _ => l10n.soundDefault,
                   }),
-                  trailing: id == _sound
-                      ? Icon(Icons.check, color: scheme.primary)
-                      : null,
+                  // Check (when selected) + a preview button that plays the
+                  // chosen catalog sound once on the dedicated preview channel
+                  // without dismissing the sheet — proving the picker drives
+                  // playback.
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (id == _sound)
+                        Icon(Icons.check, color: scheme.primary),
+                      IconButton(
+                        icon: const Icon(Icons.play_arrow),
+                        tooltip: l10n.soundPreview,
+                        onPressed: () {
+                          final base = SoundCatalog.byId(id);
+                          audio.play(
+                            SoundSpec.synth(base.id,
+                                role: SoundRole.alarm,
+                                layers: base.layers,
+                                defaultDuration: base.defaultDuration,
+                                gain: base.gain),
+                            channel: AudioChannel.preview,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   onTap: () {
                     setState(() => _sound = id);
                     Navigator.of(sheetCtx).pop();

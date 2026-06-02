@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/audio/web_audio_prime.dart';
 import 'core/routing/app_router.dart';
 import 'core/settings/settings_controller.dart';
 import 'features/alarm/presentation/alarm_host.dart';
@@ -36,8 +37,22 @@ class TarfApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
+      // The web "tap to enable sound" banner sits in the persistent app chrome,
+      // below the routed content. The dhikr break is pushed on the root
+      // navigator (fullscreen dialog) ABOVE this builder, so the banner can
+      // never overlay the sacred break screen.
       builder: (context, child) => AlarmHost(
-        child: EyeCareHost(child: child ?? const SizedBox.shrink()),
+        child: EyeCareHost(
+          child: Stack(
+            children: [
+              child ?? const SizedBox.shrink(),
+              const Align(
+                alignment: Alignment.topCenter,
+                child: TapToEnableSoundBanner(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -525,4 +525,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tapToEnableSound => 'اضغط لتفعيل الصوت';
+
+  @override
+  String get breakSoundLabel => 'صوت الاستراحة';
+
+  @override
+  String get soundPreview => 'استماع';
 }

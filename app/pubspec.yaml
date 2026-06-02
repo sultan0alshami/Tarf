@@ -86,6 +86,8 @@ flutter:
 
   assets:
     - assets/dhikr/
+    - assets/audio/
+    - assets/audio/recitation/
 
   fonts:
     - family: Inter
