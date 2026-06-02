@@ -17,8 +17,13 @@ void main() {
   testWidgets('every main screen renders and navigation works (EN)',
       (tester) async {
     SharedPreferences.setMockInitialValues({
-      'tarf.app_settings.v1':
-          jsonEncode({'onboardingComplete': true, 'localeCode': 'en'}),
+      'tarf.app_settings.v1': jsonEncode({
+        'onboardingComplete': true,
+        'localeCode': 'en',
+        // Opt out of the one-time Alarm-tab priming sheet; this test only
+        // exercises navigation, and the priming flow has its own test.
+        'notifPrimingShown': true,
+      }),
     });
     final prefs = await SharedPreferences.getInstance();
 

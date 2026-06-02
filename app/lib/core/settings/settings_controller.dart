@@ -51,6 +51,11 @@ class SettingsController extends Notifier<AppSettings> {
 
   Future<void> completeOnboarding() =>
       _persist(state.copyWith(onboardingComplete: true));
+
+  /// Records that the one-time notification priming sheet has been shown, so the
+  /// Alarm tab prompts exactly once regardless of the user's choice.
+  Future<void> markNotifPrimingShown() =>
+      _persist(state.copyWith(notifPrimingShown: true));
 }
 
 final settingsControllerProvider =

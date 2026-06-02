@@ -10,6 +10,7 @@ import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
+import '../../permissions/application/notification_priming.dart';
 import '../application/alarm_derived.dart';
 import '../application/alarms_controller.dart';
 import '../domain/alarm_item.dart';
@@ -31,6 +32,17 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
   AlarmMode _mode = const bool.fromEnvironment('FORCE_PRAYER')
       ? AlarmMode.prayer
       : AlarmMode.standard;
+
+  @override
+  void initState() {
+    super.initState();
+    // First visit to the Alarm tab is the calm, in-context moment to ask for
+    // notification permission (so alarms + prayer reminders can ring when Tarf
+    // is closed). Runs exactly once; a no-op thereafter.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeRunNotificationPriming(context, ref);
+    });
+  }
 
   void _openEditor([AlarmItem? item]) =>
       context.push(Routes.alarmEditor, extra: item);

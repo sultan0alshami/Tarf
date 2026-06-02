@@ -12,6 +12,7 @@ class AppSettings {
     this.numeralSystem,
     this.reduceMotion = false,
     this.onboardingComplete = false,
+    this.notifPrimingShown = false,
   });
 
   final ThemeMode themeMode;
@@ -27,6 +28,10 @@ class AppSettings {
   /// Whether the first-launch onboarding has been completed.
   final bool onboardingComplete;
 
+  /// Whether the one-time notification priming sheet has been shown (so the
+  /// first visit to the Alarm tab prompts exactly once, regardless of choice).
+  final bool notifPrimingShown;
+
   Locale get locale => Locale(localeCode);
 
   NumeralSystem get effectiveNumerals =>
@@ -39,6 +44,7 @@ class AppSettings {
     bool clearNumeralSystem = false,
     bool? reduceMotion,
     bool? onboardingComplete,
+    bool? notifPrimingShown,
   }) {
     return AppSettings(
       themeMode: themeMode ?? this.themeMode,
@@ -47,6 +53,7 @@ class AppSettings {
           clearNumeralSystem ? null : (numeralSystem ?? this.numeralSystem),
       reduceMotion: reduceMotion ?? this.reduceMotion,
       onboardingComplete: onboardingComplete ?? this.onboardingComplete,
+      notifPrimingShown: notifPrimingShown ?? this.notifPrimingShown,
     );
   }
 
@@ -56,6 +63,7 @@ class AppSettings {
         'numeralSystem': numeralSystem?.name,
         'reduceMotion': reduceMotion,
         'onboardingComplete': onboardingComplete,
+        'notifPrimingShown': notifPrimingShown,
       };
 
   factory AppSettings.fromJson(Map<String, Object?> json) {
@@ -71,6 +79,7 @@ class AppSettings {
       },
       reduceMotion: (json['reduceMotion'] as bool?) ?? false,
       onboardingComplete: (json['onboardingComplete'] as bool?) ?? false,
+      notifPrimingShown: (json['notifPrimingShown'] as bool?) ?? false,
     );
   }
 }
