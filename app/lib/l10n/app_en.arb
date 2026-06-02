@@ -257,6 +257,6 @@
   "tasbihHide": "Hide counter",
   "tasbihTapHint": "Tap to count",
   "tasbihReset": "Reset count",
-  "tasbihProgress": "{count} / {target}",
-  "@tasbihProgress": { "placeholders": { "count": { "type": "int" }, "target": { "type": "int" } } }
+  "tasbihProgress": "{value}",
+  "@tasbihProgress": { "description": "Tasbih cycle progress 'count / target'; value is pre-formatted with the active numeral system so it matches the toggle-aware count circle above it.", "placeholders": { "value": { "type": "String" } } }
 }

@@ -378,9 +378,16 @@ class _TasbihPanelState extends ConsumerState<_TasbihPanel>
           ],
         ),
         const SizedBox(height: TarfTokens.space1),
-        // Cycle progress — forced LTR so "count / target" never mirrors.
+        // Cycle progress — forced LTR so "count / target" never mirrors. Both
+        // numbers are formatted with the active numeral system so this line
+        // matches the toggle-aware count circle above (gen-l10n int placeholders
+        // would force Western digits and mismatch under the Eastern toggle).
         Text(
-          l10n.tasbihProgress(inCycle, target),
+          l10n.tasbihProgress(
+            '${Numerals.formatInt(inCycle, widget.numerals)}'
+            ' / '
+            '${Numerals.formatInt(target, widget.numerals)}',
+          ),
           textDirection: TextDirection.ltr,
           style: Theme.of(
             context,

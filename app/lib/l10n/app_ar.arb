@@ -256,6 +256,6 @@
   "tasbihHide": "إخفاء العدّاد",
   "tasbihTapHint": "انقر للعدّ",
   "tasbihReset": "تصفير العدّ",
-  "tasbihProgress": "{count} / {target}",
-  "@tasbihProgress": { "placeholders": { "count": { "type": "int" }, "target": { "type": "int" } } }
+  "tasbihProgress": "{value}",
+  "@tasbihProgress": { "description": "تقدم دورة التسبيح 'العدّ / الهدف'؛ القيمة منسّقة مسبقًا بنظام الأرقام الفعّال لتطابق دائرة العدّ أعلاه.", "placeholders": { "value": { "type": "String" } } }
 }

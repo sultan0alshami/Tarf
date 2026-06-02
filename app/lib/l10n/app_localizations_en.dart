@@ -677,7 +677,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tasbihReset => 'Reset count';
 
   @override
-  String tasbihProgress(int count, int target) {
-    return '$count / $target';
+  String tasbihProgress(String value) {
+    return '$value';
   }
 }

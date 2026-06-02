@@ -1364,11 +1364,11 @@ abstract class AppLocalizations {
   /// **'Reset count'**
   String get tasbihReset;
 
-  /// No description provided for @tasbihProgress.
+  /// Tasbih cycle progress 'count / target'; value is pre-formatted with the active numeral system so it matches the toggle-aware count circle above it.
   ///
   /// In en, this message translates to:
-  /// **'{count} / {target}'**
-  String tasbihProgress(int count, int target);
+  /// **'{value}'**
+  String tasbihProgress(String value);
 }
 
 class _AppLocalizationsDelegate
