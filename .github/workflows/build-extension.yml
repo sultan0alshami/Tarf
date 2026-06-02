@@ -69,6 +69,23 @@ jobs:
         working-directory: ./app
         run: flutter build web --release --no-web-resources-cdn
 
+      # --- Extension static checks + package (no secrets) ---------------------
+      - name: Lint, test & package extension
+        id: ext_checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f extension/package.json ]; then
+            echo "extension/package.json not present — skipping (fallback step will zip)."
+            echo "done=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          cd extension
+          npm ci || npm install
+          npm run lint
+          npm test
+          npm run package           # produces tarf-extension.zip with no secrets
+          echo "done=true" >> "$GITHUB_OUTPUT"
+
       # --- Extension assembly + zip -------------------------------------------
       # Runs the extension's own build script, which is responsible for copying
       # app/build/web into extension/ui and producing the packaged zip. We probe
@@ -79,6 +96,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ "${{ steps.ext_checks.outputs.done }}" = "true" ]; then
+            echo "Extension already linted/tested/zipped by Node step."
+            echo "built=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
           if [ ! -d extension ]; then
             echo "extension/ not present yet — skipping (delivered by a later sprint)."
             echo "built=false" >> "$GITHUB_OUTPUT"
