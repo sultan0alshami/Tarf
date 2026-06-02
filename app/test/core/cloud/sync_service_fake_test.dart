@@ -41,6 +41,64 @@ void main() {
       expect((p['2026-05-31'] as Map)['s'], 3); // cloud-only day kept
     });
 
+    test('progress merge carries the day string and handles a missing counter', () {
+      final result = mergeOnSignIn(
+        local: {
+          StorageKey.progress: const Versioned({
+            '2026-06-01': {'day': '2026-06-01', 'fm': 40}, // no 's'
+          }, 100),
+        },
+        cloud: {
+          StorageKey.progress: const Versioned({
+            '2026-06-01': {'day': '2026-06-01', 's': 3, 'fm': 10},
+          }, 200),
+        },
+      );
+      final day = (result[StorageKey.progress]!.value! as Map)['2026-06-01'] as Map;
+      expect(day['day'], '2026-06-01'); // string carried, never max-merged
+      expect(day['fm'], 40); // max(40,10)
+      expect(day['s'], 3); // present on only one side
+    });
+
+    test('progress merge asserts (no silent local-wins) on a non-numeric counter', () {
+      // A non-num where a counter is expected is a schema bug; it must surface
+      // loudly in dev rather than masquerade as a max (the old _maxNum footgun).
+      expect(
+        () => mergeOnSignIn(
+          local: {
+            StorageKey.progress: const Versioned({
+              '2026-06-01': {'fm': 'oops'},
+            }, 100),
+          },
+          cloud: {
+            StorageKey.progress: const Versioned({
+              '2026-06-01': {'fm': 5},
+            }, 200),
+          },
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test('progress merge asserts on an unexpected (non-counter) field', () {
+      // Both sides present so the merge path (not the LWW shortcut) runs.
+      expect(
+        () => mergeOnSignIn(
+          local: {
+            StorageKey.progress: const Versioned({
+              '2026-06-01': {'fm': 1, 'newField': 9},
+            }, 100),
+          },
+          cloud: {
+            StorageKey.progress: const Versioned({
+              '2026-06-01': {'fm': 2},
+            }, 200),
+          },
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
     test('key present on only one side is kept', () {
       final result = mergeOnSignIn(
         local: {

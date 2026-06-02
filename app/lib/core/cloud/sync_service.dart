@@ -56,6 +56,13 @@ Map<StorageKey, Versioned> mergeOnSignIn({
   return out;
 }
 
+/// The numeric per-day counter fields of [DailyProgress] (its `toJson` keys
+/// minus the `day` string). These are the ONLY fields max-merged so neither side
+/// loses activity. Keeping this explicit means a future non-numeric progress
+/// field can't masquerade as a max-merge (which previously degraded to a silent
+/// local-wins): it would trip the assert in [_mergeDay] in debug builds.
+const _progressCounterFields = {'fm', 's', 'bt', 'bs'};
+
 Map<String, Object?> _mergeProgress(Object? a, Object? b) {
   final ma = (a as Map?)?.cast<String, Object?>() ?? const {};
   final mb = (b as Map?)?.cast<String, Object?>() ?? const {};
@@ -64,17 +71,59 @@ Map<String, Object?> _mergeProgress(Object? a, Object? b) {
   for (final d in days) {
     final da = (ma[d] as Map?)?.cast<String, Object?>() ?? const {};
     final db = (mb[d] as Map?)?.cast<String, Object?>() ?? const {};
-    final fields = {...da.keys, ...db.keys};
-    out[d] = {
-      for (final f in fields) f: _maxNum(da[f], db[f]),
-    };
+    out[d] = _mergeDay(da, db);
   }
   return out;
 }
 
-Object? _maxNum(Object? a, Object? b) {
-  if (a is num && b is num) return a > b ? a : b;
-  return a ?? b;
+/// Merges one day's record. The `day` string is carried through (both sides key
+/// the same day); the known numeric counters are max-merged; any unexpected
+/// field is asserted against (so a schema change without updating this merge
+/// fails loudly in dev) and otherwise preserved non-destructively.
+Map<String, Object?> _mergeDay(
+  Map<String, Object?> da,
+  Map<String, Object?> db,
+) {
+  final out = <String, Object?>{};
+  // Preserve the day key verbatim (string, not a counter).
+  final day = da['day'] ?? db['day'];
+  if (day != null) out['day'] = day;
+
+  for (final f in _progressCounterFields) {
+    final av = da[f];
+    final bv = db[f];
+    if (av == null && bv == null) continue;
+    out[f] = _maxNum(av, bv);
+  }
+
+  // Anything outside the known schema: surface loudly in dev, keep safely in
+  // release rather than dropping the user's data.
+  final unexpected = {...da.keys, ...db.keys}
+    ..removeAll(_progressCounterFields)
+    ..remove('day');
+  assert(
+    unexpected.isEmpty,
+    'DailyProgress gained unexpected field(s) $unexpected — add them to '
+    '_progressCounterFields (numeric) or handle their merge explicitly.',
+  );
+  for (final f in unexpected) {
+    out[f] = da[f] ?? db[f];
+  }
+  return out;
+}
+
+/// Max of two values that are expected to be numeric counters. A type mismatch
+/// (a non-numeric value where a counter is expected) is a schema bug: assert in
+/// debug, then degrade safely by treating a non-num as 0 so a stray value can
+/// never silently win over a real count.
+num _maxNum(Object? a, Object? b) {
+  assert(
+    (a == null || a is num) && (b == null || b is num),
+    'Progress counter expected num, got a=${a.runtimeType}, b=${b.runtimeType}',
+  );
+  final na = a is num ? a : 0;
+  final nb = b is num ? b : 0;
+  return na > nb ? na : nb;
 }
 
 /// In-memory fake: a plain map "cloud", deterministic status transitions.
