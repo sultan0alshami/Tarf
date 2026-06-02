@@ -229,11 +229,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'ترنّ المنبّهات في الخلفية عند السماح بالإشعارات. وإلا، يرنّ طَرْف أثناء فتحه فقط.';
 
   @override
-  String get notifPrimingTitle => 'تذكيرات الراحة';
+  String get notifPrimingTitle => 'تنبيهات الخلفية';
 
   @override
   String get notifPrimingBody =>
-      'حتى يصلك تذكير الراحة وأنت خارج التطبيق، يحتاج طَرْف إذنك بالإشعارات. بدونها سيُذكّرك أثناء فتحه فقط.';
+      'لكي ترنّ منبّهاتك وتذكيرات الصلاة وأنت خارج التطبيق، يحتاج طَرْف إذنك بالإشعارات. تذكيرات العناية بالعين تعمل دائمًا أثناء فتح طَرْف؛ وبدون الإشعارات تصلك المنبّهات وتذكيرات الصلاة أثناء فتحه فقط.';
 
   @override
   String get exactAlarmPrimingBody =>
@@ -250,7 +250,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bgRemindersOff =>
-      'التنبيهات في الخلفية متوقّفة — سيُذكّرك طَرْف أثناء فتحه فقط.';
+      'تنبيهات الخلفية متوقّفة — ترنّ المنبّهات وتذكيرات الصلاة أثناء فتح طَرْف فقط.';
 
   @override
   String get bgForegroundOnlyPlatform =>

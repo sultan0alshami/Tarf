@@ -521,13 +521,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifPrimingTitle.
   ///
   /// In en, this message translates to:
-  /// **'Break reminders'**
+  /// **'Background reminders'**
   String get notifPrimingTitle;
 
   /// No description provided for @notifPrimingBody.
   ///
   /// In en, this message translates to:
-  /// **'To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.'**
+  /// **'To ring your alarms and prayer reminders even when Tarf is closed, we need notification permission. Eye-care reminders always work while Tarf is open; without notifications, alarms and prayer reminders also only arrive while it\'s open.'**
   String get notifPrimingBody;
 
   /// No description provided for @exactAlarmPrimingBody.
@@ -557,7 +557,7 @@ abstract class AppLocalizations {
   /// No description provided for @bgRemindersOff.
   ///
   /// In en, this message translates to:
-  /// **'Background reminders off — Tarf will only remind you while it\'s open.'**
+  /// **'Background reminders off — alarms and prayer reminders ring only while Tarf is open.'**
   String get bgRemindersOff;
 
   /// No description provided for @bgForegroundOnlyPlatform.

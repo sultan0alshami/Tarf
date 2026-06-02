@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/notifications/double_fire_guard.dart';
-import '../../../core/notifications/scheduled_item.dart';
 import '../../focus/application/focus_controller.dart';
 import '../core/active_time_tracker.dart';
 import '../core/prayer_service.dart';
@@ -94,18 +92,11 @@ class _EyeCareHostState extends ConsumerState<EyeCareHost>
     );
     if (decideBreak(state) != BreakDecision.fire) return;
 
-    // Double-fire guard: collapse with the OS-scheduled eye-break for this
-    // minute so a backgrounded delivery and the foreground overlay never both
-    // fire for the same logical break.
-    final guardKey = const ScheduledItem(
-      kind: ScheduledKind.eyeBreak,
-      id: 'eye',
-      title: '',
-      body: '',
-      soundId: 'default',
-    ).guardKeyFor(DateTime(now.year, now.month, now.day, now.hour, now.minute));
-    if (!ref.read(doubleFireGuardProvider).claim(guardKey, now)) return;
-
+    // No double-fire guard here: eye-breaks fire on *active screen-time*, not a
+    // fixed wall-clock minute, so they are never OS-scheduled in the background.
+    // This foreground overlay is the only path that ever shows an eye-break,
+    // and there is nothing to collapse against. (Only standard alarms + prayer
+    // times have a background path — see AlarmHost._ring.)
     _breakShowing = true;
     try {
       await showEyeBreak(context, ref);

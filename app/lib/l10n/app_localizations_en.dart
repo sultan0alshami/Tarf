@@ -229,11 +229,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Alarms ring in the background when notifications are allowed. Otherwise, Tarf rings only while open.';
 
   @override
-  String get notifPrimingTitle => 'Break reminders';
+  String get notifPrimingTitle => 'Background reminders';
 
   @override
   String get notifPrimingBody =>
-      'To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.';
+      'To ring your alarms and prayer reminders even when Tarf is closed, we need notification permission. Eye-care reminders always work while Tarf is open; without notifications, alarms and prayer reminders also only arrive while it\'s open.';
 
   @override
   String get exactAlarmPrimingBody =>
@@ -250,7 +250,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bgRemindersOff =>
-      'Background reminders off — Tarf will only remind you while it\'s open.';
+      'Background reminders off — alarms and prayer reminders ring only while Tarf is open.';
 
   @override
   String get bgForegroundOnlyPlatform =>

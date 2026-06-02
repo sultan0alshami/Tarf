@@ -38,8 +38,12 @@ void main() {
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    // Honest body present.
-    expect(find.textContaining('only while open'), findsOneWidget);
+    // Honest body present: eye-care works while open; alarms/prayers need
+    // notifications to fire when closed. (No overpromise that eye-care reminders
+    // fire in the background.)
+    expect(find.textContaining('Eye-care reminders always work while Tarf is open'),
+        findsOneWidget);
+    expect(find.textContaining('rest your eyes'), findsNothing);
     await tester.tap(find.text('Enable'));
     await tester.pumpAndSettle();
     expect(result, PrimingChoice.enable);
