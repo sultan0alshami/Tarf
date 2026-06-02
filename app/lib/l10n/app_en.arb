@@ -206,5 +206,6 @@
   "@prayerTimesForDate": { "placeholders": { "date": { "type": "String" } } },
   "prayerTimeUpdated": "Prayer time updated: {date}",
   "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
-  "locationAndMethod": "Location & method"
+  "locationAndMethod": "Location & method",
+  "tapToEnableSound": "Tap to enable sound"
 }

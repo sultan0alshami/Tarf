@@ -522,4 +522,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationAndMethod => 'Location & method';
+
+  @override
+  String get tapToEnableSound => 'Tap to enable sound';
 }

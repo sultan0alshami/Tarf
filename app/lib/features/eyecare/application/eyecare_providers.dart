@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/audio/audio_providers.dart';
+import '../../../core/audio/web_audio_prime.dart';
 import '../audio/break_audio.dart';
 import '../audio/just_audio_break_player.dart';
 import '../data/dhikr_repository.dart';
@@ -12,13 +13,20 @@ final dhikrRepositoryProvider = FutureProvider<DhikrRepository>(
 );
 
 /// The break audio player — a thin adapter over the shared audio engine that
-/// plays the user's chosen break soundtrack for the full duration.
+/// plays the user's chosen break soundtrack for the full duration. When a web
+/// autoplay block is reported, the calm tap-to-enable banner is surfaced (it
+/// lives in the app chrome below the break route, so it never overlays the
+/// sacred dhikr screen); the visual ring still drives the break length.
 final breakAudioProvider = Provider<BreakAudioPlayer>((ref) {
   final audio = ref.watch(tarfAudioServiceProvider);
   final soundtrack = ref.watch(
     eyeCareConfigProvider.select((c) => c.breakSoundtrack),
   );
-  return JustAudioBreakPlayer(audio: audio, soundtrackId: soundtrack);
+  return JustAudioBreakPlayer(
+    audio: audio,
+    soundtrackId: soundtrack,
+    onBlocked: () => ref.read(webAudioPrimeProvider.notifier).reportBlocked(),
+  );
 });
 
 /// Persisted rotation counter so the dhikr varies across breaks and restarts.

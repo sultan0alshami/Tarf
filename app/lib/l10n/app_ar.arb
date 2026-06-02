@@ -205,5 +205,6 @@
   "@prayerTimesForDate": { "placeholders": { "date": { "type": "String" } } },
   "prayerTimeUpdated": "تحديث أوقات الصلاة: {date}",
   "@prayerTimeUpdated": { "placeholders": { "date": { "type": "String" } } },
-  "locationAndMethod": "الموقع والطريقة"
+  "locationAndMethod": "الموقع والطريقة",
+  "tapToEnableSound": "اضغط لتفعيل الصوت"
 }

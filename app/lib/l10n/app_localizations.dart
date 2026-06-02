@@ -1069,6 +1069,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location & method'**
   String get locationAndMethod;
+
+  /// No description provided for @tapToEnableSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to enable sound'**
+  String get tapToEnableSound;
 }
 
 class _AppLocalizationsDelegate

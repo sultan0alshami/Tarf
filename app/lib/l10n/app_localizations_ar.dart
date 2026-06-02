@@ -522,4 +522,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get locationAndMethod => 'الموقع والطريقة';
+
+  @override
+  String get tapToEnableSound => 'اضغط لتفعيل الصوت';
 }
