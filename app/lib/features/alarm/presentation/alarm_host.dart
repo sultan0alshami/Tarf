@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/audio/audio_providers.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../eyecare/core/prayer_service.dart';
 import '../application/alarms_controller.dart';
 import '../domain/alarm_item.dart';
 import 'alarm_ringing_screen.dart';
+import 'alarm_sound.dart';
 
 /// Foreground alarm watcher. While the app is open it checks every few seconds
 /// and, when an enabled alarm becomes due (or a snooze elapses), presents the
@@ -27,6 +29,7 @@ class AlarmHost extends ConsumerStatefulWidget {
 class _AlarmHostState extends ConsumerState<AlarmHost> {
   Timer? _timer;
   bool _ringing = false;
+  AlarmSoundController? _sound;
   final Set<String> _firedThisMinute = {};
   final Map<String, DateTime> _snoozeUntil = {};
 
@@ -117,7 +120,18 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
     _ringing = true;
     final navigator = Navigator.of(context, rootNavigator: true);
 
+    // Loop the alarm's chosen sound + repeating haptic for its ring duration.
+    final cfg = ref.read(eyeCareConfigProvider);
+    final sound = AlarmSoundController(audio: ref.read(tarfAudioServiceProvider));
+    _sound = sound;
+    unawaited(sound.start(
+      item,
+      hapticEnabled: cfg.hapticEnabled,
+      playThroughSilent: cfg.loudThroughSilence,
+    ));
+
     void stop() {
+      unawaited(sound.stop());
       // One-shot alarms switch off after ringing so they don't repeat daily.
       if (item.days.isEmpty && item.enabled) {
         ref.read(alarmsControllerProvider.notifier).toggle(item.id);
@@ -126,6 +140,7 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
     }
 
     void snooze() {
+      unawaited(sound.stop());
       _snoozeUntil[item.id] =
           DateTime.now().add(Duration(minutes: item.snoozeMinutes));
       navigator.pop();
@@ -146,6 +161,10 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
         ),
       );
     } finally {
+      // Auto-timeout / OS-popped route also silences the alarm.
+      await sound.stop();
+      sound.dispose();
+      _sound = null;
       _ringing = false;
     }
   }
@@ -153,6 +172,7 @@ class _AlarmHostState extends ConsumerState<AlarmHost> {
   @override
   void dispose() {
     _timer?.cancel();
+    _sound?.dispose();
     super.dispose();
   }
 
