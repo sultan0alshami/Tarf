@@ -9,18 +9,9 @@
     "default_icon": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" }
   },
   "icons": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": [
-    "alarms",
-    "notifications",
-    "offscreen",
-    "storage",
-    "idle"
-  ],
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "permissions": ["alarms", "notifications", "offscreen", "storage", "idle", "sidePanel"],
   "host_permissions": [],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" }
 }
