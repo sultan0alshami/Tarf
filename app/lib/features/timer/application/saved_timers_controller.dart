@@ -1,24 +1,19 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../domain/saved_timer.dart';
 
-const _key = 'tarf.saved_timers.v1';
-
 /// Persisted list of saved timers (label + duration + soundId). Mirrors the
-/// AlarmsController persistence pattern.
+/// AlarmsController persistence pattern, routed through the repository so the
+/// cloud mirror sees timer changes (StorageKey.timers -> tarf.saved_timers.v1).
 class SavedTimersController extends Notifier<List<SavedTimer>> {
   @override
   List<SavedTimer> build() {
-    final raw = ref.watch(sharedPreferencesProvider).getString(_key);
-    if (raw == null) return const [];
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.timers);
+    if (raw is! List) return const [];
     try {
-      return (jsonDecode(raw) as List)
-          .cast<Map<String, Object?>>()
-          .map(SavedTimer.fromJson)
-          .toList();
+      return raw.cast<Map<String, Object?>>().map(SavedTimer.fromJson).toList();
     } catch (_) {
       return const [];
     }
@@ -26,10 +21,9 @@ class SavedTimersController extends Notifier<List<SavedTimer>> {
 
   Future<void> _persist(List<SavedTimer> next) async {
     state = next;
-    await ref.read(sharedPreferencesProvider).setString(
-          _key,
-          jsonEncode(next.map((t) => t.toJson()).toList()),
-        );
+    await ref
+        .read(tarfRepositoryProvider)
+        .write(StorageKey.timers, next.map((t) => t.toJson()).toList());
   }
 
   /// Adds [item] if its id is new, otherwise replaces the timer with that id.

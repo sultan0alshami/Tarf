@@ -1,28 +1,22 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../../../core/time/clock.dart';
 import '../domain/daily_progress.dart';
 
-const _key = 'tarf.progress.v1';
-
 /// Reactive, persisted day-keyed progress. Other features call [addFocusSession]
-/// / [addBreak]; Insights reads the map. (Repository-style API so a Firestore
-/// sync layer can later mirror these same writes.)
+/// / [addBreak]; Insights reads the map. Writes go through the repository so the
+/// Firestore sync layer mirrors these same writes (with per-day MAX merge).
 class ProgressController extends Notifier<Map<String, DailyProgress>> {
   @override
   Map<String, DailyProgress> build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final raw = prefs.getString(_key);
-    if (raw == null) return {};
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.progress);
+    if (raw is! Map) return {};
     try {
-      final decoded = jsonDecode(raw) as Map<String, Object?>;
-      return decoded.map(
-        (k, v) =>
-            MapEntry(k, DailyProgress.fromJson(v! as Map<String, Object?>)),
-      );
+      return raw.cast<String, Object?>().map(
+            (k, v) => MapEntry(k, DailyProgress.fromJson(v! as Map<String, Object?>)),
+          );
     } catch (_) {
       return {};
     }
@@ -30,9 +24,9 @@ class ProgressController extends Notifier<Map<String, DailyProgress>> {
 
   Future<void> _persist(Map<String, DailyProgress> next) async {
     state = next;
-    final encoded =
-        jsonEncode(next.map((k, v) => MapEntry(k, v.toJson())));
-    await ref.read(sharedPreferencesProvider).setString(_key, encoded);
+    await ref
+        .read(tarfRepositoryProvider)
+        .write(StorageKey.progress, next.map((k, v) => MapEntry(k, v.toJson())));
   }
 
   DailyProgress _today(DateTime now) {

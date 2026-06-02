@@ -1,22 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../domain/todo.dart';
-
-const _key = 'tarf.todos.v1';
 
 class TodosController extends Notifier<List<Todo>> {
   @override
   List<Todo> build() {
-    final raw = ref.watch(sharedPreferencesProvider).getString(_key);
-    if (raw == null) return const [];
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.todos);
+    if (raw is! List) return const [];
     try {
-      return (jsonDecode(raw) as List)
-          .cast<Map<String, Object?>>()
-          .map(Todo.fromJson)
-          .toList();
+      return raw.cast<Map<String, Object?>>().map(Todo.fromJson).toList();
     } catch (_) {
       return const [];
     }
@@ -24,10 +18,9 @@ class TodosController extends Notifier<List<Todo>> {
 
   Future<void> _persist(List<Todo> next) async {
     state = next;
-    await ref.read(sharedPreferencesProvider).setString(
-          _key,
-          jsonEncode(next.map((t) => t.toJson()).toList()),
-        );
+    await ref
+        .read(tarfRepositoryProvider)
+        .write(StorageKey.todos, next.map((t) => t.toJson()).toList());
   }
 
   Future<void> add(String title, {int estimated = 1, required int nowMs}) {

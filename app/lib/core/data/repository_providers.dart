@@ -2,13 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/account/application/cloud_account.dart';
 import '../../firebase/firebase_flags.dart';
+import '../settings/settings_controller.dart';
 import 'cloud_mirror.dart';
+import 'prefs_repository.dart';
 import 'tarf_repository.dart';
 
-/// The app's single repository. Overridden in main() with a PrefsRepository
-/// (and, when cloud is enabled, an attached CloudMirror).
+/// The app's single persistence seam. Defaults to a [PrefsRepository] built from
+/// the already-initialized [sharedPreferencesProvider], so any scope that
+/// provides prefs (the app and every existing test) gets a working repository
+/// for free. main() overrides it with the SAME PrefsRepository instance that
+/// also has a CloudMirror attached when cloud is enabled.
 final tarfRepositoryProvider = Provider<TarfRepository>(
-  (ref) => throw UnimplementedError('tarfRepositoryProvider must be overridden'),
+  (ref) => PrefsRepository(ref.watch(sharedPreferencesProvider)),
 );
 
 /// The active cloud mirror. Defaults to a no-op; replaced when signed in.

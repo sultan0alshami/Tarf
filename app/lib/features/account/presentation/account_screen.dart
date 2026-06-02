@@ -16,13 +16,14 @@ import '../../focus/application/focus_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../../todos/application/todos_controller.dart';
 import '../application/account_controller.dart';
+import '../application/cloud_account.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
   Future<void> _export(BuildContext context, WidgetRef ref) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await Clipboard.setData(ClipboardData(text: LocalDataManager.exportJson(prefs)));
+    final repo = ref.read(tarfRepositoryProvider);
+    await Clipboard.setData(ClipboardData(text: exportJsonFromRepo(repo)));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).dataExported)),
@@ -54,16 +55,15 @@ class AccountScreen extends ConsumerWidget {
     );
     if (confirmed != true) return;
 
-    // Cloud-aware: when signed in, clear the Firestore subtree + auth account
-    // before the local wipe so a failure mid-way still allows a retry. Guest
-    // (signed out) clears local only.
+    // Cloud-aware, repository-routed: purgeEverything always clears local and,
+    // when signed in, deletes the Firestore subtree + auth account first so a
+    // failure mid-way still allows a retry. Guest (signed out) clears local only.
     final account = ref.read(accountControllerProvider);
-    if (account.isSignedIn) {
-      final cloud = ref.read(cloudAccountProvider);
-      await cloud.deleteCloudData(account.user!.uid);
-      await cloud.deleteAccount();
-    }
-    await LocalDataManager.deleteAll(ref.read(sharedPreferencesProvider));
+    await purgeEverything(
+      repo: ref.read(tarfRepositoryProvider),
+      cloudAccount: ref.read(cloudAccountProvider),
+      uid: account.isSignedIn ? account.user!.uid : null,
+    );
     // Reset every in-memory store so the app returns to a clean state.
     ref
       ..invalidate(settingsControllerProvider)

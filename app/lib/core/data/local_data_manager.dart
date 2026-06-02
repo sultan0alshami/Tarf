@@ -18,6 +18,7 @@ abstract final class LocalDataManager {
     'tarf.progress.v1',
     'tarf.todos.v1',
     'tarf.alarms.v1',
+    'tarf.saved_timers.v1',
   ];
 
   /// A pretty-printed JSON snapshot of everything stored on this device.

@@ -8,8 +8,9 @@ enum StorageKey {
   progress('tarf.progress.v1'),
   todos('tarf.todos.v1'),
   alarms('tarf.alarms.v1'),
-  // Reserved for Phase 3 multi-timer list; additive, no call-site churn here.
-  timers('tarf.timers.v1');
+  // Phase 3 multi-timer list. The shipped key is `tarf.saved_timers.v1`, so the
+  // enum maps to it for byte-compatibility (additive, no on-disk change).
+  timers('tarf.saved_timers.v1');
 
   const StorageKey(this.id);
   final String id;

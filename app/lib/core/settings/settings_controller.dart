@@ -1,29 +1,28 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/repository_providers.dart';
+import '../data/tarf_repository.dart';
 import '../format/numerals.dart';
 import 'app_settings.dart';
 
 /// Provides the [SharedPreferences] instance. Overridden in `main()` after async
-/// initialization so the rest of the app can read it synchronously.
+/// initialization so the rest of the app can read it synchronously. The default
+/// [tarfRepositoryProvider] is built from this, so every feature persists
+/// through the repository while the on-disk format stays byte-identical.
 final sharedPreferencesProvider = Provider<SharedPreferences>(
   (ref) => throw UnimplementedError('sharedPreferencesProvider must be overridden'),
 );
 
-const _settingsKey = 'tarf.app_settings.v1';
-
-/// Holds [AppSettings], loading from and persisting to [SharedPreferences].
+/// Holds [AppSettings], loading from and persisting via the [TarfRepository].
 class SettingsController extends Notifier<AppSettings> {
   @override
   AppSettings build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final raw = prefs.getString(_settingsKey);
-    if (raw == null) return const AppSettings();
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.settings);
+    if (raw is! Map) return const AppSettings();
     try {
-      return AppSettings.fromJson(jsonDecode(raw) as Map<String, Object?>);
+      return AppSettings.fromJson(raw.cast<String, Object?>());
     } catch (_) {
       return const AppSettings();
     }
@@ -31,8 +30,7 @@ class SettingsController extends Notifier<AppSettings> {
 
   Future<void> _persist(AppSettings next) async {
     state = next;
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(_settingsKey, jsonEncode(next.toJson()));
+    await ref.read(tarfRepositoryProvider).write(StorageKey.settings, next.toJson());
   }
 
   Future<void> setThemeMode(ThemeMode mode) => _persist(state.copyWith(themeMode: mode));

@@ -1,21 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../domain/eyecare_config.dart';
-
-const _key = 'tarf.eyecare_config.v1';
 
 /// Holds the persisted [EyeCareConfig].
 class EyeCareConfigController extends Notifier<EyeCareConfig> {
   @override
   EyeCareConfig build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final raw = prefs.getString(_key);
-    if (raw == null) return const EyeCareConfig();
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.eyecareConfig);
+    if (raw is! Map) return const EyeCareConfig();
     try {
-      return EyeCareConfig.fromJson(jsonDecode(raw) as Map<String, Object?>);
+      return EyeCareConfig.fromJson(raw.cast<String, Object?>());
     } catch (_) {
       return const EyeCareConfig();
     }
@@ -23,8 +19,7 @@ class EyeCareConfigController extends Notifier<EyeCareConfig> {
 
   Future<void> update(EyeCareConfig config) async {
     state = config;
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(_key, jsonEncode(config.toJson()));
+    await ref.read(tarfRepositoryProvider).write(StorageKey.eyecareConfig, config.toJson());
   }
 }
 

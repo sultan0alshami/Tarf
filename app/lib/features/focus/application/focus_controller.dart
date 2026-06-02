@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,23 +7,21 @@ import '../../../core/audio/audio_providers.dart';
 import '../../../core/audio/sound_catalog.dart';
 import '../../../core/audio/sound_spec.dart';
 import '../../../core/audio/tarf_audio_service.dart';
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../../todos/application/todos_controller.dart';
 import '../domain/focus_models.dart';
 
-const _cfgKey = 'tarf.focus_config.v1';
-
 /// Persisted Pomodoro configuration.
 class FocusConfigController extends Notifier<FocusConfig> {
   @override
   FocusConfig build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final raw = prefs.getString(_cfgKey);
-    if (raw == null) return const FocusConfig();
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.focusConfig);
+    if (raw is! Map) return const FocusConfig();
     try {
-      return FocusConfig.fromJson(jsonDecode(raw) as Map<String, Object?>);
+      return FocusConfig.fromJson(raw.cast<String, Object?>());
     } catch (_) {
       return const FocusConfig();
     }
@@ -32,9 +29,7 @@ class FocusConfigController extends Notifier<FocusConfig> {
 
   Future<void> update(FocusConfig config) async {
     state = config;
-    await ref
-        .read(sharedPreferencesProvider)
-        .setString(_cfgKey, jsonEncode(config.toJson()));
+    await ref.read(tarfRepositoryProvider).write(StorageKey.focusConfig, config.toJson());
   }
 }
 

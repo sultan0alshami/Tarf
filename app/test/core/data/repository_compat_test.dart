@@ -13,6 +13,8 @@ void main() {
     expect(StorageKey.progress.id, 'tarf.progress.v1');
     expect(StorageKey.todos.id, 'tarf.todos.v1');
     expect(StorageKey.alarms.id, 'tarf.alarms.v1');
+    // P3 saved-timers: enum maps to the shipped key (NOT the reserved name).
+    expect(StorageKey.timers.id, 'tarf.saved_timers.v1');
   });
 
   test('reads data written the OLD way (raw setString) unchanged', () async {

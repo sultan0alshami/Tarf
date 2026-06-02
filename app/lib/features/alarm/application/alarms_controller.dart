@@ -1,22 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/settings/settings_controller.dart';
+import '../../../core/data/repository_providers.dart';
+import '../../../core/data/tarf_repository.dart';
 import '../domain/alarm_item.dart';
-
-const _key = 'tarf.alarms.v1';
 
 class AlarmsController extends Notifier<List<AlarmItem>> {
   @override
   List<AlarmItem> build() {
-    final raw = ref.watch(sharedPreferencesProvider).getString(_key);
-    if (raw == null) return const [];
+    final raw = ref.watch(tarfRepositoryProvider).read(StorageKey.alarms);
+    if (raw is! List) return const [];
     try {
-      return (jsonDecode(raw) as List)
-          .cast<Map<String, Object?>>()
-          .map(AlarmItem.fromJson)
-          .toList();
+      return raw.cast<Map<String, Object?>>().map(AlarmItem.fromJson).toList();
     } catch (_) {
       return const [];
     }
@@ -25,10 +19,9 @@ class AlarmsController extends Notifier<List<AlarmItem>> {
   Future<void> _persist(List<AlarmItem> next) async {
     final sorted = [...next]..sort((a, b) => a.minuteOfDay.compareTo(b.minuteOfDay));
     state = sorted;
-    await ref.read(sharedPreferencesProvider).setString(
-          _key,
-          jsonEncode(sorted.map((a) => a.toJson()).toList()),
-        );
+    await ref
+        .read(tarfRepositoryProvider)
+        .write(StorageKey.alarms, sorted.map((a) => a.toJson()).toList());
   }
 
   Future<void> add({
