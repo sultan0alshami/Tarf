@@ -63,6 +63,15 @@ module.exports = async function handler(req, res) {
     res.statusCode = 400;
     return res.end(JSON.stringify({ ok: false, reason: v.reason }));
   }
+  if (v.testMode && gateway !== "stub") {
+    // Loud signal: an UNSIGNED callback was accepted only because no webhook
+    // secret is set yet. Set <GATEWAY>_WEBHOOK_SECRET before production so
+    // forged "payment_paid" callbacks can't be accepted (deploy-before-keys).
+    console.warn(
+      "[webhook] ACCEPTING UNSIGNED callback in TEST MODE — set " +
+        gateway.toUpperCase() + "_WEBHOOK_SECRET before going live."
+    );
+  }
   // Signature good (or test mode). Idempotent ack; persistence is an owner concern.
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");

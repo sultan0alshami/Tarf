@@ -60,9 +60,9 @@ jobs:
         working-directory: ./app
         run: flutter pub get
 
-      - name: Generate code (build_runner)
-        working-directory: ./app
-        run: dart run build_runner build --delete-conflicting-outputs
+      # NOTE: no build_runner step — Tarf uses hand-written Riverpod
+      # (Notifier/NotifierProvider) and no Drift codegen, so there are zero
+      # .g.dart/.drift.dart parts to generate.
 
       # CanvasKit locally bundled (no CDN) so the MV3 CSP is satisfied.
       - name: Build Flutter web (extension UI)

@@ -18,10 +18,17 @@ test("popup states the honest 'only while Chrome is open' limit", () => {
   assert.match(html, /data-i18n="limit"/);
 });
 
-test("popup shows a dhikr line and quick links to the site", () => {
+test("popup shows a dhikr line and the full-app download link", () => {
   const html = read("popup.html");
   assert.match(html, /id="dhikr"/);
-  assert.match(html, /tarf\.app\/support|data-i18n="link\.support"/);
+  assert.match(html, /tarf\.app\/download|data-i18n="link\.download"/);
+});
+
+test("no donate/support affordance on the dhikr surfaces (reverence)", () => {
+  for (const f of ["popup.html", "sidepanel.html"]) {
+    const html = read(f);
+    assert.doesNotMatch(html, /support|ادعمنا|link\.support/);
+  }
 });
 
 test("i18n module exposes ar+en and the limit/breakNow keys", () => {

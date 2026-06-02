@@ -5,6 +5,18 @@
 // Keys are read from process.env ONLY in donate.js (handler scope) — never here.
 // =============================================================================
 
+// Append query params to a URL that may already carry a query string, choosing
+// `?` or `&` correctly — so a callback base like `…/support.html?thanks=1`
+// never produces a malformed `?thanks=1?status=success`.
+function appendParams(url, params) {
+  const sep = String(url).includes("?") ? "&" : "?";
+  const qs = Object.keys(params)
+    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== "")
+    .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+    .join("&");
+  return qs ? url + sep + qs : url;
+}
+
 class PaymentGateway {
   get id() { return "abstract"; }
   isConfigured() { return false; }
@@ -82,8 +94,8 @@ class StripeGateway extends PaymentGateway {
     const secret = process.env.STRIPE_SECRET_KEY;
     const form = new URLSearchParams();
     form.set("mode", "payment");
-    form.set("success_url", callbackUrl + "?status=success");
-    form.set("cancel_url", callbackUrl + "?status=cancelled");
+    form.set("success_url", appendParams(callbackUrl, { status: "success" }));
+    form.set("cancel_url", appendParams(callbackUrl, { status: "cancelled" }));
     form.set("line_items[0][quantity]", "1");
     form.set("line_items[0][price_data][currency]", currency.toLowerCase());
     form.set("line_items[0][price_data][unit_amount]", String(amountMinor));
@@ -140,5 +152,5 @@ function selectGateway(key) {
 
 module.exports = {
   PaymentGateway, MoyasarGateway, TapGateway, StripeGateway, StubGateway,
-  GatewayError, GATEWAYS, selectGateway,
+  GatewayError, GATEWAYS, selectGateway, appendParams,
 };
