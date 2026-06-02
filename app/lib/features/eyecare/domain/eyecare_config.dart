@@ -59,6 +59,7 @@ class EyeCareConfig {
     this.prayerLongitude = 46.6753,
     this.prayerMethod = 'ummAlQura',
     this.prayerMadhab = 'shafi',
+    this.prayerCityLabel = '',
     this.prayerAlarmsEnabled = const {'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'},
     this.mergeWithPomodoro = false,
   });
@@ -100,6 +101,10 @@ class EyeCareConfig {
   final String prayerMethod;
   final String prayerMadhab;
 
+  /// Human-readable city/place shown on the Prayer screen (e.g. "Riyadh").
+  /// Display-only; prayer times are computed from lat/lng/method/madhab.
+  final String prayerCityLabel;
+
   /// Which daily prayers ring as alarms in Prayer mode (subset of
   /// fajr/dhuhr/asr/maghrib/isha).
   final Set<String> prayerAlarmsEnabled;
@@ -134,6 +139,7 @@ class EyeCareConfig {
     double? prayerLongitude,
     String? prayerMethod,
     String? prayerMadhab,
+    String? prayerCityLabel,
     Set<String>? prayerAlarmsEnabled,
     bool? mergeWithPomodoro,
   }) {
@@ -166,6 +172,7 @@ class EyeCareConfig {
       prayerLongitude: prayerLongitude ?? this.prayerLongitude,
       prayerMethod: prayerMethod ?? this.prayerMethod,
       prayerMadhab: prayerMadhab ?? this.prayerMadhab,
+      prayerCityLabel: prayerCityLabel ?? this.prayerCityLabel,
       prayerAlarmsEnabled: prayerAlarmsEnabled ?? this.prayerAlarmsEnabled,
       mergeWithPomodoro: mergeWithPomodoro ?? this.mergeWithPomodoro,
     );
@@ -199,6 +206,7 @@ class EyeCareConfig {
         'prayerLng': prayerLongitude,
         'prayerMethod': prayerMethod,
         'prayerMadhab': prayerMadhab,
+        'prayerCity': prayerCityLabel,
         'prayerAlarms': prayerAlarmsEnabled.toList(),
         'mergeWithPomodoro': mergeWithPomodoro,
       };
@@ -240,6 +248,7 @@ class EyeCareConfig {
       prayerLongitude: (j['prayerLng'] as num?)?.toDouble() ?? 46.6753,
       prayerMethod: (j['prayerMethod'] as String?) ?? 'ummAlQura',
       prayerMadhab: (j['prayerMadhab'] as String?) ?? 'shafi',
+      prayerCityLabel: (j['prayerCity'] as String?) ?? '',
       prayerAlarmsEnabled: ((j['prayerAlarms'] as List?)?.cast<String>().toSet()) ??
           const {'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'},
       mergeWithPomodoro: (j['mergeWithPomodoro'] as bool?) ?? false,
