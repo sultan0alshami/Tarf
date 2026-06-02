@@ -58,6 +58,9 @@ class WebAudioPrime extends Notifier<WebAudioPrimeState> {
       defaultDuration: Duration(milliseconds: 120),
     );
     await audio.play(primeTone, channel: AudioChannel.preview);
+    // The container may be torn down during the await (e.g. test/teardown);
+    // never mutate state on a disposed notifier.
+    if (!ref.mounted) return;
     state = state.copyWith(primed: true, blocked: false);
   }
 }
