@@ -17,8 +17,17 @@ timers/audio/notifications inside an MV3 service worker (it sleeps, has no DOM).
   calm 20-second sound with the Web Audio API (start chime → gentle pad → end
   chime). No bundled audio file needed; the sound ending = break over.
 - `popup.html/.js/.css` — the control surface (enable, interval, snooze, "take
-  a break now", live next-break countdown). On-brand teal, light/dark.
-- `dhikr.json` — the rotating, non-sectarian dhikr set (mirrors the app).
+  a break now", live next-break countdown). Arabic-first RTL, teal, light/dark.
+  Includes a rotating dhikr line, quick links to tarf.app, and the honest
+  "only while Chrome is open" limit statement.
+- `i18n.js` — AR/EN string table + `window.TarfI18n` helper. Arabic is the
+  default; a one-tap `EN` toggle switches language and persists direction/lang
+  on the `<html>` element.
+- `sidepanel.html/.js` — persistent timer/streak dashboard rendered in
+  `chrome.sidePanel`. Shows next-break countdown, a "take a break now" button,
+  and a rotating dhikr line. Reuses `popup.css` and `i18n.js`.
+- `dhikr.json` — the fully-diacritized (tashkil), non-sectarian dhikr set
+  (mirrors the app's reverence rules).
 
 ## Load it (unpacked)
 
@@ -29,15 +38,38 @@ timers/audio/notifications inside an MV3 service worker (it sleeps, has no DOM).
    notification + hear the 20-second sound. The scheduled break fires every
    20 minutes of active browsing.
 
-## Package for the Chrome Web Store
+## Develop
 
-```powershell
-pwsh ./package.ps1   # produces tarf-extension.zip
+```bash
+npm test              # node:test suite (dhikr + manifest + popup invariants; 13 tests)
+npm run lint          # node --check on all JS files (syntax validation, no network)
+npm run package       # cross-platform: produces tarf-extension.zip via Node (no native zip needed)
 ```
 
-Upload the zip in the Chrome Web Store Developer Dashboard. See
-`../docs/store/chrome-web-store.md` for the single-purpose description and the
-per-permission justifications (alarms, notifications, offscreen, storage, idle).
+All tests use `node:test`/`node:assert` — **no npm runtime deps** and **no env
+vars required**. The full suite runs offline.
+
+## Package for the Chrome Web Store
+
+```bash
+npm run package       # cross-platform Node packager → tarf-extension.zip
+# or on Windows:
+pwsh ./package.ps1    # PowerShell packager (same output)
+```
+
+Upload `tarf-extension.zip` in the Chrome Web Store Developer Dashboard.
+See `STORE_LISTING.md` for the single-purpose statement and the per-permission
+justifications. Full submission guide: `../docs/store/chrome-web-store.md`.
+
+Permissions (justified in STORE_LISTING.md):
+`alarms`, `notifications`, `offscreen`, `storage`, `idle`, `sidePanel`.
+No host permissions. No remote code. CSP: `script-src 'self'; object-src 'self'`.
+
+## Localization (AR default, EN toggle)
+
+Arabic is the default language. The popup and side panel expose an `EN` toggle
+that calls `window.TarfI18n.toggle()` — switching language, text direction, and
+all `data-i18n` elements without a page reload.
 
 ## Optional enhancement (post-v1)
 
