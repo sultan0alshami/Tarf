@@ -1,5 +1,6 @@
 :root {
   --accent: #0E7C66;
+  --accent-light: #2FB89B;
   --bg: #ffffff;
   --fg: #15201d;
   --muted: #5b6b66;
@@ -18,10 +19,40 @@ body {
   background: var(--bg);
   color: var(--fg);
 }
+
+/* RTL body text alignment */
+html[dir="rtl"] body { text-align: right; }
+html[dir="ltr"] body { text-align: left; }
+
 header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .brand { display: flex; flex-direction: column; }
 .brand .ar { font-size: 22px; font-weight: 700; }
 .brand .en { font-size: 11px; color: var(--muted); }
+
+/* Language toggle button */
+.lang {
+  margin-inline-start: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+.lang:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Dhikr display */
+.dhikr-ar {
+  font-family: "Amiri", "Scheherazade New", "Traditional Arabic", serif;
+  font-size: 20px;
+  text-align: center;
+  line-height: 1.9;
+  color: var(--accent);
+  margin: 10px 0 4px;
+  padding: 0 8px;
+  min-height: 32px;
+}
 
 .status {
   margin: 14px 0;
@@ -53,6 +84,22 @@ button { cursor: pointer; font: inherit; }
 .snooze button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); }
 .snooze button:hover { border-color: var(--accent); color: var(--accent); }
 
+/* Quick links row */
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.links a {
+  color: var(--accent);
+  text-decoration: none;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+}
+.links a:hover { border-bottom-color: var(--accent); }
+
 footer { margin-top: 16px; font-size: 11px; color: var(--muted); text-align: center; }
 
 /* iOS-style switch */
@@ -62,3 +109,10 @@ footer { margin-top: 16px; font-size: 11px; color: var(--muted); text-align: cen
 .slider::before { content: ""; position: absolute; height: 22px; width: 22px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
 .switch input:checked + .slider { background: var(--accent); }
 .switch input:checked + .slider::before { transform: translateX(18px); }
+
+/* Side panel: wider, scrollable */
+body.panel {
+  width: 360px;
+  min-height: 200px;
+  padding: 20px;
+}
