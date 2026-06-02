@@ -44,7 +44,10 @@ class FakeGeoLocator implements GeoLocator {
   }
 }
 
-/// Override in main() (or a platform bootstrap) with the geolocator-backed impl
-/// once Phase-4 platform permissions are wired. Defaults to manual-first.
+/// Defaults to manual-first ([UnavailableGeoLocator]): the picker fully works on
+/// lat/lng/city entry alone, and no native location-permission surface ships.
+/// Device geolocation is a FUTURE DELIBERATE OPT-IN — adding it means re-adding
+/// the `geolocator` dependency, a real GeoLocator impl, and the platform
+/// permission strings together, then overriding this provider in a bootstrap.
 final geoLocatorProvider =
     Provider<GeoLocator>((ref) => const UnavailableGeoLocator());
