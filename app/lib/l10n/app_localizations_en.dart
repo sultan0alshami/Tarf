@@ -670,4 +670,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permBannerTitle => 'Reminder delivery';
+
+  @override
+  String get tasbihShow => 'Count dhikr';
+
+  @override
+  String get tasbihHide => 'Hide counter';
+
+  @override
+  String get tasbihTapHint => 'Tap to count';
+
+  @override
+  String get tasbihReset => 'Reset count';
+
+  @override
+  String tasbihCompleted(int n) {
+    return 'Completed $n';
+  }
+
+  @override
+  String tasbihProgress(int count, int target) {
+    return '$count / $target';
+  }
 }

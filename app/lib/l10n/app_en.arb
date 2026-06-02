@@ -254,5 +254,13 @@
   "timerDeleted": "Timer deleted",
   "timerRun": "Start",
   "timerUnnamed": "Timer",
-  "permBannerTitle": "Reminder delivery"
+  "permBannerTitle": "Reminder delivery",
+  "tasbihShow": "Count dhikr",
+  "tasbihHide": "Hide counter",
+  "tasbihTapHint": "Tap to count",
+  "tasbihReset": "Reset count",
+  "tasbihCompleted": "Completed {n}",
+  "@tasbihCompleted": { "placeholders": { "n": { "type": "int" } } },
+  "tasbihProgress": "{count} / {target}",
+  "@tasbihProgress": { "placeholders": { "count": { "type": "int" }, "target": { "type": "int" } } }
 }

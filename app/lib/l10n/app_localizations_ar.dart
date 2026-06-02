@@ -669,4 +669,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get permBannerTitle => 'تسليم التذكيرات';
+
+  @override
+  String get tasbihShow => 'عدّ الذكر';
+
+  @override
+  String get tasbihHide => 'إخفاء العدّاد';
+
+  @override
+  String get tasbihTapHint => 'انقر للعدّ';
+
+  @override
+  String get tasbihReset => 'تصفير العدّ';
+
+  @override
+  String tasbihCompleted(int n) {
+    return 'أتممت $n';
+  }
+
+  @override
+  String tasbihProgress(int count, int target) {
+    return '$count / $target';
+  }
 }

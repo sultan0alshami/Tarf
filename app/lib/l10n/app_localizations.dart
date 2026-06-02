@@ -1351,6 +1351,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder delivery'**
   String get permBannerTitle;
+
+  /// No description provided for @tasbihShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Count dhikr'**
+  String get tasbihShow;
+
+  /// No description provided for @tasbihHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide counter'**
+  String get tasbihHide;
+
+  /// No description provided for @tasbihTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to count'**
+  String get tasbihTapHint;
+
+  /// No description provided for @tasbihReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset count'**
+  String get tasbihReset;
+
+  /// No description provided for @tasbihCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed {n}'**
+  String tasbihCompleted(int n);
+
+  /// No description provided for @tasbihProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / {target}'**
+  String tasbihProgress(int count, int target);
 }
 
 class _AppLocalizationsDelegate
