@@ -45,6 +45,7 @@ class EyeCareConfig {
     this.soundEnabled = true,
     this.hapticEnabled = true,
     this.loudThroughSilence = false,
+    this.breakSoundtrack = 'calm',
     this.preBreakHeadsUp = true,
     this.preBreakLeadMicro = const Duration(seconds: 10),
     this.preBreakLeadLong = const Duration(seconds: 30),
@@ -77,6 +78,9 @@ class EyeCareConfig {
   final bool soundEnabled;
   final bool hapticEnabled;
   final bool loudThroughSilence;
+
+  /// Stable SoundCatalog id chosen for the dhikr break bed.
+  final String breakSoundtrack;
   final bool preBreakHeadsUp;
   final Duration preBreakLeadMicro;
   final Duration preBreakLeadLong;
@@ -115,6 +119,7 @@ class EyeCareConfig {
     bool? soundEnabled,
     bool? hapticEnabled,
     bool? loudThroughSilence,
+    String? breakSoundtrack,
     bool? preBreakHeadsUp,
     Duration? preBreakLeadMicro,
     Duration? preBreakLeadLong,
@@ -146,6 +151,7 @@ class EyeCareConfig {
       soundEnabled: soundEnabled ?? this.soundEnabled,
       hapticEnabled: hapticEnabled ?? this.hapticEnabled,
       loudThroughSilence: loudThroughSilence ?? this.loudThroughSilence,
+      breakSoundtrack: breakSoundtrack ?? this.breakSoundtrack,
       preBreakHeadsUp: preBreakHeadsUp ?? this.preBreakHeadsUp,
       preBreakLeadMicro: preBreakLeadMicro ?? this.preBreakLeadMicro,
       preBreakLeadLong: preBreakLeadLong ?? this.preBreakLeadLong,
@@ -179,6 +185,7 @@ class EyeCareConfig {
         'sound': soundEnabled,
         'haptic': hapticEnabled,
         'loudThroughSilence': loudThroughSilence,
+        'breakSoundtrack': breakSoundtrack,
         'preBreakHeadsUp': preBreakHeadsUp,
         'preLeadMicroS': preBreakLeadMicro.inSeconds,
         'preLeadLongS': preBreakLeadLong.inSeconds,
@@ -216,6 +223,7 @@ class EyeCareConfig {
       soundEnabled: (j['sound'] as bool?) ?? true,
       hapticEnabled: (j['haptic'] as bool?) ?? true,
       loudThroughSilence: (j['loudThroughSilence'] as bool?) ?? false,
+      breakSoundtrack: (j['breakSoundtrack'] as String?) ?? 'calm',
       preBreakHeadsUp: (j['preBreakHeadsUp'] as bool?) ?? true,
       preBreakLeadMicro: secs(j['preLeadMicroS'], 10),
       preBreakLeadLong: secs(j['preLeadLongS'], 30),
