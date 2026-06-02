@@ -50,6 +50,10 @@ dependencies:
   just_audio: ^0.10.5
   audio_session: ^0.2.3
   adhan: ^2.0.0+1
+  flutter_local_notifications: ^19.0.0
+  android_alarm_manager_plus: ^4.0.0
+  timezone: ^0.10.0
+  flutter_timezone: ^4.0.0
 
 dev_dependencies:
   flutter_test:
