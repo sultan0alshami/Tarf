@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tracks whether a *reverent* full-screen overlay (the dhikr eye-break) is
@@ -14,28 +15,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// banner lives) is layered ABOVE the Router's Navigator, so a fullscreen route
 /// pushed on the root navigator does NOT cover the banner by z-order alone.
 /// Suppressing by state is the reliable guarantee. See [[reverence]] in design.
-class ReverentOverlay extends Notifier<int> {
-  @override
-  int build() => 0;
+///
+/// Why a [ValueNotifier] and not a Riverpod `Notifier`'s `state`: the break must
+/// claim the overlay SYNCHRONOUSLY in its `initState` so the banner is gone on
+/// the break's very first painted frame (a post-frame/microtask flip lands a
+/// frame late, flashing the banner over the fading-in sacred line). Riverpod
+/// forbids writing provider state during build/initState, but a plain
+/// [ValueNotifier] may be mutated there — and the banner still reacts via the
+/// derived [reverentOverlayActiveProvider], which mirrors it.
+class ReverentOverlay {
+  ReverentOverlay._();
 
-  /// Call when a reverent overlay appears (e.g. BreakOverlay.initState).
-  void enter() {
-    if (ref.mounted) state = state + 1;
-  }
+  /// Process-wide count of reverent overlays currently on screen. App chrome is
+  /// a single tree, so one shared signal is correct (and lets the break claim it
+  /// synchronously from `initState`).
+  static final ValueNotifier<int> count = ValueNotifier<int>(0);
+
+  /// Call when a reverent overlay appears (e.g. BreakOverlay.initState). Safe to
+  /// call synchronously during build/initState.
+  static void enter() => count.value = count.value + 1;
 
   /// Call when it leaves (e.g. BreakOverlay.dispose). Never goes below zero.
-  /// The leave() is deferred a microtask by callers, so the provider may already
-  /// be disposed (e.g. a test tearing down) — guard against that.
-  void leave() {
-    if (ref.mounted) state = state > 0 ? state - 1 : 0;
-  }
+  static void leave() => count.value = count.value > 0 ? count.value - 1 : 0;
 }
 
-final reverentOverlayProvider = NotifierProvider<ReverentOverlay, int>(
-  ReverentOverlay.new,
-);
-
-/// True while at least one reverent overlay is on screen.
-final reverentOverlayActiveProvider = Provider<bool>(
-  (ref) => ref.watch(reverentOverlayProvider) > 0,
-);
+/// True while at least one reverent overlay is on screen. Mirrors the shared
+/// [ReverentOverlay.count] ValueNotifier so widgets can `ref.watch` it; rebuilds
+/// whenever the count crosses any change (the banner only cares about > 0).
+final reverentOverlayActiveProvider = Provider<bool>((ref) {
+  final notifier = ReverentOverlay.count;
+  void listener() => ref.invalidateSelf();
+  notifier.addListener(listener);
+  ref.onDispose(() => notifier.removeListener(listener));
+  return notifier.value > 0;
+});

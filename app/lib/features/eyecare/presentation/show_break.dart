@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/overlay/reverent_overlay.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../application/eyecare_config_controller.dart';
@@ -35,6 +36,14 @@ Future<void> showEyeBreak(
     navigator.pop();
   }
 
+  // Claim the reverent overlay SYNCHRONOUSLY, before pushing, so incidental
+  // chrome (e.g. the web tap-to-enable-sound banner) is already gone on the
+  // break's first painted frame — never flashing over the fading-in sacred
+  // line. The banner is an ancestor of the Navigator (it lives in
+  // MaterialApp.router's builder), so it cannot react to the route's own
+  // initState in the same frame; claiming at the push site is what makes the
+  // suppression effective on frame one. Released when the break is dismissed.
+  ReverentOverlay.enter();
   await navigator.push<void>(
     PageRouteBuilder<void>(
       fullscreenDialog: true,
@@ -56,6 +65,7 @@ Future<void> showEyeBreak(
           FadeTransition(opacity: animation, child: child),
     ),
   );
+  ReverentOverlay.leave();
 
   ref.read(dhikrRotationProvider.notifier).next();
 }

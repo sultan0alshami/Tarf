@@ -76,7 +76,9 @@ class TapToEnableSoundBanner extends ConsumerWidget {
     final state = ref.watch(webAudioPrimeProvider);
     if (!state.needsPrime) return const SizedBox.shrink();
     // Reverence: never overlay the dhikr break (this banner sits in the app
-    // chrome, which `MaterialApp.router` layers above the Navigator).
+    // chrome, which `MaterialApp.router` layers above the Navigator). The break
+    // claims the overlay at its push site — before the route builds — so this
+    // suppression is already true on the break's first painted frame.
     if (ref.watch(reverentOverlayActiveProvider)) {
       return const SizedBox.shrink();
     }

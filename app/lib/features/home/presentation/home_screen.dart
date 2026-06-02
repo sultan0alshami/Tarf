@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/format/numerals.dart';
+import '../../../core/overlay/reverent_overlay.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/time/clock.dart';
@@ -80,7 +81,16 @@ class HomeScreen extends ConsumerWidget {
           Card(
             child: InkWell(
               borderRadius: BorderRadius.circular(TarfTokens.radiusM),
-              onTap: () => context.push(Routes.eyeCareBreak),
+              // Claim the reverent overlay before the route builds so the web
+              // tap-to-enable-sound banner is gone on the break's first frame
+              // (the banner is an ancestor of the Navigator and can't react to
+              // the route's own initState in time). Released on dismissal.
+              onTap: () {
+                ReverentOverlay.enter();
+                context.push(Routes.eyeCareBreak).whenComplete(
+                      ReverentOverlay.leave,
+                    );
+              },
               child: Padding(
               padding: const EdgeInsets.all(TarfTokens.space4),
               child: Row(
