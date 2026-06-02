@@ -666,4 +666,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get timerUnnamed => 'مؤقّت';
+
+  @override
+  String get permBannerTitle => 'تسليم التذكيرات';
 }

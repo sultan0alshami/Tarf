@@ -253,5 +253,6 @@
   "timerLabelHint": "e.g. Tea, Wudu, Study",
   "timerDeleted": "Timer deleted",
   "timerRun": "Start",
-  "timerUnnamed": "Timer"
+  "timerUnnamed": "Timer",
+  "permBannerTitle": "Reminder delivery"
 }

@@ -667,4 +667,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timerUnnamed => 'Timer';
+
+  @override
+  String get permBannerTitle => 'Reminder delivery';
 }

@@ -252,5 +252,6 @@
   "timerLabelHint": "مثال: شاي، وضوء، مذاكرة",
   "timerDeleted": "تم حذف المؤقّت",
   "timerRun": "ابدأ",
-  "timerUnnamed": "مؤقّت"
+  "timerUnnamed": "مؤقّت",
+  "permBannerTitle": "تسليم التذكيرات"
 }

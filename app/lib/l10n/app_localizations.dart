@@ -1345,6 +1345,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Timer'**
   String get timerUnnamed;
+
+  /// No description provided for @permBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder delivery'**
+  String get permBannerTitle;
 }
 
 class _AppLocalizationsDelegate
