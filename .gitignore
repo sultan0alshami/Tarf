@@ -81,3 +81,6 @@ _setup/chromeprofile/
 # Agent per-agent memory (local)
 .claude/agent-memory-local/
 .claude/agent-memory/
+
+# Stray agent scratch under app/ (CWD quirk; never track)
+app/.claude/
