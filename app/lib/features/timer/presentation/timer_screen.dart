@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/audio/audio_haptics.dart';
+import '../../../core/audio/audio_providers.dart';
+import '../../../core/audio/sound_catalog.dart';
+import '../../../core/audio/sound_spec.dart';
+import '../../../core/audio/tarf_audio_service.dart';
 import '../../../core/format/numerals.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/widgets/progress_ring.dart';
@@ -9,18 +14,51 @@ import '../../../core/widgets/tarf_wheel_picker.dart';
 import '../../../core/widgets/tarf_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/tokens.dart';
+import '../../eyecare/application/eyecare_config_controller.dart';
 import '../application/timer_controller.dart';
 
 const _presetMinutes = [1, 5, 10, 20, 30, 40];
 
-class TimerScreen extends ConsumerWidget {
+class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TimerScreen> createState() => _TimerScreenState();
+}
+
+class _TimerScreenState extends ConsumerState<TimerScreen> {
+  /// Fires the looped completion sound + haptic once when the timer hits zero.
+  Future<void> _onFinished() async {
+    final cfg = ref.read(eyeCareConfigProvider); // reuse global sound/haptic flags
+    final audio = ref.read(tarfAudioServiceProvider);
+    final base = SoundCatalog.forRole(SoundRole.timerDone);
+    if (cfg.soundEnabled) {
+      await audio.play(base,
+          channel: AudioChannel.timer,
+          loop: true,
+          playThroughSilent: cfg.loudThroughSilence);
+    }
+    const AudioHaptics().cue(HapticKind.timerDone, enabled: cfg.hapticEnabled);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+
+    // React to the zero-crossing (sound + haptic) and to leaving the finished
+    // state (Reset / new duration stops the completion sound).
+    ref.listen(timerControllerProvider, (prev, next) {
+      if (next.justFinished && prev?.justFinished != true) {
+        _onFinished();
+        ref.read(timerControllerProvider.notifier).acknowledgeFinished();
+      }
+      if (prev?.finished == true && next.finished == false) {
+        ref.read(tarfAudioServiceProvider).stop(AudioChannel.timer);
+      }
+    });
+
     final data = ref.watch(timerControllerProvider);
     final c = ref.read(timerControllerProvider.notifier);
     final n = ref.watch(
