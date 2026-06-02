@@ -7,6 +7,7 @@
     "ownerActions": [
       "Fill dhikr-signoff: obtain a named scholar/editor sign-off for the Arabic text, tashkil, transliteration, and source references. Record the signer name, date, and scope in dhikr-signoff.md.",
       "Fill audio entries when break-audio clips are commissioned or sourced — add source_url, license, license_url, author, and required_attribution for each clip.",
+      "Fill the recitation section: commission ONE reciter for all 9 dhikr clips, drop them into app/assets/audio/recitation/ named <id>.ogg (they auto-resolve at load — see that folder's README.md), then record reciter/source/license and the scholarly sign-off status per clip.",
       "Confirm font download dates and OFL license snapshot paths are current."
     ]
   },
@@ -116,6 +117,33 @@
       "notes": "One audio clip per dhikr entry in dhikr.json. If commissioned, the signed agreement must be stored at assets_ledger/audio-agreements/<id>.pdf. Arabic TTS fallback (flutter_tts gated on isLanguageInstalled('ar-SA')) may be used as an interim substitute."
     }
   ],
+  "recitation": {
+    "_meta": {
+      "purpose": "Provenance + sign-off tracking for the 9 dhikr break-recitation clips. These are SACRED break audio. NONE are bundled yet (only .gitkeep). Both gates below are BLOCKING per docs/store/release-checklist.md §B before any public release.",
+      "folder": "app/assets/audio/recitation/",
+      "spec": "app/assets/audio/recitation/README.md",
+      "dropInMechanism": "DhikrRepository.load() reads the AssetManifest and auto-assigns assets/audio/recitation/<id>.<ext> to any dhikr whose audio is null (ext preference: ogg, oga, m4a, aac, mp3, wav; explicit dhikr.json audio always wins). Drop a correctly-named file and it plays — no JSON edit.",
+      "encoding": "Mono, loudness-normalized ~-16 LUFS, OGG/Opus or M4A/AAC, short (phrase + tail; the visual ring drives break length), ONE coherent reciter.",
+      "signoffGate": "Recitation pronunciation/tashkil must be reviewed alongside the text in assets_ledger/dhikr-signoff.md (currently PENDING). License/provenance: commissioned (written agreement at assets_ledger/audio-agreements/<id>.pdf) or a clearly-compatible license, recorded per clip below.",
+      "commonsResearch": "2026-06-02: Wikimedia Commons cleanly covers only 3/9 — alhamdulillah + astaghfirullah (Ar-…ogg, CC BY-SA 3.0, uploader ArabicAudios) and allahu-akbar (Ar-eg-…oga, CC BY-SA) — as mixed-speaker flat dictionary pronunciations; the other 6 have no clean reverent single-source clip. Decision: COMMISSION one reciter rather than bundle mismatched Commons clips."
+    },
+    "reciter": "[[FILL — single commissioned reciter for all 9 clips]]",
+    "license": "[[FILL — commissioned (written agreement at assets_ledger/audio-agreements/) or compatible license id]]",
+    "license_url": "[[FILL]]",
+    "agreement_file": "[[FILL — assets_ledger/audio-agreements/<id>.pdf if commissioned]]",
+    "signoff_status": "PENDING — recitation must be reviewed with the text in assets_ledger/dhikr-signoff.md before release",
+    "clips": [
+      {"id": "subhanallah", "arabic": "سُبْحَانَ اللّٰهِ", "expected_file": "app/assets/audio/recitation/subhanallah.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "alhamdulillah", "arabic": "الْحَمْدُ لِلّٰهِ", "expected_file": "app/assets/audio/recitation/alhamdulillah.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL — commission preferred; Commons Ar-الحمد_لله.ogg CC BY-SA 3.0 by ArabicAudios available as interim, attribution required]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "la-ilaha-illallah", "arabic": "لَا إِلٰهَ إِلَّا اللّٰهُ", "expected_file": "app/assets/audio/recitation/la-ilaha-illallah.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "allahu-akbar", "arabic": "اللّٰهُ أَكْبَرُ", "expected_file": "app/assets/audio/recitation/allahu-akbar.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL — commission preferred; Commons Ar-eg-الله_أكبر.oga CC BY-SA available as interim, attribution required]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "subhanallah-wa-bihamdihi", "arabic": "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ", "expected_file": "app/assets/audio/recitation/subhanallah-wa-bihamdihi.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "subhanallah-azim", "arabic": "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ، سُبْحَانَ اللّٰهِ الْعَظِيمِ", "expected_file": "app/assets/audio/recitation/subhanallah-azim.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "astaghfirullah", "arabic": "أَسْتَغْفِرُ اللّٰهَ", "expected_file": "app/assets/audio/recitation/astaghfirullah.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL — commission preferred; Commons Ar-أستغفر_الله.ogg CC BY-SA 3.0 by ArabicAudios available as interim, attribution required]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "la-hawla", "arabic": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ", "expected_file": "app/assets/audio/recitation/la-hawla.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"},
+      {"id": "salawat", "arabic": "اللّٰهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ", "expected_file": "app/assets/audio/recitation/salawat.ogg", "status": "NOT BUNDLED", "source_url": "[[FILL]]", "license": "[[FILL]]", "required_attribution": "[[FILL]]"}
+    ]
+  },
   "thirdPartyLibraries": {
     "note": "Dart/Flutter package licenses are enumerated at runtime via the LicenseRegistry and rendered in the in-app Licenses screen. The packages below are the key ones users are most likely to ask about.",
     "packages": [
