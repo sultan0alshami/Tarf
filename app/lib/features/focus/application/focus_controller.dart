@@ -3,7 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/audio/audio_haptics.dart';
+import '../../../core/audio/audio_providers.dart';
+import '../../../core/audio/sound_catalog.dart';
+import '../../../core/audio/sound_spec.dart';
+import '../../../core/audio/tarf_audio_service.dart';
 import '../../../core/settings/settings_controller.dart';
+import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../../todos/application/todos_controller.dart';
 import '../domain/focus_models.dart';
@@ -58,6 +64,24 @@ class FocusController extends Notifier<FocusState> {
     if (!state.running || state.phase == FocusPhase.idle) return;
     state = advanceFocus(state, _cfg, const Duration(seconds: 1));
     if (state.justCompletedPhase == FocusPhase.work) _recordCompletedWork();
+    _onPhaseTransition();
+  }
+
+  /// Fires the soft transition chime + a selection haptic on any phase boundary
+  /// (work<->break). Kept out of the pure [advanceFocus]; honors the app's global
+  /// sound/haptic/play-through-silent flags (shared with eye-care).
+  void _onPhaseTransition() {
+    if (state.justCompletedPhase == null) return;
+    final cfg = ref.read(eyeCareConfigProvider);
+    if (cfg.soundEnabled) {
+      final spec = SoundCatalog.forRole(SoundRole.focusTransition);
+      ref.read(tarfAudioServiceProvider).play(
+            spec,
+            channel: AudioChannel.focus,
+            playThroughSilent: cfg.loudThroughSilence,
+          );
+    }
+    const AudioHaptics().cue(HapticKind.transition, enabled: cfg.hapticEnabled);
   }
 
   /// Credits a naturally-completed work session to today's progress and to the
@@ -103,6 +127,7 @@ class FocusController extends Notifier<FocusState> {
       _cfg,
       state.remaining + const Duration(seconds: 1),
     );
+    _onPhaseTransition();
     _ensureTicker();
   }
 
