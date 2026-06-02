@@ -37,6 +37,31 @@ void main() {
       expect(fake.stops, contains(AudioChannel.breakBed));
     });
 
+    test('defaults to NOT playing through silent', () async {
+      final fake = FakeAudioService();
+      final player = JustAudioBreakPlayer(audio: fake, soundtrackId: 'calm');
+      await player.start(
+        duration: const Duration(seconds: 20),
+        soundEnabled: true,
+      );
+      expect(fake.plays.single.playThroughSilent, isFalse);
+    });
+
+    test('forwards loudThroughSilence as playThroughSilent when opted in',
+        () async {
+      final fake = FakeAudioService();
+      final player = JustAudioBreakPlayer(
+        audio: fake,
+        soundtrackId: 'calm',
+        loudThroughSilence: true,
+      );
+      await player.start(
+        duration: const Duration(seconds: 20),
+        soundEnabled: true,
+      );
+      expect(fake.plays.single.playThroughSilent, isTrue);
+    });
+
     test('a recitation asset id takes the bundled-asset code path (isAsset)', () async {
       final fake = FakeAudioService();
       final player = JustAudioBreakPlayer(

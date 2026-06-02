@@ -22,9 +22,15 @@ final breakAudioProvider = Provider<BreakAudioPlayer>((ref) {
   final soundtrack = ref.watch(
     eyeCareConfigProvider.select((c) => c.breakSoundtrack),
   );
+  // Honor the same "loud through silent" choice the alarm/timer/focus respect,
+  // so the dhikr bed isn't silenced by the ringer switch when the user opted in.
+  final loudThroughSilence = ref.watch(
+    eyeCareConfigProvider.select((c) => c.loudThroughSilence),
+  );
   return JustAudioBreakPlayer(
     audio: audio,
     soundtrackId: soundtrack,
+    loudThroughSilence: loudThroughSilence,
     onBlocked: () => ref.read(webAudioPrimeProvider.notifier).reportBlocked(),
   );
 });

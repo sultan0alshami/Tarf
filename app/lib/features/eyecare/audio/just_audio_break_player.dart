@@ -20,17 +20,23 @@ class JustAudioBreakPlayer implements BreakAudioPlayer {
     String? recitationAssetPath,
     void Function()? onBlocked,
     bool ownsService = false,
+    bool loudThroughSilence = false,
   })  : _audio = audio,
         _soundtrackId = soundtrackId,
         _recitationAssetPath = recitationAssetPath,
         _onBlocked = onBlocked,
-        _ownsService = ownsService;
+        _ownsService = ownsService,
+        _loudThroughSilence = loudThroughSilence;
 
   final TarfAudioService _audio;
   final String _soundtrackId;
   final String? _recitationAssetPath;
   final void Function()? _onBlocked;
   final bool _ownsService;
+
+  /// Mirrors the user's "play even when the phone is on silent" choice; forwarded
+  /// to the engine so the dhikr break bed honors it like the alarm/timer/focus do.
+  final bool _loudThroughSilence;
 
   SoundSpec _spec() {
     // Bundled recitation clip wins when configured AND present (owner-supplied).
@@ -64,6 +70,7 @@ class JustAudioBreakPlayer implements BreakAudioPlayer {
       spec,
       channel: AudioChannel.breakBed,
       duration: duration, // sound ends == break ends
+      playThroughSilent: _loudThroughSilence,
     );
     if (!ok) _onBlocked?.call();
   }
