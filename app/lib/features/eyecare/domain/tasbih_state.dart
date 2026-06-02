@@ -6,13 +6,13 @@ import 'package:flutter/foundation.dart';
 @immutable
 class TasbihState {
   const TasbihState({required this.dayKey, this.count = 0})
-      : _justCompleted = false;
+    : _justCompleted = false;
 
   const TasbihState._({
     required this.dayKey,
     required this.count,
-    required bool justCompleted,
-  }) : _justCompleted = justCompleted;
+    required this._justCompleted,
+  });
 
   final String dayKey;
   final int count;
@@ -34,7 +34,11 @@ class TasbihState {
   TasbihState increment({required int target}) {
     final next = count + 1;
     final completed = target > 0 && next % target == 0;
-    return TasbihState._(dayKey: dayKey, count: next, justCompleted: completed);
+    return TasbihState._(
+      dayKey: dayKey,
+      count: next,
+      justCompleted: completed,
+    );
   }
 
   TasbihState reset() => TasbihState(dayKey: dayKey);
@@ -42,7 +46,7 @@ class TasbihState {
   Map<String, Object?> toJson() => {'day': dayKey, 'count': count};
 
   factory TasbihState.fromJson(Map<String, Object?> j) => TasbihState(
-        dayKey: (j['day'] as String?) ?? '',
-        count: (j['count'] as int?) ?? 0,
-      );
+    dayKey: (j['day'] as String?) ?? '',
+    count: (j['count'] as int?) ?? 0,
+  );
 }
