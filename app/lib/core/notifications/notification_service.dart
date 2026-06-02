@@ -64,6 +64,19 @@ class NotificationService extends Notifier<bool> {
 
   static const _prayerIds = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
+  bool _listening = false;
+
+  /// Subscribe to the three scheduling inputs; reconcile on any change. Also
+  /// reconciles when permission becomes granted. Call once from main() after
+  /// init so add/edit/toggle/delete and permission grants re-arm the schedule.
+  void listenForChanges() {
+    if (_listening) return;
+    _listening = true;
+    ref.listen(alarmsControllerProvider, (_, _) => reconcile());
+    ref.listen(eyeCareConfigProvider, (_, _) => reconcile());
+    ref.listen(permissionStateProvider, (_, _) => reconcile());
+  }
+
   /// Build the desired set of items from the three sources.
   List<(ScheduledItem, DateTime)> _desired(DateTime now) {
     final out = <(ScheduledItem, DateTime)>[];

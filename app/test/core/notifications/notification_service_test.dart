@@ -155,5 +155,40 @@ void main() {
           .length;
       expect(prayerCount, greaterThanOrEqualTo(1)); // at least the next one today
     });
+
+    test('listenForChanges reschedules when an alarm is added', () async {
+      final g = FakeNotificationGateway();
+      final c = _container(prefs, g);
+      addTearDown(c.dispose);
+      c.read(permissionStateProvider.notifier).setForTest(PermissionState
+          .initial
+          .afterNotificationResult(PermissionStatus.granted));
+      await c.read(eyeCareConfigProvider.notifier).update(noPrayers);
+      c.read(notificationServiceProvider.notifier).listenForChanges();
+      await c
+          .read(alarmsControllerProvider.notifier)
+          .upsert(const AlarmItem(id: 'a1', hour: 9, minute: 0));
+      await Future<void>.delayed(Duration.zero); // let listeners flush
+      expect(g.scheduled.length, 1);
+    });
+
+    test('removing an alarm cancels its schedule on next reconcile', () async {
+      final g = FakeNotificationGateway();
+      final c = _container(prefs, g);
+      addTearDown(c.dispose);
+      c.read(permissionStateProvider.notifier).setForTest(PermissionState
+          .initial
+          .afterNotificationResult(PermissionStatus.granted));
+      await c.read(eyeCareConfigProvider.notifier).update(noPrayers);
+      c.read(notificationServiceProvider.notifier).listenForChanges();
+      await c
+          .read(alarmsControllerProvider.notifier)
+          .upsert(const AlarmItem(id: 'a1', hour: 9, minute: 0));
+      await Future<void>.delayed(Duration.zero);
+      expect(g.scheduled.length, 1);
+      await c.read(alarmsControllerProvider.notifier).remove('a1');
+      await Future<void>.delayed(Duration.zero);
+      expect(g.scheduled, isEmpty);
+    });
   });
 }
