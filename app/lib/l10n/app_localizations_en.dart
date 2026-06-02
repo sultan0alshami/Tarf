@@ -226,7 +226,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alarmNativeNote =>
-      'Alarms will ring once native scheduling is enabled on this device.';
+      'Alarms ring in the background when notifications are allowed. Otherwise, Tarf rings only while open.';
 
   @override
   String get notifPrimingTitle => 'Break reminders';

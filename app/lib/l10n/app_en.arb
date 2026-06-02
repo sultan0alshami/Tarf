@@ -92,7 +92,7 @@
   "alarms": "Alarms",
   "addAlarm": "Add alarm",
   "noAlarms": "No alarms yet",
-  "alarmNativeNote": "Alarms will ring once native scheduling is enabled on this device.",
+  "alarmNativeNote": "Alarms ring in the background when notifications are allowed. Otherwise, Tarf rings only while open.",
 
   "notifPrimingTitle": "Break reminders",
   "notifPrimingBody": "To remind you to rest your eyes even when Tarf is closed, we need notification permission. Without it, Tarf reminds you only while open.",

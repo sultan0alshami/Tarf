@@ -226,7 +226,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get alarmNativeNote =>
-      'ستُشغَّل المنبّهات عند تفعيل الجدولة الأصلية على هذا الجهاز.';
+      'ترنّ المنبّهات في الخلفية عند السماح بالإشعارات. وإلا، يرنّ طَرْف أثناء فتحه فقط.';
 
   @override
   String get notifPrimingTitle => 'تذكيرات الراحة';

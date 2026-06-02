@@ -515,7 +515,7 @@ abstract class AppLocalizations {
   /// No description provided for @alarmNativeNote.
   ///
   /// In en, this message translates to:
-  /// **'Alarms will ring once native scheduling is enabled on this device.'**
+  /// **'Alarms ring in the background when notifications are allowed. Otherwise, Tarf rings only while open.'**
   String get alarmNativeNote;
 
   /// No description provided for @notifPrimingTitle.
