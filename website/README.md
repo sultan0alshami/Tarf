@@ -130,11 +130,12 @@ Variables; Netlify: Site settings → Environment):
 
 | Variable | Purpose |
 |---|---|
-| `PAYMENT_GATEWAY` | `moyasar` (default), `tap`, or `stripe` |
+| `PAYMENT_GATEWAY` | `moyasar` (default), `tap`, `stripe`, or `stub` |
 | `SITE_URL` | e.g. `https://tarf.app` — used to build the post-payment callback URL |
 | `MOYASAR_SECRET_KEY` | Moyasar secret key — `sk_test_…` (sandbox) or `sk_live_…` (live). Dashboard → Settings → API keys. |
 | `TAP_SECRET_KEY` | Tap secret key (if `PAYMENT_GATEWAY=tap`). |
 | `STRIPE_SECRET_KEY` | Stripe secret key (if `PAYMENT_GATEWAY=stripe`). Note: Stripe does **not** support Mada — Visa/Mastercard fallback only. |
+| `PAYMENT_GATEWAY=stub` | Offline stub — no keys needed, no network, always TEST MODE. Use for CI and local demo. |
 
 **Where the owner inserts merchant keys:** you do **not** edit `donate.js` —
 just set the environment variables above. The file reads them via
@@ -181,6 +182,49 @@ the secondary. The toggle sets `<html lang>` + `<html dir>` and persists to
 
 Translations are injected via `textContent` only (never `innerHTML`), so copy
 can never inject markup — XSS-safe by construction.
+
+---
+
+## Running the test suite
+
+```bash
+npm test          # node --test test/  (donate + webhook + static-guard suites)
+npm run lint      # node --check on all four api files
+npm run build     # no-op (static site)
+```
+
+All tests use `node:test`/`node:assert`/`node:crypto` — **no npm runtime deps**
+and **no env vars required**. The full suite runs offline.
+
+### Stub gateway (offline TEST MODE)
+
+To run the donation flow with no real keys set `PAYMENT_GATEWAY=stub`:
+
+```bash
+PAYMENT_GATEWAY=stub vercel dev
+```
+
+The `stub` adapter is always "configured" (`isConfigured() → true`), makes no
+network calls, and returns a synthetic `testMode=1&gateway=stub` redirect. Use it
+for CI and local demo. Keys for `moyasar`/`tap`/`stripe` are only needed for
+production charges.
+
+---
+
+## Webhook env keys
+
+`api/webhook.js` verifies the gateway's HMAC callback signature. The owner sets
+one variable per gateway (never committed — use the Vercel environment dashboard):
+
+| Variable | Purpose |
+|---|---|
+| `MOYASAR_WEBHOOK_SECRET` | Moyasar webhook signing secret. Dashboard → Settings → Webhooks. |
+| `TAP_WEBHOOK_SECRET` | Tap webhook signing secret. |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_…`). |
+
+With **no webhook secret set**, the route accepts in **TEST MODE** — safe until
+the owner adds the secret. Once set, every callback is verified via a
+constant-time HMAC-SHA256 compare; unverified requests receive `400`.
 
 ---
 
