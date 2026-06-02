@@ -186,6 +186,12 @@
 
   "syncStatusOffline": "غير متصل · على هذا الجهاز",
   "comingSoon": "قريبًا",
+  "signOut": "تسجيل الخروج",
+  "syncStatusSynced": "متزامن",
+  "syncStatusSyncing": "جارٍ المزامنة…",
+  "syncStatusError": "خطأ في المزامنة — ستتم إعادة المحاولة",
+  "accountSignedInAs": "مسجّل الدخول باسم {name}",
+  "signInErrorGeneric": "تعذّر تسجيل الدخول. حاول مرة أخرى.",
 
   "eyeCareSettingsTitle": "إعدادات العناية بالعين",
   "coreBreakGroupLabel": "التذكير والراحة",

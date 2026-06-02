@@ -475,6 +475,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comingSoon => 'Coming soon';
 
   @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get syncStatusSynced => 'Synced';
+
+  @override
+  String get syncStatusSyncing => 'Syncing…';
+
+  @override
+  String get syncStatusError => 'Sync error — will retry';
+
+  @override
+  String accountSignedInAs(Object name) {
+    return 'Signed in as $name';
+  }
+
+  @override
+  String get signInErrorGeneric => 'Couldn\'t sign in. Please try again.';
+
+  @override
   String get eyeCareSettingsTitle => 'Eye-care settings';
 
   @override

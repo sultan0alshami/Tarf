@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/data/local_data_manager.dart';
+import '../../../core/data/repository_providers.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/widgets/tarf_widgets.dart';
@@ -14,6 +15,7 @@ import '../../eyecare/application/eyecare_config_controller.dart';
 import '../../focus/application/focus_controller.dart';
 import '../../insights/application/progress_controller.dart';
 import '../../todos/application/todos_controller.dart';
+import '../application/account_controller.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
@@ -52,6 +54,15 @@ class AccountScreen extends ConsumerWidget {
     );
     if (confirmed != true) return;
 
+    // Cloud-aware: when signed in, clear the Firestore subtree + auth account
+    // before the local wipe so a failure mid-way still allows a retry. Guest
+    // (signed out) clears local only.
+    final account = ref.read(accountControllerProvider);
+    if (account.isSignedIn) {
+      final cloud = ref.read(cloudAccountProvider);
+      await cloud.deleteCloudData(account.user!.uid);
+      await cloud.deleteAccount();
+    }
     await LocalDataManager.deleteAll(ref.read(sharedPreferencesProvider));
     // Reset every in-memory store so the app returns to a clean state.
     ref
@@ -78,12 +89,23 @@ class AccountScreen extends ConsumerWidget {
     final isRtl = Directionality.of(context) == TextDirection.rtl;
     final chevron = isRtl ? Icons.chevron_left : Icons.chevron_right;
 
+    final flags = ref.watch(firebaseFlagsProvider);
+    final account = ref.watch(accountControllerProvider);
+    final signedIn = account.isSignedIn;
+    final canSignIn = flags.signInAvailable;
+
+    final profileLabel = signedIn
+        ? l10n.accountSignedInAs(
+            account.user!.displayName ?? account.user!.email ?? '')
+        : l10n.accountGuest;
+    final chipLabel = signedIn ? l10n.syncStatusSynced : l10n.syncStatusOffline;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.accountTitle)),
       body: ListView(
         padding: const EdgeInsets.all(TarfTokens.space3),
         children: [
-          // 1. Guest profile card.
+          // 1. Profile card (guest or signed-in).
           Card(
             child: Padding(
               padding: const EdgeInsets.all(TarfTokens.space4),
@@ -97,7 +119,7 @@ class AccountScreen extends ConsumerWidget {
                       color: tarf.accentContainer,
                     ),
                     child: Icon(
-                      Icons.person_outline,
+                      signedIn ? Icons.person : Icons.person_outline,
                       color: scheme.primary,
                       size: 30,
                     ),
@@ -105,7 +127,7 @@ class AccountScreen extends ConsumerWidget {
                   const SizedBox(width: TarfTokens.space3),
                   Expanded(
                     child: Text(
-                      l10n.accountGuest,
+                      profileLabel,
                       style: theme.textTheme.bodyLarge,
                     ),
                   ),
@@ -120,7 +142,7 @@ class AccountScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(TarfTokens.radiusL),
                     ),
                     child: Text(
-                      l10n.syncStatusOffline,
+                      chipLabel,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: scheme.primary,
                       ),
@@ -133,33 +155,53 @@ class AccountScreen extends ConsumerWidget {
 
           const SizedBox(height: TarfTokens.space4),
 
-          // 2. Sign-in (disabled — Firebase not wired yet).
-          OutlinedButton.icon(
-            onPressed: null,
-            icon: const Icon(Icons.login),
-            label: Text(l10n.signInGoogle),
-          ),
-          const SizedBox(height: TarfTokens.space2),
-          OutlinedButton.icon(
-            onPressed: null,
-            icon: const Icon(Icons.apple),
-            label: Text(l10n.signInApple),
-          ),
-          const SizedBox(height: TarfTokens.space2),
-          OutlinedButton.icon(
-            onPressed: null,
-            icon: const Icon(Icons.email_outlined),
-            label: Text(l10n.signInEmail),
-          ),
-          const SizedBox(height: TarfTokens.space2),
-          Center(
-            child: Text(
-              l10n.comingSoon,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: tarf.textTertiary,
-              ),
+          // 2. Sign-in / sign-out. Sign-in is enabled ONLY when cloud is fully
+          // available (compile flag + present config); otherwise the buttons
+          // stay disabled with a "Coming soon" caption. Guest is the default.
+          if (signedIn)
+            OutlinedButton.icon(
+              onPressed: account.busy
+                  ? null
+                  : () => ref.read(accountControllerProvider.notifier).signOut(),
+              icon: const Icon(Icons.logout),
+              label: Text(l10n.signOut),
+            )
+          else ...[
+            OutlinedButton.icon(
+              onPressed: canSignIn
+                  ? () => ref.read(accountControllerProvider.notifier).signInWithGoogle()
+                  : null,
+              icon: const Icon(Icons.login),
+              label: Text(l10n.signInGoogle),
             ),
-          ),
+            const SizedBox(height: TarfTokens.space2),
+            OutlinedButton.icon(
+              onPressed: canSignIn
+                  ? () => ref.read(accountControllerProvider.notifier).signInWithApple()
+                  : null,
+              icon: const Icon(Icons.apple),
+              label: Text(l10n.signInApple),
+            ),
+            const SizedBox(height: TarfTokens.space2),
+            OutlinedButton.icon(
+              onPressed: canSignIn
+                  ? () => _promptEmailSignIn(context, ref)
+                  : null,
+              icon: const Icon(Icons.email_outlined),
+              label: Text(l10n.signInEmail),
+            ),
+            if (!canSignIn) ...[
+              const SizedBox(height: TarfTokens.space2),
+              Center(
+                child: Text(
+                  l10n.comingSoon,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: tarf.textTertiary,
+                  ),
+                ),
+              ),
+            ],
+          ],
 
           const SizedBox(height: TarfTokens.space4),
 
@@ -199,5 +241,59 @@ class AccountScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Minimal email sign-in prompt. The real auth happens in AccountController;
+  /// only reachable when cloud is enabled (button is disabled otherwise).
+  Future<void> _promptEmailSignIn(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final emailCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
+    final submit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.signInEmail),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: emailCtrl,
+              keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.email],
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: TarfTokens.space2),
+            TextField(
+              controller: passCtrl,
+              obscureText: true,
+              autofillHints: const [AutofillHints.password],
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.signInEmail),
+          ),
+        ],
+      ),
+    );
+    if (submit != true) return;
+    await ref
+        .read(accountControllerProvider.notifier)
+        .signInWithEmail(emailCtrl.text.trim(), passCtrl.text);
+    if (context.mounted) {
+      final err = ref.read(accountControllerProvider).lastError;
+      if (err != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.signInErrorGeneric)),
+        );
+      }
+    }
   }
 }

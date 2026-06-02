@@ -475,6 +475,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get comingSoon => 'قريبًا';
 
   @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String get syncStatusSynced => 'متزامن';
+
+  @override
+  String get syncStatusSyncing => 'جارٍ المزامنة…';
+
+  @override
+  String get syncStatusError => 'خطأ في المزامنة — ستتم إعادة المحاولة';
+
+  @override
+  String accountSignedInAs(Object name) {
+    return 'مسجّل الدخول باسم $name';
+  }
+
+  @override
+  String get signInErrorGeneric => 'تعذّر تسجيل الدخول. حاول مرة أخرى.';
+
+  @override
   String get eyeCareSettingsTitle => 'إعدادات العناية بالعين';
 
   @override

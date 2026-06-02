@@ -187,6 +187,13 @@
 
   "syncStatusOffline": "Offline · On this device",
   "comingSoon": "Coming soon",
+  "signOut": "Sign out",
+  "syncStatusSynced": "Synced",
+  "syncStatusSyncing": "Syncing…",
+  "syncStatusError": "Sync error — will retry",
+  "accountSignedInAs": "Signed in as {name}",
+  "@accountSignedInAs": { "placeholders": { "name": {} } },
+  "signInErrorGeneric": "Couldn't sign in. Please try again.",
 
   "eyeCareSettingsTitle": "Eye-care settings",
   "coreBreakGroupLabel": "Reminder & rest",
